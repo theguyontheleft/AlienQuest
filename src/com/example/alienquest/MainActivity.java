@@ -20,6 +20,11 @@ public class MainActivity
         extends Activity
 {
 
+    /**
+     * Used for the settings
+     */
+    public static boolean inputCorrect;
+    
     // GPS location values
     protected double longitude_;
     protected double latitude_;
@@ -30,7 +35,7 @@ public class MainActivity
     {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-        
+
         getGPSLocation();
     }
 

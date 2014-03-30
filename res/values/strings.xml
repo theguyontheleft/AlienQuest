@@ -4,5 +4,19 @@
     <string name="app_name">AlienQuest</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="pref_title_file">pref_general</string>
+    <string name="instructions">Instructions</string>
+    <string name="pref_title_name">Display Name</string>
+    <string name="pref_title_game_length">Game Length</string>
+
+    <!-- Value String -->
+    <string name="pref_default_name"></string>
+    <string name="pref_default_game_time"></string>
+
+    <string-array name="settings_array">
+        <item>Name</item>
+        <item>Game Length</item>
+        <item>Setting 2</item>
+    </string-array>
 
 </resources>

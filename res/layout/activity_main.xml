@@ -23,4 +23,12 @@
         android:layout_below="@+id/textView1"
         android:text="Instructions" />
 
+    <Button
+        android:id="@+id/settingsButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/instructionsButton"
+        android:layout_below="@+id/instructionsButton"
+        android:text="Settings" />
+
 </RelativeLayout>

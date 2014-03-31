@@ -6,29 +6,56 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:visibility="visible"
     tools:context=".MainActivity" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
 
     <Button
         android:id="@+id/instructionsButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/startGameButton"
+        android:layout_below="@+id/startGameButton"
+        android:layout_marginTop="18dp"
         android:text="Instructions" />
 
     <Button
-        android:id="@+id/settingsButton1"
+        android:id="@+id/aboutButton"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/instructionsButton"
+        android:layout_alignRight="@+id/startGameButton"
         android:layout_below="@+id/instructionsButton"
-        android:text="Settings" />
+        android:layout_marginTop="21dp"
+        android:text="About" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="@string/hello_human" />
+
+    <Button
+        android:id="@+id/startGameButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:text="Start Game" />
+
+    <FrameLayout
+        android:id="@+id/mainActivityFragmentFrame1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="?android:attr/detailsElementBackground"
+        android:visibility="visible" >
+
+    </FrameLayout>
 
 </RelativeLayout>

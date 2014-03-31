@@ -3,7 +3,7 @@
 
     <string name="app_name">AlienQuest</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_human">Hello human, welcome to Alien Quest!</string>
     <string name="pref_title_file">pref_general</string>
     <string name="instructions">Instructions</string>
     <string name="pref_title_name">Display Name</string>

@@ -5,17 +5,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 /**
  * @author Jimmy Dagres
  * 
  * @version Mar 31, 2014
  * 
- *          Displays instructions for the game
+ *          This fragment tells the users a little about us and who we are.
+ *          ALIENS!
+ * 
  */
-public class InstructionsFragment
-        extends Fragment
+public class AboutFragment extends Fragment
 {
     // this is the first callback method that is invoked.
     @Override
@@ -32,7 +32,7 @@ public class InstructionsFragment
 
         View view = inflater.inflate( R.layout.instructions_fragment,
                 container, false );
-
         return view;
     }
+
 }

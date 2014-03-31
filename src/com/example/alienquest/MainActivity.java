@@ -64,7 +64,7 @@ public class MainActivity
         switch ( item.getItemId() )
         {
         case R.id.action_settings:
-            // MainActivity.this.startActivity( settingsIntention ); // Causes
+            MainActivity.this.startActivity( settingsIntention ); // Causes
             // it to crash
 
             break;

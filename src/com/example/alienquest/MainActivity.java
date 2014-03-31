@@ -51,11 +51,8 @@ public class MainActivity
 
         getGPSLocation();
 
-        SettingsPreferenceActivity settings_ =
-                new SettingsPreferenceActivity();
         settingsIntention =
-                new Intent( MainActivity.this,
-                        SettingsPreferenceActivity.class );
+                new Intent( MainActivity.this, SettingsPreferenceActivity.class );
     }
 
     @Override
@@ -64,7 +61,7 @@ public class MainActivity
         switch ( item.getItemId() )
         {
         case R.id.action_settings:
-            MainActivity.this.startActivity( settingsIntention ); // Causes
+            this.startActivity( settingsIntention ); // Causes
             // it to crash
 
             break;

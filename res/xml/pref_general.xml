@@ -20,6 +20,14 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_game_length" />
-    
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_title_difficulty"
+        android:inputType="textCapWords"
+        android:key="example_text"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_difficulty" />
 
 </PreferenceScreen>

@@ -35,9 +35,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="client.general.SettingsPreferenceActivity"
-            android:label="@string/action_settings"
-            android:screenOrientation="portrait" >
+            android:name="com.example.settings.SettingsPreferenceActivity"
+            android:label="@string/action_settings" >
         </activity>
     </application>
 

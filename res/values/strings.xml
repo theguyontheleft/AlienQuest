@@ -7,7 +7,14 @@
     <string name="pref_title_file">pref_general</string>
     <string name="instructions">Instructions</string>
     <string name="pref_title_name">Display Name</string>
+    <string name="pref_title_difficulty">Quest Difficulty</string>
     <string name="pref_title_game_length">Game Length</string>
+
+    <!-- Difficulty Strings -->
+    <string name="easyDifficulty">Harmless Explorers (Easy)"</string>
+    <string name="mediumDifficulty">Ancient Astronauts (Medium)</string>
+    <string name="hardDifficulty">Hostile Takeover (Hard)</string>
+    <string name="extremeDifficulty">Giorgio Tsoukalos\' Vacation (Extreme)</string>
 
     <!-- Value String -->
     <string name="pref_default_name"></string>
@@ -16,7 +23,7 @@
     <string-array name="settings_array">
         <item>Name</item>
         <item>Game Length</item>
-        <item>Setting 2</item>
+        <item>Quest Difficulty</item>
     </string-array>
 
 </resources>

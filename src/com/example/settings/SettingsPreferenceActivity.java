@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +29,14 @@ import com.example.alienquest.R;
 /**
  * @author Jimmy Dagres
  * 
- * @version Nov 8, 2013
+ * @version March 8, 2014
  * 
  *          This activity displays a list of all of the setting preferences.
  *          When selected a dialog appears allowing the user to change the
  *          setting. Each setting is stored in a non volatile shared preference
  *          file.
+ * 
+ *          TODO: Set default values for difficulty and game time
  * 
  */
 public class SettingsPreferenceActivity extends Activity
@@ -66,15 +69,25 @@ public class SettingsPreferenceActivity extends Activity
                 getString( R.string.pref_title_name ) );
     }
 
-    // /**
-    // * @return the name saved in the preferences
-    // */
-    // public String getGameLength()
-    // {
-    // return preference_.getString(
-    // getString( R.string.pref_title_game_length ),
-    // getString( R.string.pref_title_game_length ) );
-    // }
+    /**
+     * @return the game length in the preferences
+     */
+    public String getGameLength()
+    {
+        return preference_.getString(
+                getString( R.string.pref_title_game_length ),
+                getString( R.string.pref_title_game_length ) );
+    }
+
+    /**
+     * @return the difficulty saved in the preferences
+     */
+    public String getDifficulty()
+    {
+        return preference_.getString(
+                getString( R.string.pref_title_difficulty ),
+                getString( R.string.pref_title_difficulty ) );
+    }
 
     @Override
     public void onCreate( Bundle savedInstanceState )
@@ -99,7 +112,7 @@ public class SettingsPreferenceActivity extends Activity
 
         initializeSettingsList();
 
-        // Makes sure a proper phone number and name is set
+        // Makes sure a proper game length and name is set
         checkForValidPreferences();
 
         if ( allPreferencesSet() && initialSetup )
@@ -166,7 +179,7 @@ public class SettingsPreferenceActivity extends Activity
                             getString( R.string.pref_title_name ) ), nameView );
             break;
 
-        case 1: // The phone number preference
+        case 1: // The game length preference
 
             // Raises a toast to show the location
             Toast.makeText(
@@ -174,11 +187,126 @@ public class SettingsPreferenceActivity extends Activity
                     "Have list of different times", Toast.LENGTH_LONG ).show();
             break;
 
-        case 2: // Third setting
-            // TODO
+        case 2: // Third setting is game difficulty
+            displayDifficultyDialog(
+                    getString( R.string.pref_title_difficulty ),
+                    preference_.getString(
+                            getString( R.string.pref_title_difficulty ),
+                            getString( R.string.pref_title_difficulty ) ) );
             break;
         }
 
+    }
+
+    /**
+     * This function uses a dialog containing a radiogroup, it performs almost
+     * the same as the displayUpdateSettingsDialog except it's designed for the
+     * difficulty button. It creates a reference to the Difficulty radioButton
+     * called "difficultytRadioGroup1".
+     * 
+     * @param difficultyPreferenceKey
+     *            name of the setting being updated
+     * @param currentDifficultyPreference
+     *            current value of the preference
+     */
+    private void displayDifficultyDialog(
+            final String difficultyPreferenceKey,
+            String currentDifficultyPreference )
+    {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from( getBaseContext() );
+        View promptsView =
+                li.inflate( R.layout.dialog_update_difficulty_settings, null );
+        AlertDialog.Builder alertDialogBuilder =
+                new AlertDialog.Builder( this );
+
+        // set prompts.xml to alert dialog builder and sets the title
+        alertDialogBuilder.setView( promptsView );
+        alertDialogBuilder.setTitle( "Update Game Difficulty" );
+
+        // Define all of the difficulty options
+        final RadioButton easyDifficultyRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.Easy );
+        final RadioButton mediumDifficultyRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.Medium );
+        final RadioButton hardDifficultyRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.Hard );
+        final RadioButton extremeDifficultyRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.Extreme );
+
+        easyDifficultyRadioButton
+                .setChecked( getString( R.string.pref_title_difficulty )
+                        .contains( currentDifficultyPreference ) );
+
+        alertDialogBuilder
+                .setCancelable( false )
+                .setPositiveButton( "OK",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void
+                                    onClick( DialogInterface dialog, int id )
+                            {
+                                String newSettings;
+
+                                // The Easy option
+                                if ( easyDifficultyRadioButton.isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.easyDifficulty );
+                                }
+                                // The Medium option
+                                else if ( mediumDifficultyRadioButton
+                                        .isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.mediumDifficulty );
+                                }
+                                // The Hard option
+                                else if ( hardDifficultyRadioButton
+                                        .isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.hardDifficulty );
+                                }
+                                // The Extreme option
+
+                                else if ( extremeDifficultyRadioButton
+                                        .isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.extremeDifficulty );
+                                }
+                                else
+                                {
+                                    // Default to medium difficulty
+                                    newSettings =
+                                            getString( R.string.mediumDifficulty );
+                                }
+
+                                updatePreference( difficultyPreferenceKey,
+                                        newSettings );
+
+                            }
+                        } )
+                .setNegativeButton( "Cancel",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void
+                                    onClick( DialogInterface dialog, int id )
+                            {
+                                dialog.cancel();
+                            }
+                        } );
+
+        // Create the alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // Show the dialog
+        alertDialog.show();
     }
 
     /**
@@ -230,8 +358,7 @@ public class SettingsPreferenceActivity extends Activity
                                 // Make sure a blank setting isn't entered
                                 if ( !"".equals( newSettingsValue ) )
                                 {
-                                    // phone number make sure it's length is 10
-                                    // digits
+                                    // Check game length options
                                     if ( settingsToBeUpdated
                                             .contains( getString( R.string.pref_title_game_length ) ) )
                                     {
@@ -347,9 +474,9 @@ public class SettingsPreferenceActivity extends Activity
     }
 
     /**
-     * Checks to see if a phone number has been set that's not the default
+     * Checks to see if a game time has been set that's not the default
      * 
-     * @return whether a custom phone number has been entered
+     * @return whether a game time number has been entered
      */
     public boolean isGameTimePrefernceSet()
     {
@@ -375,14 +502,14 @@ public class SettingsPreferenceActivity extends Activity
      * Checks to see if there is a valid name entered, and raises a toast for
      * the three possible cases:
      * 
-     * First case: a name and a phone number needs to entered.
+     * First case: a name and game time needs to entered.
      * 
      * Second case: a name needs to be entered.
      * 
-     * Third case: phone number needs to be entered.
+     * Third case:game time needs to be entered.
      * 
-     * @param validPhoneNumberExists
-     *            if this is true then a phone number needs to be entered
+     * @param validGameLengthExists
+     *            if this is true then a game length needs to be entered
      */
     private void
             checkForValidNameAndMakeToast( boolean validPhoneNumberExists )
@@ -395,7 +522,7 @@ public class SettingsPreferenceActivity extends Activity
             if ( validPhoneNumberExists )
             {
                 Toast.makeText( getApplicationContext(),
-                        "Please enter a valid name and phone number.",
+                        "Please enter a valid name and game length.",
                         Toast.LENGTH_LONG ).show();
             }
             else
@@ -442,15 +569,10 @@ public class SettingsPreferenceActivity extends Activity
             }
             else
             {
-                TelephonyManager mTelephonyMgr;
-                mTelephonyMgr =
-                        (TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE );
-
-                String phoneNumber = mTelephonyMgr.getLine1Number();
 
                 // updatePreference(
-                // getString( R.string.pref_title_phone_number ),
-                // phoneNumber ); TODO
+                // getString( R.string.pref_title_difficulty ),
+                // gameDifficulty ); TODO
             }
         }
 
@@ -484,15 +606,5 @@ public class SettingsPreferenceActivity extends Activity
         }
 
         return false;
-    }
-
-    /**
-     * * Disables the back button for the Order activity to prevent admin from
-     * going * back to previous order listing.
-     */
-    @Override
-    public void onBackPressed()
-    {
-        closeSettingsOnCreation();
     }
 }

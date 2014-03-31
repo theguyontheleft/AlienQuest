@@ -11,10 +11,10 @@ import android.widget.RelativeLayout;
 
 /**
  * @author Jimmy Dagres
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -65,11 +65,12 @@ public class GameActivity
         params =
                 new RelativeLayout.LayoutParams( screenWidthPixels_,
                         screenHeightPixels_ );
+        mRelativeLayout = new RelativeLayout( this );
 
         mRelativeLayout.addView( mTextureView, params );
         setContentView( mRelativeLayout );
 
-        mRelativeLayout = new RelativeLayout( this );
+
     }
 
     @Override

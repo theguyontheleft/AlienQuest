@@ -30,7 +30,7 @@ public class AboutFragment extends Fragment
             Bundle savedInstanceState )
     {
 
-        View view = inflater.inflate( R.layout.instructions_fragment,
+        View view = inflater.inflate( R.layout.dialog_instructions,
                 container, false );
         return view;
     }

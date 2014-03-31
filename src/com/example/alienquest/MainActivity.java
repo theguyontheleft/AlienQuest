@@ -1,19 +1,20 @@
 package com.example.alienquest;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mapping.GPSLocator;
@@ -55,9 +56,10 @@ public class MainActivity
      */
     private Intent startGameIntention;
 
-    // references to the fragments
-    private InstructionsFragment instructionsFragment_;
-    private AboutFragment aboutFragment_;
+    /**
+     * instance of the settings task
+     */
+    private static SharedPreferences preference_;
 
     // GPS location values
     protected double longitude_;
@@ -88,6 +90,11 @@ public class MainActivity
         instructionsButton_ = (Button) findViewById( R.id.instructionsButton );
         aboutGameButton_ = (Button) findViewById( R.id.aboutButton );
 
+        // Set up the preference
+        preference_ =
+                getSharedPreferences( getString( R.string.pref_title_file ),
+                        Context.MODE_PRIVATE );
+
         // Start game
         startGameButton_.setOnClickListener( new View.OnClickListener()
         {
@@ -108,18 +115,7 @@ public class MainActivity
             @Override
             public void onClick( View v )
             {
-                // Vibrate the device on a successful shake
-                Vibrator earthShaker =
-                        (Vibrator) getSystemService( Context.VIBRATOR_SERVICE );
-                earthShaker.vibrate( 200 );
-
-                // To remove the fragment
-                // getFragmentManager().beginTransaction().remove(
-                // instructionsFragment_ )
-                // .commit();
-
-                displayInstructionsFragment();
-
+                displayInstructionsPopUp();
             }
         } );
 
@@ -133,30 +129,21 @@ public class MainActivity
             }
         } );
 
-        // restoring references when the Activity is restoring itself
-        if ( savedInstanceState != null )
-        {
-
-            instructionsFragment_ =
-                    (InstructionsFragment) getFragmentManager()
-                            .findFragmentByTag(
-                                    FRAG1_TAG );
-            aboutFragment_ =
-                    (AboutFragment) getFragmentManager().findFragmentByTag(
-                            FRAG2_TAG );
-        }
     }
 
     /**
      * Adds the instructions fragment to the view
      */
-    private void displayInstructionsFragment()
+    private void displayInstructionsPopUp()
     {
-        instructionsFragment_ = new InstructionsFragment();
-        getFragmentManager()
-                .beginTransaction()
-                .add( R.id.mainActivityFragmentFrame1, instructionsFragment_,
-                        FRAG1_TAG ).commit();
+        // prepare the instructions box
+        Dialog instructionsBox =
+                new Dialog( MainActivity.this );
+        instructionsBox.setContentView( R.layout.dialog_instructions );
+        // set the message to display
+        instructionsBox.setTitle( "Instructions Menu" );
+
+        instructionsBox.show();
     }
 
     /**
@@ -164,49 +151,14 @@ public class MainActivity
      */
     private void displayAboutFragment()
     {
-        // createGui();
-        // aboutFragment_ = new AboutFragment(); TODO
-        // getFragmentManager().beginTransaction()
-        // .add( R.id.frame2, aboutFragment_, FRAG2_TAG ).commit();
-    }
+        // prepare the instructions box
+        Dialog aboutBox =
+                new Dialog( MainActivity.this );
+        aboutBox.setContentView( R.layout.dialog_about );
+        // set the message to display
+        aboutBox.setTitle( "About Alien Quest" );
 
-    /**
-     * @return the view of a new GUI
-     */
-    private View createGui()
-    {
-        LinearLayout layout = new LinearLayout( this );
-        //
-        // layout.setOrientation( LinearLayout.HORIZONTAL );
-        // layout.setLayoutParams( new LinearLayout.LayoutParams(
-        // AbsListView.LayoutParams.FILL_PARENT,
-        // AbsListView.LayoutParams.FILL_PARENT ) );
-        //
-        // LinearLayout innerLayout1 = new LinearLayout( this );
-        // innerLayout1.setLayoutParams( new LinearLayout.LayoutParams( 300,
-        // ViewGroup.LayoutParams.FILL_PARENT ) );
-        // innerLayout1.setTag( FRAG1_TAG );
-        // {
-        // FragmentTransaction fragmentTransaction =
-        // getFragmentManager().beginTransaction();
-        // fragmentTransaction.add( FRAG1_TAG, new ItemsList() );
-        // fragmentTransaction.commit();
-        // }
-        // layout.addView( innerLayout1 );
-        //
-        // LinearLayout innerLayout2 = new LinearLayout( this );
-        // innerLayout2.setLayoutParams( new LinearLayout.LayoutParams( 300,
-        // ViewGroup.LayoutParams.FILL_PARENT ) );
-        // innerLayout2.setTag( FRAG1_TAG );
-        // {
-        // FragmentTransaction fragmentTransaction =
-        // getFragmentManager().beginTransaction();
-        // fragmentTransaction.add( FRAG1_TAG, new ItemDetails() );
-        // fragmentTransaction.commit();
-        // }
-        // layout.addView( innerLayout2 );
-
-        return layout;
+        aboutBox.show();
     }
 
     @Override

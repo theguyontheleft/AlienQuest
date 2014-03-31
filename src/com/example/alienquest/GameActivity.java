@@ -47,7 +47,7 @@ public class GameActivity
         screenWidthPixels_ = metrics.widthPixels;
         screenHeightPixels_ = metrics.heightPixels;
 
-        displayCamera();
+        // displayCamera();
     }
 
     /**

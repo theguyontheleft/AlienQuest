@@ -1,27 +1,32 @@
 package com.example.alienquest;
 
+import java.io.Console;
+import java.io.IOException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.TextureView;
+import android.view.TextureView.SurfaceTextureListener;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.example.mapping.MapFragment;
 
 /**
  * @author Jimmy Dagres
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
 public class GameActivity
-        extends Activity
+        extends Activity implements SurfaceTextureListener
 {
     public final static String FRAG1_TAG = "FRAG1";
     public final static String FRAG2_TAG = "FRAG2";
@@ -57,7 +62,7 @@ public class GameActivity
         screenWidthPixels_ = metrics.widthPixels;
         screenHeightPixels_ = metrics.heightPixels;
 
-        // displayCamera();
+        displayCamera();
         // displayMapFragment();
 
         // Record the start time of the game
@@ -70,7 +75,8 @@ public class GameActivity
     private void displayCamera()
     {
         mTextureView = new TextureView( this );
-        // mTextureView.setSurfaceTextureListener( this );
+
+        mTextureView.setSurfaceTextureListener( this );
 
         // mTextureView = (TextureView) findViewById( R.id.textureView1 );
 
@@ -110,5 +116,46 @@ public class GameActivity
     public static long getQuestStartTime()
     {
         return questStartTime_;
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(
+        SurfaceTexture surface,
+        int width,
+        int height)
+    {
+        mCamera = Camera.open();
+        try {
+               mCamera.setPreviewTexture(surface);
+               mCamera.startPreview();
+
+        }  catch (IOException ex) {
+               ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(
+        SurfaceTexture surface,
+        int width,
+        int height)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface)
+    {
+        mCamera.stopPreview();
+        mCamera.release();
+        return true;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface)
+    {
+        // TODO Auto-generated method stub
+
     }
 }

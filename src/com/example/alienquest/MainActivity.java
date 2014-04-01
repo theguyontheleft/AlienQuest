@@ -32,10 +32,6 @@ import com.example.settings.SettingsPreferenceActivity;
 public class MainActivity
         extends Activity
 {
-
-    public final static String FRAG1_TAG = "FRAG1";
-    public final static String FRAG2_TAG = "FRAG2";
-    public final static String FRAG3_TAG = "FRAG3";
     /**
      * Used for the settings
      */

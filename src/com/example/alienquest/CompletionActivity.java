@@ -4,6 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 
+/**
+ * @author Jimmy Dagres
+ * 
+ * @version Apr 1, 2014
+ *
+ */
 public class CompletionActivity extends Activity
 {
 

@@ -22,9 +22,8 @@ import com.example.settings.SettingsPreferenceActivity;
 
 /**
  * @author Jimmy Dagres
- * @author
- * @author
- * @author
+ * @author Garrett Moran
+ * @author Tiffany Tuan
  * 
  * @version Mar 30, 2014
  * 
@@ -87,9 +86,9 @@ public class MainActivity
         aboutGameButton_ = (Button) findViewById( R.id.aboutButton );
 
         // Set up the preference
-        preference_ =
-                getSharedPreferences( getString( R.string.pref_title_file ),
-                        Context.MODE_PRIVATE );
+        preference_ = getSharedPreferences(
+                getString( R.string.pref_title_file ),
+                Context.MODE_PRIVATE );
 
         // Start game
         startGameButton_.setOnClickListener( new View.OnClickListener()
@@ -216,4 +215,12 @@ public class MainActivity
         }
     }
 
+    /**
+     * @return
+     * @returns the preferences
+     */
+    public static SharedPreferences getPreference_()
+    {
+        return preference_;
+    }
 }

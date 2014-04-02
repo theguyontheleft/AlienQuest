@@ -1,6 +1,7 @@
 package com.example.alienquest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -13,7 +14,11 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mapping.MapFragment;
@@ -21,10 +26,10 @@ import com.example.mapping.MapFragment;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -42,6 +47,10 @@ public class GameActivity
     private RelativeLayout mRelativeLayout;
 
     private MapFragment mapFragement_;
+    private ListView objectives;
+    private ArrayAdapter<String> itemAdapter;
+    private ArrayList<String> itemList;
+    private FrameLayout objectivesFrame;
 
     // Store the width and height in pixels, this will be usefull in
     // calculations throughout the application
@@ -61,7 +70,12 @@ public class GameActivity
     {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_game );
-
+        objectives = (ListView)findViewById(R.id.objectivesFrame).findViewById(R.id.listView1);
+        itemList = new ArrayList<String>();
+        itemList.clear();
+        itemAdapter = new ArrayAdapter<String>(this, R.id.listView1, itemList);
+        objectives.setAdapter(itemAdapter);
+        objectives.bringToFront();
         // Load the preference values
         // Set up the preference
         preference_ = getSharedPreferences(
@@ -94,32 +108,9 @@ public class GameActivity
 
         displayCamera();
         // displayMapFragment();
-
+        displayObjectives();
         // Record the start time of the game
         questStartTime_ = System.currentTimeMillis();
-    }
-
-    /**
-     * This method will display the bulk of the screen as the camera
-     */
-    private void displayCamera()
-    {
-        mTextureView = new TextureView( this );
-
-        mTextureView.setSurfaceTextureListener( this );
-
-        // mTextureView = (TextureView) findViewById( R.id.textureView1 );
-
-        RelativeLayout.LayoutParams params;
-
-        params =
-                new RelativeLayout.LayoutParams( screenWidthPixels_,
-                        screenHeightPixels_ );
-        mRelativeLayout = new RelativeLayout( this );
-
-        mRelativeLayout.addView( mTextureView, params );
-        setContentView( mRelativeLayout );
-
     }
 
     /**
@@ -132,6 +123,15 @@ public class GameActivity
                 .add( R.id.mapFrame, mapFragement_, FRAG2_TAG ).commit();
     }
 
+    /**
+     * displays the objectives component to the game screen
+     */
+    private void displayObjectives()
+    {
+        //TODO: change this to actually do what it should do
+        itemAdapter.add("1.......200");
+    }
+
     @Override
     public boolean onCreateOptionsMenu( Menu menu )
     {
@@ -140,12 +140,27 @@ public class GameActivity
         return true;
     }
 
-    /**
-     * @return the start time of the game
-     */
-    public static long getQuestStartTime()
+    public long getQuestStartTime()
     {
         return questStartTime_;
+    }
+
+    //---- Following Methods handle camera implementation -----//
+
+    /**
+     * This method will display the bulk of the screen as the camera
+     */
+    private void displayCamera()
+    {
+        mTextureView = new TextureView( this );
+        mTextureView.setSurfaceTextureListener( this );
+        RelativeLayout.LayoutParams params;
+        params =
+                new RelativeLayout.LayoutParams( screenWidthPixels_,
+                        screenHeightPixels_ );
+        mRelativeLayout = new RelativeLayout( this );
+        mRelativeLayout.addView( mTextureView, params );
+        setContentView( mRelativeLayout );
     }
 
     @Override
@@ -174,7 +189,6 @@ public class GameActivity
             int height )
     {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -189,6 +203,7 @@ public class GameActivity
     public void onSurfaceTextureUpdated( SurfaceTexture surface )
     {
         // TODO Auto-generated method stub
-
     }
+  //--------------------End of Section-----------------------//
+
 }

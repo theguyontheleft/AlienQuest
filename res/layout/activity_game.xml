@@ -11,21 +11,29 @@
 
     <FrameLayout
         android:id="@+id/objectivesFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="51dp"
-        android:layout_marginTop="55dp" >
-    </FrameLayout>
+        android:drawable="@color/Background" >
 
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/Background" >
+
+    </ListView>
+    </FrameLayout>
+        
     <FrameLayout
         android:id="@+id/mapFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="61dp"
-        android:layout_toRightOf="@+id/objectivesFrame" >
+        android:layout_alignParentRight="true" >
     </FrameLayout>
+
+   
 
 </RelativeLayout>

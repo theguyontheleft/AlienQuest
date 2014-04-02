@@ -7,7 +7,7 @@
     <string name="pref_title_file">pref_general</string>
     <string name="pref_title_name">Display Name</string>
     <string name="pref_title_difficulty">Quest Difficulty</string>
-    <string name="pref_title_game_length">Game Length</string>
+    <string name="pref_title_game_length">Campaign Length</string>
 
     <!-- Error Messages -->
     <string name="error_general">An Error Has Occurred</string>
@@ -17,6 +17,12 @@
     <string name="mediumDifficulty">Ancient Astronauts (Medium)</string>
     <string name="hardDifficulty">Hostile Takeover (Hard)</string>
     <string name="extremeDifficulty">Giorgio Tsoukalos\' Vacation (Extreme)</string>
+
+    <!-- Game Length -->
+    <string name="speedRound">5 Minutes (Speed Round)</string>
+    <string name="shortLength">10 Minutes (Short)</string>
+    <string name="mediumLength">15 Minutes (Medium)</string>
+    <string name="longLength">30 Minutes (Stamina Defense)</string>
 
     <!-- Instruction strings -->
     <string name="instructions_category1">		Instructions TO BE UPDATEDrrrrrrrrrrrrrrrrrrrrrrrrrrrrr

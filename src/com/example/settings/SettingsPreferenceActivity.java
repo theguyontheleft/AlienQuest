@@ -36,8 +36,6 @@ import com.example.alienquest.R;
  *          setting. Each setting is stored in a non volatile shared preference
  *          file.
  * 
- *          TODO: Set default values for difficulty and game time
- * 
  */
 public class SettingsPreferenceActivity extends Activity
 {
@@ -181,10 +179,11 @@ public class SettingsPreferenceActivity extends Activity
 
         case 1: // The game length preference
 
-            // Raises a toast to show the location
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Have list of different times", Toast.LENGTH_LONG ).show();
+            displayGameTime(
+                    getString( R.string.pref_title_game_length ),
+                    preference_.getString(
+                            getString( R.string.pref_title_game_length ),
+                            getString( R.string.pref_title_game_length ) ) );
             break;
 
         case 2: // Third setting is game difficulty
@@ -196,6 +195,127 @@ public class SettingsPreferenceActivity extends Activity
             break;
         }
 
+    }
+
+    /**
+     * @param difficultyPreferenceKey
+     * @param currentDifficultyPreference
+     */
+    private void displayGameTime( final String difficultyPreferenceKey,
+            String currentDifficultyPreference )
+    {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from( getBaseContext() );
+        View promptsView =
+                li.inflate( R.layout.dialog_update_game_time, null );
+        AlertDialog.Builder alertDialogBuilder =
+                new AlertDialog.Builder( this );
+
+        // set prompts.xml to alert dialog builder and sets the title
+        alertDialogBuilder.setView( promptsView );
+        alertDialogBuilder.setTitle( "Select Campaign Length" );
+
+        // Define all of the difficulty options
+        final RadioButton speedRoundRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.speedRound );
+        final RadioButton shortLengthRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.shortLength );
+        final RadioButton mediumLengthRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.mediumLength );
+        final RadioButton longLengthRadioButton =
+                (RadioButton) promptsView
+                        .findViewById( R.id.longLength );
+
+        // Fill in the appropriate check boxes, default to medium if nothing has
+        // been selected
+        if ( currentDifficultyPreference
+                .contentEquals( getString( R.string.pref_title_game_length ) ) )
+        {
+            mediumLengthRadioButton
+                    .setChecked( true );
+        }
+        else
+        {
+            speedRoundRadioButton.setChecked( currentDifficultyPreference
+                    .contains( getString( R.string.speedRound ) ) );
+            shortLengthRadioButton.setChecked( currentDifficultyPreference
+                    .contains( getString( R.string.shortLength ) ) );
+            mediumLengthRadioButton
+                    .setChecked( currentDifficultyPreference
+                            .contains( getString( R.string.mediumLength ) ) );
+            longLengthRadioButton
+                    .setChecked( currentDifficultyPreference
+                            .contains( getString( R.string.longLength ) ) );
+        }
+
+        alertDialogBuilder
+                .setCancelable( false )
+                .setPositiveButton( "OK",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void
+                                    onClick( DialogInterface dialog, int id )
+                            {
+                                String newSettings;
+
+                                // The Easy option
+                                if ( speedRoundRadioButton.isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.speedRound );
+                                }
+                                // The Medium option
+                                else if ( shortLengthRadioButton
+                                        .isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.shortLength );
+                                }
+                                // The Hard option
+                                else if ( mediumLengthRadioButton
+                                        .isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.mediumLength );
+                                }
+                                // The Extreme option
+
+                                else if ( longLengthRadioButton
+                                        .isChecked() )
+                                {
+                                    newSettings =
+                                            getString( R.string.longLength );
+                                }
+                                else
+                                {
+                                    // Default to medium difficulty
+                                    newSettings =
+                                            getString( R.string.mediumLength );
+                                }
+
+                                updatePreference( difficultyPreferenceKey,
+                                        newSettings );
+
+                            }
+                        } )
+                .setNegativeButton( "Cancel",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void
+                                    onClick( DialogInterface dialog, int id )
+                            {
+                                dialog.cancel();
+                            }
+                        } );
+
+        // Create the alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // Show the dialog
+        alertDialog.show();
     }
 
     /**
@@ -238,9 +358,29 @@ public class SettingsPreferenceActivity extends Activity
                 (RadioButton) promptsView
                         .findViewById( R.id.Extreme );
 
-        easyDifficultyRadioButton
-                .setChecked( getString( R.string.pref_title_difficulty )
-                        .contains( currentDifficultyPreference ) );
+        // Fill in the appropriate check boxes, default to medium if nothing has
+        // been selected
+        if ( currentDifficultyPreference
+                .contentEquals( getString( R.string.pref_title_difficulty ) ) )
+        {
+            // Default to medium difficulty
+            mediumDifficultyRadioButton
+                    .setChecked( true );
+        }
+        else
+        {
+            easyDifficultyRadioButton.setChecked( currentDifficultyPreference
+                    .contains( getString( R.string.easyDifficulty ) ) );
+            mediumDifficultyRadioButton
+                    .setChecked( currentDifficultyPreference
+                            .contains( getString( R.string.mediumDifficulty ) ) );
+            hardDifficultyRadioButton
+                    .setChecked( currentDifficultyPreference
+                            .contains( getString( R.string.hardDifficulty ) ) );
+            extremeDifficultyRadioButton
+                    .setChecked( currentDifficultyPreference
+                            .contains( getString( R.string.extremeDifficulty ) ) );
+        }
 
         alertDialogBuilder
                 .setCancelable( false )
@@ -273,7 +413,6 @@ public class SettingsPreferenceActivity extends Activity
                                             getString( R.string.hardDifficulty );
                                 }
                                 // The Extreme option
-
                                 else if ( extremeDifficultyRadioButton
                                         .isChecked() )
                                 {
@@ -282,7 +421,7 @@ public class SettingsPreferenceActivity extends Activity
                                 }
                                 else
                                 {
-                                    // Default to medium difficulty
+                                    // The medium difficulty
                                     newSettings =
                                             getString( R.string.mediumDifficulty );
                                 }

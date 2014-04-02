@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/errorImageView1"
         android:layout_width="257dp"
         android:layout_height="356dp"
         android:src="@drawable/alien_logic_meme" />

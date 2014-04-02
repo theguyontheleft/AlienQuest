@@ -9,6 +9,9 @@
     <string name="pref_title_difficulty">Quest Difficulty</string>
     <string name="pref_title_game_length">Game Length</string>
 
+    <!-- Error Messages -->
+    <string name="error_general">An Error Has Occurred</string>
+
     <!-- Difficulty Strings -->
     <string name="easyDifficulty">Harmless Explorers (Easy)"</string>
     <string name="mediumDifficulty">Ancient Astronauts (Medium)</string>

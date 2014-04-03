@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.Menu;
@@ -28,199 +29,186 @@ import com.example.settings.SettingsPreferenceActivity;
  * @version Mar 30, 2014
  * 
  */
-public class MainActivity
-        extends Activity
-{
-    /**
-     * Used for the settings
-     */
-    public static boolean inputCorrect;
+public class MainActivity extends Activity {
+	/**
+	 * Used for the settings
+	 */
+	public static boolean inputCorrect;
 
-    /**
-     * determines if the app is in its initial setup
-     */
-    private static boolean initialSetup;
+	/**
+	 * determines if the app is in its initial setup
+	 */
+	private static boolean initialSetup;
 
-    /**
-     * settings menu Intent, used to access settings and preference information
-     */
-    private Intent settingsIntention;
+	/**
+	 * settings menu Intent, used to access settings and preference information
+	 */
+	private Intent settingsIntention;
 
-    /**
-     * start game intent
-     */
-    private Intent startGameIntention;
+	/**
+	 * start game intent
+	 */
+	private Intent startGameIntention;
 
-    /**
-     * instance of the settings task
-     */
-    private static SharedPreferences preference_;
+	/**
+	 * instance of the settings task
+	 */
+	private static SharedPreferences preference_;
 
-    // GPS location values
-    protected double longitude_;
-    protected double latitude_;
-    private GPSLocator gps_ = null;
+	// GPS location values
+	protected double longitude_;
+	protected double latitude_;
+	private GPSLocator gps_ = null;
 
-    // Button instances
-    private Button startGameButton_;
-    private Button instructionsButton_;
-    private Button aboutGameButton_;
+	// Button instances
+	private Button startGameButton_;
+	private Button instructionsButton_;
+	private Button aboutGameButton_;
 
-    @Override
-    protected void onCreate( Bundle savedInstanceState )
-    {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+	private TextView welcomeMsg_;
 
-        getGPSLocation();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-        settingsIntention =
-                new Intent( MainActivity.this,
-                        SettingsPreferenceActivity.class );
-        startGameIntention =
-                new Intent( MainActivity.this, GameActivity.class );
+		Typeface tf = Typeface.createFromAsset(getAssets(), "Fonts/Molot.otf");
 
-        // Set up the start game, instructions and about buttons.
-        startGameButton_ = (Button) findViewById( R.id.startGameButton );
-        instructionsButton_ = (Button) findViewById( R.id.instructionsButton );
-        aboutGameButton_ = (Button) findViewById( R.id.aboutButton );
+		getGPSLocation();
 
-        // Set up the preference
-        preference_ = getSharedPreferences(
-                getString( R.string.pref_title_file ),
-                Context.MODE_PRIVATE );
+		settingsIntention = new Intent(MainActivity.this,
+				SettingsPreferenceActivity.class);
+		startGameIntention = new Intent(MainActivity.this, GameActivity.class);
 
-        // Start game
-        startGameButton_.setOnClickListener( new View.OnClickListener()
-        {
-            @Override
-            public void onClick( View v )
-            {
-                Vibrator earthShaker =
-                        (Vibrator) getSystemService( Context.VIBRATOR_SERVICE );
-                earthShaker.vibrate( 200 );
+		// Set up the start game, instructions and about buttons.
+		startGameButton_ = (Button) findViewById(R.id.startGameButton);
+		instructionsButton_ = (Button) findViewById(R.id.instructionsButton);
+		aboutGameButton_ = (Button) findViewById(R.id.aboutButton);
 
-                MainActivity.this.startActivity( startGameIntention );
-            }
-        } );
+		welcomeMsg_ = (TextView) findViewById(R.id.textView1);
 
-        // Display instructions fragment
-        instructionsButton_.setOnClickListener( new View.OnClickListener()
-        {
-            @Override
-            public void onClick( View v )
-            {
-                displayInstructionsPopUp();
-            }
-        } );
+		startGameButton_.setTypeface(tf);
+		instructionsButton_.setTypeface(tf);
+		aboutGameButton_.setTypeface(tf);
 
-        // Display about fragment
-        aboutGameButton_.setOnClickListener( new View.OnClickListener()
-        {
-            @Override
-            public void onClick( View v )
-            {
-                displayAboutFragment();
-            }
-        } );
+		welcomeMsg_.setTypeface(tf);
 
-    }
+		// Set up the preference
+		preference_ = getSharedPreferences(getString(R.string.pref_title_file),
+				Context.MODE_PRIVATE);
 
-    /**
-     * Adds the instructions fragment to the view
-     */
-    private void displayInstructionsPopUp()
-    {
-        // prepare the instructions box
-        Dialog instructionsBox =
-                new Dialog( MainActivity.this );
-        instructionsBox.setContentView( R.layout.dialog_instructions );
-        // set the message to display
-        instructionsBox.setTitle( "Instructions Menu" );
+		// Start game
+		startGameButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Vibrator earthShaker = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				earthShaker.vibrate(200);
 
-        instructionsBox.show();
-    }
+				MainActivity.this.startActivity(startGameIntention);
+			}
+		});
 
-    /**
-     * Adds the about fragment to the view
-     */
-    private void displayAboutFragment()
-    {
-        // prepare the instructions box
-        Dialog aboutBox =
-                new Dialog( MainActivity.this );
-        aboutBox.setContentView( R.layout.dialog_about );
-        // set the message to display
-        aboutBox.setTitle( "About Alien Quest" );
+		// Display instructions fragment
+		instructionsButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				displayInstructionsDialog();
+			}
+		});
 
-        aboutBox.show();
-    }
+		// Display about fragment
+		aboutGameButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				displayAboutDialog();
+			}
+		});
 
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item )
-    {
-        switch ( item.getItemId() )
-        {
-        case R.id.action_settings:
-            this.startActivity( settingsIntention );
-            break;
-        }
+	}
 
-        return true;
-    }
+	/**
+	 * Adds the instructions fragment to the view
+	 */
+	private void displayInstructionsDialog() {
+		// prepare the instructions box
+		Dialog instructionsBox = new Dialog(MainActivity.this);
+		instructionsBox.setContentView(R.layout.dialog_instructions);
+		// set the message to display
+		instructionsBox.setTitle("Instructions Menu");
 
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu )
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.settings, menu );
-        return true;
-    }
+		instructionsBox.show();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
-     */
-    @Override
-    public boolean onMenuItemSelected( int featureId, MenuItem item )
-    {
-        // TODO Auto-generated method stub
-        return super.onMenuItemSelected( featureId, item );
-    }
+	/**
+	 * Adds the about fragment to the view
+	 */
+	private void displayAboutDialog() {
+		// prepare the instructions box
+		Dialog aboutBox = new Dialog(MainActivity.this);
+		aboutBox.setContentView(R.layout.dialog_about);
 
-    /**
-     * Try's to get the GPS location
-     */
-    private void getGPSLocation()
-    {
-        gps_ = new GPSLocator( MainActivity.this );
+		// set the message to display
+		aboutBox.setTitle("About Alien Quest");
 
-        // check if GPS enabled
-        if ( gps_.canGetLocation() )
-        {
-            latitude_ = gps_.getLatitude();
-            longitude_ = gps_.getLongitude();
+		aboutBox.show();
+	}
 
-            // Raises a toast to show the location
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Your Location is - \nLat: " + latitude_ + "\nLong: "
-                            + longitude_, Toast.LENGTH_LONG ).show();
-        }
-        else
-        {
-            // There was an error getting the gps information
-            gps_.showSettingsAlert();
-        }
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			this.startActivity(settingsIntention);
+			break;
+		}
 
-    /**
-     * @return
-     * @returns the preferences
-     */
-    public static SharedPreferences getPreference_()
-    {
-        return preference_;
-    }
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.settings, menu);
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
+	 */
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+	/**
+	 * Try's to get the GPS location
+	 */
+	private void getGPSLocation() {
+		gps_ = new GPSLocator(MainActivity.this);
+
+		// check if GPS enabled
+		if (gps_.canGetLocation()) {
+			latitude_ = gps_.getLatitude();
+			longitude_ = gps_.getLongitude();
+
+			// Raises a toast to show the location
+			Toast.makeText(
+					getApplicationContext(),
+					"Your Location is - \nLat: " + latitude_ + "\nLong: "
+							+ longitude_, Toast.LENGTH_LONG).show();
+		} else {
+			// There was an error getting the gps information
+			gps_.showSettingsAlert();
+		}
+	}
+
+	/**
+	 * @return
+	 * @returns the preferences
+	 */
+	public static SharedPreferences getPreference_() {
+		return preference_;
+	}
 }

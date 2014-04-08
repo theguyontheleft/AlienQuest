@@ -2,7 +2,6 @@ package com.example.mapping;
 
 import java.util.ArrayList;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.alienquest.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -22,20 +22,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @version Mar 30, 2014
  * 
  */
-public class MapFragment
-        extends Fragment
+public class MapFragmentClass
+        extends MapFragment
 {
     private GPSLocator gps_ = null;
 
-    /**
-     * This arrayList will store the markets
-     */
+    private/**
+            * This arrayList will store the markets
+            */
     ArrayList<MarkerOptions> alienShips_;
-
-    /**
-     * The google map
-     */
-    private GoogleMap mMap_;
 
     // this is the first callback method that is invoked.
     @Override
@@ -46,16 +41,17 @@ public class MapFragment
 
     }
 
-    // this is where the GUI is initialized
-    @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState )
-    {
-
-        View view = inflater.inflate( R.layout.map_fragment,
-                container, false );
-        return view;
-    }
+    //
+    // // this is where the GUI is initialized
+    // @Override
+    // public View onCreateView( LayoutInflater inflater, ViewGroup container,
+    // Bundle savedInstanceState )
+    // {
+    //
+    // View view = inflater.inflate( R.id.mapView,
+    // container, false );
+    // return view;
+    // }
 
     /**
      * @param numberOfAlienShips
@@ -90,7 +86,7 @@ public class MapFragment
                                 .fromResource( R.drawable.alien_ship_map_marker_large ) );
 
         // Add the marker to the map and the array list
-        mMap_.addMarker( newMarker );
+        // mMap_.addMarker( newMarker ); TODO
         alienShips_.add( newMarker );
     }
 

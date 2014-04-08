@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * 
  * This class uses the GPS from the android to get the latitude and longitude
@@ -202,6 +204,14 @@ public class GPSLocator extends Service implements LocationListener
                 .setMessage( "GPS is not enabled. Do you want to go to settings menu?" );
 
         alertDialog.show();
+    }
+
+    /**
+     * @return the latitude longitude variable
+     */
+    public LatLng getLatLongVariable()
+    {
+        return new LatLng( latitude, longitude );
     }
 
     @Override

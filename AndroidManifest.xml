@@ -61,6 +61,11 @@
             android:label="MapFragment"
             android:screenOrientation="landscape" >
         </activity>
+         <activity
+            android:name="com.example.mapping.MapActivity"
+            android:label="ALienLandingPoints"
+            android:screenOrientation="landscape" >
+        </activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

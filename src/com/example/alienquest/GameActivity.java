@@ -27,8 +27,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * @author Jimmy Dagres
@@ -61,8 +64,8 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     /**
      * The google map
      */
-    private GoogleMap mMap_;
-    private MapFragment mMapFrag_;
+    private static GoogleMap mMap_;
+    private static MapFragment mMapFrag_;
 
     private GPSLocator gps_ = null;
 
@@ -73,6 +76,12 @@ public class GameActivity extends Activity implements SurfaceTextureListener
 
     // Time in ms that the game started
     private static long questStartTime_;
+
+    /**
+     * When the game first starts the user is prompted of the map where the
+     * aliens are landing
+     */
+    private boolean userPrompted_ = false;
 
     // GPS location values
     protected double longitude_;
@@ -126,9 +135,9 @@ public class GameActivity extends Activity implements SurfaceTextureListener
         screenWidthPixels_ = metrics.widthPixels;
         screenHeightPixels_ = metrics.heightPixels;
 
-        displayCamera();
-        // displayMapFragment();
-        displayObjectives();
+        // displayCamera();
+        displayMapFragment();
+        // displayObjectives();
 
         // Record the start time of the game
         questStartTime_ = System.currentTimeMillis();
@@ -141,18 +150,19 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     {
         // Add the map fragment
         mMapFrag_ = new MapFragment();
+        // mapFragement_ = new MapFragment();
         mMap_ = mMapFrag_.getMap();
 
         FragmentTransaction fragMan = getFragmentManager().beginTransaction();
         fragMan.add( R.id.mapFrame, mMapFrag_, FRAG2_TAG );
         fragMan.commit();
-
+        
         LatLng HAMBURG = new LatLng( 53.558, 9.927 ); // TODO remove
         LatLng KIEL = new LatLng( 53.551, 9.993 );
 
         // Zoom in on the current location
         getGPSLocation(); // Get the location first
-
+        
         // Initialize the camera position
         MapsInitializer.initialize( GameActivity.this );
         CameraPosition mCameraPosition =
@@ -172,15 +182,21 @@ public class GameActivity extends Activity implements SurfaceTextureListener
         // .icon( BitmapDescriptorFactory
         // .fromResource( R.drawable.ic_launcher ) ) );
 
-        // Move the camera instantly to hamburg with a zoom of 15.
-        // mMap_.moveCamera( CameraUpdateFactory.newLatLngZoom(
-        // HAMBURG, 15 ) );
+        if ( null != mMap_ )
+        {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "The Aliens are coming!", Toast.LENGTH_LONG ).show();
 
-        // Zoom in, animating the camera.
-        // mMap_.animateCamera( CameraUpdateFactory
+            // Move the camera instantly to hamburg with a zoom of 15.
+            mMap_.moveCamera( CameraUpdateFactory.newLatLngZoom(
+                    HAMBURG, 15 ) );
+            // Zoom in, animating the camera.
+            mMap_.animateCamera( CameraUpdateFactory
 
-        // .newCameraPosition( mCameraPosition )
-        // );
+                    .newCameraPosition( mCameraPosition )
+                    );
+        }
     }
 
     /**

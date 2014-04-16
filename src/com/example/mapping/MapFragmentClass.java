@@ -41,17 +41,15 @@ public class MapFragmentClass
 
     }
 
-    //
-    // // this is where the GUI is initialized
-    // @Override
-    // public View onCreateView( LayoutInflater inflater, ViewGroup container,
-    // Bundle savedInstanceState )
-    // {
-    //
-    // View view = inflater.inflate( R.id.mapView,
-    // container, false );
-    // return view;
-    // }
+    // this is where the GUI is initialized
+    @Override
+    public View onCreateView( LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState )
+    {
+        View view = inflater.inflate( R.id.mapFrame,
+                container, false );
+        return view;
+    }
 
     /**
      * @param numberOfAlienShips

@@ -48,6 +48,9 @@ public class MapFragmentClass
     {
         View view = inflater.inflate( R.id.mapFrame,
                 container, false );
+      
+
+    
         return view;
     }
 

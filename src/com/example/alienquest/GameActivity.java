@@ -150,52 +150,28 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     {
         // Add the map fragment
         mMapFrag_ = new MapFragment();
-        // mapFragement_ = new MapFragment();
-        mMap_ = mMapFrag_.getMap();
+        mapFragement_ = new MapFragmentClass();
 
-        FragmentTransaction fragMan = getFragmentManager().beginTransaction();
+        FragmentTransaction fragMan =
+                getFragmentManager().beginTransaction();
         fragMan.add( R.id.mapFrame, mMapFrag_, FRAG2_TAG );
         fragMan.commit();
-        
-        LatLng HAMBURG = new LatLng( 53.558, 9.927 ); // TODO remove
-        LatLng KIEL = new LatLng( 53.551, 9.993 );
 
-        // Zoom in on the current location
-        getGPSLocation(); // Get the location first
-        
-        // Initialize the camera position
-        MapsInitializer.initialize( GameActivity.this );
-        CameraPosition mCameraPosition =
-                new CameraPosition.Builder()
-                        .target( gps_.getLatLongVariable() ).bearing( 0 )
-                        .tilt( 30 ).build();
+        mMap_ = mMapFrag_.getMap(); // Custom MapFragment
+        setUpMapIfNeeded(); // Dynamic
 
-        // TODO causes null pointer exception
-        // Marker hamburg =
-        // mMap_.addMarker( new MarkerOptions().position(
-        // gps_.getLatLongVariable() )
-        // .title( "Hamburg" ) );
-        // Marker kiel = mMap_.addMarker( new MarkerOptions()
-        // .position( gps_.getLatLongVariable() )
-        // .title( "Kiel" )
-        // .snippet( "Kiel is cool" )
-        // .icon( BitmapDescriptorFactory
-        // .fromResource( R.drawable.ic_launcher ) ) );
+    }
 
+    private void setUpMapIfNeeded()
+    {
         if ( null != mMap_ )
         {
-            Toast.makeText(
-                    getApplicationContext(),
-                    "The Aliens are coming!", Toast.LENGTH_LONG ).show();
-
-            // Move the camera instantly to hamburg with a zoom of 15.
-            mMap_.moveCamera( CameraUpdateFactory.newLatLngZoom(
-                    HAMBURG, 15 ) );
-            // Zoom in, animating the camera.
-            mMap_.animateCamera( CameraUpdateFactory
-
-                    .newCameraPosition( mCameraPosition )
-                    );
+            centerOnCurrentLocation();
+        }
+        else
+        {
+            mMap_ = mMapFrag_.getMap();
+            centerOnCurrentLocation();
         }
     }
 
@@ -248,6 +224,73 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     }
 
     // ---- Following Methods handle camera implementation -----//
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        setUpMapIfNeeded();
+    }
+
+    /**
+     * Focuses the google map on th current GPS location
+     */
+    private void centerOnCurrentLocation()
+    {
+        if ( null != mMap_ )
+        {
+            // Get the location first
+            getGPSLocation();
+
+            // Initialize the camera position
+            MapsInitializer.initialize( GameActivity.this );
+            CameraPosition mCameraPosition =
+                    new CameraPosition.Builder()
+                            .zoom( 17.0f )
+                            .target( gps_.getLatLongVariable() ).bearing( 0 )
+                            .tilt( 0 ).build();
+
+            Marker hamburg =
+                    mMap_.addMarker( new MarkerOptions().position(
+                            gps_.getLatLongVariable() )
+                            .title( "Hamburg" ) );
+            Marker kiel =
+                    mMap_.addMarker( new MarkerOptions()
+                            .position( gps_.getLatLongVariable() )
+                            .title( "Kiel" )
+                            .snippet( "Kiel is cool" )
+                            .icon( BitmapDescriptorFactory
+                                    .fromResource( R.drawable.alien_ship_map_marker_large ) ) );
+
+            Toast.makeText(
+                    getApplicationContext(),
+                    "The Aliens are coming!", Toast.LENGTH_LONG ).show();
+
+            // Move the camera instantly to hamburg with a zoom of 15.
+            mMap_.moveCamera( CameraUpdateFactory.newLatLngZoom(
+                    gps_.getLatLongVariable(), 18.0f ) );
+            // Zoom in, animating the camera.
+            mMap_.animateCamera( CameraUpdateFactory
+                    .newCameraPosition( mCameraPosition )
+                    );
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+    }
 
     /**
      * This method will display the bulk of the screen as the camera

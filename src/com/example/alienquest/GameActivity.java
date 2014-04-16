@@ -64,10 +64,10 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     /**
      * The google map
      */
-    private static GoogleMap mMap_;
-    private static MapFragment mMapFrag_;
+    protected static GoogleMap mMap_;
+    protected static MapFragment mMapFrag_;
 
-    private GPSLocator gps_ = null;
+    protected GPSLocator gps_ = null;
 
     // Store the width and height in pixels, this will be usefull in
     // calculations throughout the application
@@ -150,7 +150,6 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     {
         // Add the map fragment
         mMapFrag_ = new MapFragment();
-        mapFragement_ = new MapFragmentClass();
 
         FragmentTransaction fragMan =
                 getFragmentManager().beginTransaction();
@@ -238,7 +237,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener
     }
 
     /**
-     * Focuses the google map on th current GPS location
+     * Focuses the google map on the current GPS location
      */
     private void centerOnCurrentLocation()
     {
@@ -251,21 +250,23 @@ public class GameActivity extends Activity implements SurfaceTextureListener
             MapsInitializer.initialize( GameActivity.this );
             CameraPosition mCameraPosition =
                     new CameraPosition.Builder()
-                            .zoom( 17.0f )
+                            .zoom( 16.0f )
                             .target( gps_.getLatLongVariable() ).bearing( 0 )
                             .tilt( 0 ).build();
 
-            Marker hamburg =
+            Marker currentPosition =
                     mMap_.addMarker( new MarkerOptions().position(
                             gps_.getLatLongVariable() )
                             .title( "Hamburg" ) );
-            Marker kiel =
+
+            Marker newAlienShip =
                     mMap_.addMarker( new MarkerOptions()
                             .position( gps_.getLatLongVariable() )
-                            .title( "Kiel" )
-                            .snippet( "Kiel is cool" )
+                            .title( "AlienShip" )
+                            // TODO specify which ship
+                            .snippet( "Ship is landing!" )
                             .icon( BitmapDescriptorFactory
-                                    .fromResource( R.drawable.alien_ship_map_marker_large ) ) );
+                                    .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
 
             Toast.makeText(
                     getApplicationContext(),
@@ -273,7 +274,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener
 
             // Move the camera instantly to hamburg with a zoom of 15.
             mMap_.moveCamera( CameraUpdateFactory.newLatLngZoom(
-                    gps_.getLatLongVariable(), 18.0f ) );
+                    gps_.getLatLongVariable(), 15.0f ) );
             // Zoom in, animating the camera.
             mMap_.animateCamera( CameraUpdateFactory
                     .newCameraPosition( mCameraPosition )

@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.alienquest.GameActivity;
 import com.example.alienquest.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -23,35 +25,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * 
  */
 public class MapFragmentClass
-        extends MapFragment
+        extends GameActivity
 {
-    private GPSLocator gps_ = null;
-
-    private/**
-            * This arrayList will store the markets
-            */
-    ArrayList<MarkerOptions> alienShips_;
+    /**
+     * This arrayList will store the markets
+     */
+    private ArrayList<Marker> alienShips_;
 
     // this is the first callback method that is invoked.
     @Override
     public void onCreate( Bundle state )
     {
         super.onCreate( state );
-        alienShips_ = new ArrayList<MarkerOptions>();
+        alienShips_ = new ArrayList<Marker>();
 
-    }
-
-    // this is where the GUI is initialized
-    @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState )
-    {
-        View view = inflater.inflate( R.id.mapFrame,
-                container, false );
-      
-
-    
-        return view;
     }
 
     /**
@@ -61,7 +48,14 @@ public class MapFragmentClass
     {
         for ( int j = 0; j < numberOfAlienShips; j++ )
         {
-            // TODO create the marker and add it to the map
+            Marker newAlienShip =
+                    mMap_.addMarker( new MarkerOptions()
+                            .position( gps_.getLatLongVariable() )
+                            .title( "AlienShip" + j )
+                            .snippet( "Ship" + j + " is landing!" )
+                            .icon( BitmapDescriptorFactory
+                                    .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
+            alienShips_.add( newAlienShip );
         }
     }
 
@@ -79,16 +73,19 @@ public class MapFragmentClass
     public void markAlienShipAtLocation( double longitude, double latitude,
             int shipID, String shipType )
     {
-        // // Uses a custom icon.
-        MarkerOptions newMarker =
-                new MarkerOptions()
-                        .title( shipType + " " + shipID )
-                        .icon( BitmapDescriptorFactory
-                                .fromResource( R.drawable.alien_ship_map_marker_large ) );
 
-        // Add the marker to the map and the array list
-        // mMap_.addMarker( newMarker ); TODO
-        alienShips_.add( newMarker );
+        // TODO is this needed?
+
+        // // // Uses a custom icon.
+        // MarkerOptions newMarker =
+        // new MarkerOptions()
+        // .title( shipType + " " + shipID )
+        // .icon( BitmapDescriptorFactory
+        // .fromResource( R.drawable.alien_ship_map_marker_large ) );
+        //
+        // // Add the marker to the map and the array list
+        // // mMap_.addMarker( newMarker ); TODO
+        // alienShips_.add( newMarker );
     }
 
     /**

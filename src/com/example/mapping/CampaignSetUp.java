@@ -4,7 +4,9 @@ import java.util.Random;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.alienquest.GameActivity;
 import com.example.alienquest.R;
@@ -46,6 +48,8 @@ public class CampaignSetUp extends GameActivity {
 
 	private static Random randomNumberGenerator_;
 
+	private Location alienLocation_;
+
 	/**
 	 * @return NumberOfAlienShips
 	 */
@@ -63,9 +67,7 @@ public class CampaignSetUp extends GameActivity {
 	/**
 	 * Look at the preference setting and store the values locally.
 	 */
-	public CampaignSetUp(SharedPreferences initPreferences) {
-		initializePreferences(initPreferences);
-		initializeTheNumberOfAliens();
+	public CampaignSetUp() {
 	}
 
 	private void initializePreferences(SharedPreferences preferences) {
@@ -271,5 +273,39 @@ public class CampaignSetUp extends GameActivity {
 		}
 		setmNumberOfAlienShips(randomInt);
 		return getmNumberOfAlienShips();
+	}
+
+	private void getRandomAlienLocation(int radius) {
+		Random random = new Random();
+
+		// Convert radius from meters to degrees
+		double radiusInDegrees = radius / 111000f;
+
+		double u = random.nextDouble();
+		double v = random.nextDouble();
+		double w = radiusInDegrees * Math.sqrt(u);
+		double t = 2 * Math.PI * v;
+		double x = w * Math.cos(t);
+		double y = w * Math.sin(t);
+
+		// Adjust the x-coordinate for the shrinking of the east-west distances
+		double new_x = x / Math.cos(latitude_);
+
+		double alienLongitude = new_x + longitude_;
+		double alienLatitude = y + latitude_;
+
+		alienLocation_ = new Location("GPS");
+
+		alienLocation_.setLongitude(alienLongitude);
+		alienLocation_.setLatitude(alienLatitude);
+
+	}
+
+	public double getAlienLongitude() {
+		return alienLocation_.getLongitude();
+	}
+
+	public double getAlienLatitude() {
+		return alienLocation_.getLatitude();
 	}
 }

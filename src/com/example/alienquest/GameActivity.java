@@ -55,7 +55,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 
 	private RelativeLayout mRelativeLayout;
 
-	private MapFragmentClass mapFragement_;
+	private MapFragmentClass mapFragment_;
 	private ListView objectives;
 	private ArrayAdapter<String> itemAdapter;
 	private ArrayList<String> itemList;
@@ -165,7 +165,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 	}
 
 	/**
-	 * Try's to get the GPS location
+	 * Tries to get the GPS location
 	 */
 	private void getGPSLocation() {
 		gps_ = new GPSLocator(getApplicationContext());

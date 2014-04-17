@@ -3,25 +3,21 @@ package com.example.mapping;
 import java.util.Random;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.example.alienquest.GameActivity;
 import com.example.alienquest.R;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * @author Jimmy Dagres
+ * @author Jimmy Dagres, Tiffany Tuan, Garrett Moran
  * 
  * @version Apr 2, 2014
  * 
  */
 public class CampaignSetUp {
 
-	int randomInt;
-	private static int mNumberOfAlienShips;
+	private int mNumberOfAlienShips;
 
 	/**
 	 * There are currently four difficulty options
@@ -49,7 +45,7 @@ public class CampaignSetUp {
 	 */
 	private int gameLengthInMinutes_ = 2;
 
-	private static Random randomNumberGenerator_;
+	private static Random randomNumGenerator_;
 
 	protected Location alienLocation_;
 
@@ -124,7 +120,7 @@ public class CampaignSetUp {
 	 * @return the number of aliens created
 	 */
 	private void initializeNumberOfAliens() {
-		randomNumberGenerator_ = new Random();
+		randomNumGenerator_ = new Random();
 
 		switch (gameDifficulty) {
 		case 0:
@@ -144,19 +140,19 @@ public class CampaignSetUp {
 
 			if (gameLengthInMinutes_ == 0) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 5;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 5;
 
 			} else if (gameLengthInMinutes_ == 1) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 10;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 10;
 
 			} else if (gameLengthInMinutes_ == 2) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 15;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 15;
 
 			} else {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 30;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 30;
 
 			}
 			break;
@@ -176,19 +172,19 @@ public class CampaignSetUp {
 
 			if (gameLengthInMinutes_ == 0) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 15;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 15;
 
 			} else if (gameLengthInMinutes_ == 1) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 30;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 30;
 
 			} else if (gameLengthInMinutes_ == 2) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 45;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 45;
 
 			} else {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 90;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 90;
 
 			}
 			break;
@@ -209,19 +205,19 @@ public class CampaignSetUp {
 
 			if (gameLengthInMinutes_ == 0) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 25;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 25;
 
 			} else if (gameLengthInMinutes_ == 1) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 50;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 50;
 
 			} else if (gameLengthInMinutes_ == 2) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 75;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 75;
 
 			} else {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 150;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 150;
 
 			}
 			break;
@@ -241,27 +237,27 @@ public class CampaignSetUp {
 
 			if (gameLengthInMinutes_ == 0) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 30;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 30;
 
 			} else if (gameLengthInMinutes_ == 1) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 60;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 60;
 
 			} else if (gameLengthInMinutes_ == 2) {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 90;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 90;
 
 			} else {
 
-				randomInt = randomNumberGenerator_.nextInt(10) + 180;
+				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 180;
 
 			}
 			break;
 		default:
 			break;
 		}
-		Log.i("Random int is ", "" + randomInt);
-		setmNumberOfAlienShips(randomInt);
+		Log.i("Random int is ", "" + mNumberOfAlienShips);
+		setmNumberOfAlienShips(mNumberOfAlienShips);
 	}
 
 	private void getRandomAlienLocation(double latitude_, double longitude_,

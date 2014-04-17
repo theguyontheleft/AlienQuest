@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -60,6 +61,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 	private ArrayAdapter<String> itemAdapter;
 	private ArrayList<String> itemList;
 	private FrameLayout objectivesFrame;
+	private Intent settings;
 
 	/**
 	 * The google map
@@ -86,17 +88,19 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 	// GPS location values
 	protected double longitude_;
 	protected double latitude_;
-	private CampaignSetUp setUp;
+	protected CampaignSetUp setUp;
 
 	/**
 	 * instance of the settings task
 	 */
-	private static SharedPreferences preference_;
+	protected static SharedPreferences preference_;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
+		settings = getIntent();
+		
 		objectives = (ListView) findViewById(R.id.objectivesFrame)
 				.findViewById(R.id.listView1);
 		itemList = new ArrayList<String>();
@@ -130,6 +134,9 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		screenWidthPixels_ = metrics.widthPixels;
 		screenHeightPixels_ = metrics.heightPixels;
+
+		// Default the preferences if they aren't set yet
+		// setUp = new CampaignSetUp();
 
 		// displayCamera();
 		displayMapFragment();
@@ -229,15 +236,16 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 			// Initialize the camera position
 			MapsInitializer.initialize(GameActivity.this);
 			CameraPosition mCameraPosition = new CameraPosition.Builder()
-					.zoom(16.0f).target(gps_.getLatLongVariable()).bearing(0)
-					.tilt(0).build();
+					.zoom(16.0f).target(gps_.getLatCurrentLongVariable())
+					.bearing(0).tilt(0).build();
 
 			Marker currentPosition = mMap_.addMarker(new MarkerOptions()
-					.position(gps_.getLatLongVariable()).title("Hamburg"));
+					.position(gps_.getLatCurrentLongVariable())
+					.title("Hamburg"));
 
 			Marker newAlienShip = mMap_
 					.addMarker(new MarkerOptions()
-							.position(gps_.getLatLongVariable())
+							.position(gps_.getLatCurrentLongVariable())
 							.title("AlienShip")
 							// TODO specify which ship
 							.snippet("Ship is landing!")
@@ -249,7 +257,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 
 			// Move the camera instantly to hamburg with a zoom of 15.
 			mMap_.moveCamera(CameraUpdateFactory.newLatLngZoom(
-					gps_.getLatLongVariable(), 15.0f));
+					gps_.getLatCurrentLongVariable(), 15.0f));
 			// Zoom in, animating the camera.
 			mMap_.animateCamera(CameraUpdateFactory
 					.newCameraPosition(mCameraPosition));

@@ -109,7 +109,7 @@ public class MainActivity extends Activity
                 Vibrator earthShaker =
                         (Vibrator) getSystemService( Context.VIBRATOR_SERVICE );
                 earthShaker.vibrate( 200 );
-
+                //startGameIntention.putExtra("Difficulty", settingsIntention.getStringExtra("Difficulty"));
                 MainActivity.this.startActivity( startGameIntention );
             }
         } );
@@ -185,6 +185,7 @@ public class MainActivity extends Activity
         {
         case R.id.action_settings:
             this.startActivity( settingsIntention );
+            
             break;
         }
 

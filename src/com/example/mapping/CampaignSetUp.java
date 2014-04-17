@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.alienquest.GameActivity;
 import com.example.alienquest.R;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Jimmy Dagres
@@ -17,7 +18,7 @@ import com.example.alienquest.R;
  * @version Apr 2, 2014
  * 
  */
-public class CampaignSetUp extends GameActivity {
+public class CampaignSetUp {
 	private static int mNumberOfAlienShips;
 
 	/**
@@ -48,7 +49,7 @@ public class CampaignSetUp extends GameActivity {
 
 	private static Random randomNumberGenerator_;
 
-	private Location alienLocation_;
+	protected Location alienLocation_;
 
 	/**
 	 * @return NumberOfAlienShips
@@ -67,59 +68,28 @@ public class CampaignSetUp extends GameActivity {
 	/**
 	 * Look at the preference setting and store the values locally.
 	 */
-	public CampaignSetUp() {
+	public CampaignSetUp(String pref, int gameLength) {
+		initializePreferences(pref, gameLength);
+		initializeNumberOfAliens();
 	}
 
-	private void initializePreferences(SharedPreferences preferences) {
-		// Set the difficulty variable
-		String currentDifficultySetting = preferences.getString(
-				getString(R.string.pref_title_difficulty),
-				getString(R.string.pref_title_difficulty));
-
-		if (currentDifficultySetting
-				.contentEquals(getString(R.string.pref_title_difficulty))
-				|| currentDifficultySetting
-						.contentEquals(getString(R.string.mediumDifficulty))) {
+	private void initializePreferences(String preference_,
+			int currentGameLengthSetting) {
+		if (preference_.equals("mediumDifficulty")) {
 			// The preference hasnn't been set yet, so default it to medium
 			gameDifficulty = 1;
-		} else if (currentDifficultySetting
-				.contentEquals(getString(R.string.easyDifficulty))) {
+		} else if (preference_.equals("easyDifficulty")) {
 			// Easy
 			gameDifficulty = 0;
-		} else if (currentDifficultySetting
-				.contentEquals(getString(R.string.hardDifficulty))) {
+		} else if (preference_.equals("hardDifficulty")) {
 			// Hard
 			gameDifficulty = 2;
-		} else if (currentDifficultySetting
-				.contentEquals(getString(R.string.extremeDifficulty))) {
+		} else if (preference_.equals("extremeDifficulty")) {
 			// Extreme
 			gameDifficulty = 3;
 		}
 
-		// Set the difficulty variable
-		String currentGameLengthSetting = preferences.getString(
-				getString(R.string.pref_title_game_length),
-				getString(R.string.pref_title_game_length));
-
-		if (currentGameLengthSetting
-				.contentEquals(getString(R.string.pref_title_game_length))
-				|| currentDifficultySetting
-						.contentEquals(getString(R.string.mediumLength))) {
-			// The preference hasnn't been set yet, so default it to medium
-			gameLengthInMinutes_ = 1;
-		} else if (currentGameLengthSetting
-				.contentEquals(getString(R.string.speedRound))) {
-			// Easy
-			gameLengthInMinutes_ = 0;
-		} else if (currentGameLengthSetting
-				.contentEquals(getString(R.string.shortLength))) {
-			// Hard
-			gameLengthInMinutes_ = 2;
-		} else if (currentGameLengthSetting
-				.contentEquals(getString(R.string.longLength))) {
-			// Extreme
-			gameLengthInMinutes_ = 3;
-		}
+		gameLengthInMinutes_ = currentGameLengthSetting;
 	}
 
 	/**
@@ -128,7 +98,7 @@ public class CampaignSetUp extends GameActivity {
 	 * 
 	 * @return the number of aliens created
 	 */
-	private int initializeTheNumberOfAliens() {
+	private int initializeNumberOfAliens() {
 		randomNumberGenerator_ = new Random();
 		int randomInt = 0;
 
@@ -198,7 +168,6 @@ public class CampaignSetUp extends GameActivity {
 				randomInt = randomNumberGenerator_.nextInt(10) + 90;
 
 			}
-			Log.i("Random int is ", "" + randomInt);
 			break;
 		case 2:
 
@@ -232,8 +201,6 @@ public class CampaignSetUp extends GameActivity {
 				randomInt = randomNumberGenerator_.nextInt(10) + 150;
 
 			}
-			Log.i("Random int is ", "" + randomInt);
-
 			break;
 		case 3:
 			/**
@@ -266,7 +233,6 @@ public class CampaignSetUp extends GameActivity {
 				randomInt = randomNumberGenerator_.nextInt(10) + 180;
 
 			}
-			Log.i("Random int is ", "" + randomInt);
 			break;
 		default:
 			break;
@@ -275,7 +241,8 @@ public class CampaignSetUp extends GameActivity {
 		return getmNumberOfAlienShips();
 	}
 
-	private void getRandomAlienLocation(int radius) {
+	private void getRandomAlienLocation(double latitude_, double longitude_,
+			int radius) {
 		Random random = new Random();
 
 		// Convert radius from meters to degrees
@@ -301,11 +268,8 @@ public class CampaignSetUp extends GameActivity {
 
 	}
 
-	public double getAlienLongitude() {
-		return alienLocation_.getLongitude();
-	}
-
-	public double getAlienLatitude() {
-		return alienLocation_.getLatitude();
+	public LatLng getRandomLatLongVariable() {
+		return new LatLng(alienLocation_.getLatitude(),
+				alienLocation_.getLongitude());
 	}
 }

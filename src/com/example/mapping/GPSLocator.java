@@ -209,7 +209,7 @@ public class GPSLocator extends Service implements LocationListener
     /**
      * @return the latitude longitude variable
      */
-    public LatLng getLatLongVariable()
+    public LatLng getLatCurrentLongVariable()
     {
         return new LatLng( latitude, longitude );
     }

@@ -13,7 +13,7 @@
     <string name="error_general">An Error Has Occurred</string>
 
     <!-- Difficulty Strings -->
-    <string name="easyDifficulty">Harmless Explorers (Easy)"</string>
+    <string name="easyDifficulty">Harmless Explorers (Easy)</string>
     <string name="mediumDifficulty">Ancient Astronauts (Medium)</string>
     <string name="hardDifficulty">Hostile Takeover (Hard)</string>
     <string name="extremeDifficulty">Giorgio Tsoukalos\' Vacation (Extreme)</string>

@@ -34,7 +34,7 @@ public class CampaignSetUp {
 	 * 
 	 * 3 = extremeDifficulty
 	 */
-	private static int gameDifficulty = 1;
+	private int gameDifficulty = 1;
 
 	/**
 	 * There are currently four campaign length options
@@ -47,7 +47,7 @@ public class CampaignSetUp {
 	 * 
 	 * 3 = longLength (30 minutes)
 	 */
-	private static int gameLengthInMinutes_ = 2;
+	private int gameLengthInMinutes_ = 2;
 
 	private static Random randomNumberGenerator_;
 
@@ -70,42 +70,49 @@ public class CampaignSetUp {
 	/**
 	 * Look at the preference setting and store the values locally.
 	 */
-	public CampaignSetUp(String gameLevel, String gameLength) {
-		initializePreferences(gameLevel, gameLength);
+	public CampaignSetUp(Context context, String gameLevel, String gameLength) {
+		initializePreferences(context, gameLevel, gameLength);
 		initializeNumberOfAliens();
 	}
 
-	private void initializePreferences(String currentGameLevel_,
-			String currentGameLength_) {
-		if (currentGameLevel_.equals("mediumDifficulty")) {
+	private void initializePreferences(Context context,
+			String currentGameLevel_, String currentGameLength_) {
+		if (currentGameLevel_.equals(context
+				.getString(R.string.mediumDifficulty))) {
 			// The preference hasnn't been set yet, so default it to medium
 			gameDifficulty = 1;
-		} else if (currentGameLevel_.equals("easyDifficulty")) {
+		} else if (currentGameLevel_.equals(context
+				.getString(R.string.easyDifficulty))) {
 			// Easy
 			gameDifficulty = 0;
-		} else if (currentGameLevel_.equals("hardDifficulty")) {
+		} else if (currentGameLevel_.equals(context
+				.getString(R.string.hardDifficulty))) {
 			// Hard
 			gameDifficulty = 2;
-		} else if (currentGameLevel_.equals("extremeDifficulty")) {
+		} else if (currentGameLevel_.equals(context
+				.getString(R.string.extremeDifficulty))) {
 			// Extreme
 			gameDifficulty = 3;
 		}
 
-		if (currentGameLength_.equals("speedRound")) {
-			// The preference hasnn't been set yet, so default it to medium
+		if (currentGameLength_.equals(context.getString(R.string.speedRound))) {
 			gameLengthInMinutes_ = 0;
-		} else if (currentGameLength_.equals("shortLength")) {
+		} else if (currentGameLength_.equals(context
+				.getString(R.string.shortLength))) {
 			// Easy
 			gameLengthInMinutes_ = 1;
-		} else if (currentGameLength_.equals("mediumLength")) {
+		} else if (currentGameLength_.equals(context
+				.getString(R.string.mediumLength))) {
 			// Hard
 			gameLengthInMinutes_ = 2;
-		} else if (currentGameLength_.equals("longLength")) {
+		} else if (currentGameLength_.equals(context
+				.getString(R.string.longLength))) {
 			// Extreme
 			gameLengthInMinutes_ = 3;
 		}
 
 		Log.w("Level", "" + gameDifficulty);
+		Log.i("Game length ", "" + gameLengthInMinutes_);
 
 		// gameLengthInMinutes_ = currentGameLengthSetting;
 	}
@@ -253,7 +260,6 @@ public class CampaignSetUp {
 		default:
 			break;
 		}
-		Log.i("Game length ", "" + gameLengthInMinutes_);
 		Log.i("Random int is ", "" + randomInt);
 		setmNumberOfAlienShips(randomInt);
 	}

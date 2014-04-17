@@ -146,7 +146,11 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 				getString(R.string.pref_title_game_length));
 
 		// Default the preferences if they aren't set yet
-		setUp = new CampaignSetUp(difficulty_, gameLength_);
+		setUp = new CampaignSetUp(this, difficulty_, gameLength_);
+		Toast.makeText(
+				getApplicationContext(),
+				"Difficulty is " + difficulty_ + " and length is "
+						+ gameLength_, Toast.LENGTH_LONG).show();
 
 		// displayCamera();
 		displayMapFragment();

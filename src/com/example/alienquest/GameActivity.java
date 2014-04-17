@@ -89,6 +89,8 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 	protected double longitude_;
 	protected double latitude_;
 	protected CampaignSetUp setUp;
+	private String difficulty_;
+	private String gameLength_;
 
 	/**
 	 * instance of the settings task
@@ -100,7 +102,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		settings = getIntent();
-		
+
 		objectives = (ListView) findViewById(R.id.objectivesFrame)
 				.findViewById(R.id.listView1);
 		itemList = new ArrayList<String>();
@@ -135,8 +137,16 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		screenWidthPixels_ = metrics.widthPixels;
 		screenHeightPixels_ = metrics.heightPixels;
 
+		difficulty_ = preference_.getString(
+				getString(R.string.pref_title_difficulty),
+				getString(R.string.pref_title_difficulty));
+
+		gameLength_ = preference_.getString(
+				getString(R.string.pref_title_game_length),
+				getString(R.string.pref_title_game_length));
+
 		// Default the preferences if they aren't set yet
-		// setUp = new CampaignSetUp();
+		setUp = new CampaignSetUp(difficulty_, gameLength_);
 
 		// displayCamera();
 		displayMapFragment();

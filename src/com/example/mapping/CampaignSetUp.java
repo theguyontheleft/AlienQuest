@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
  * 
  */
 public class CampaignSetUp {
+
+	int randomInt;
 	private static int mNumberOfAlienShips;
 
 	/**
@@ -68,28 +70,44 @@ public class CampaignSetUp {
 	/**
 	 * Look at the preference setting and store the values locally.
 	 */
-	public CampaignSetUp(String pref, int gameLength) {
-		initializePreferences(pref, gameLength);
+	public CampaignSetUp(String gameLevel, String gameLength) {
+		initializePreferences(gameLevel, gameLength);
 		initializeNumberOfAliens();
 	}
 
-	private void initializePreferences(String preference_,
-			int currentGameLengthSetting) {
-		if (preference_.equals("mediumDifficulty")) {
+	private void initializePreferences(String currentGameLevel_,
+			String currentGameLength_) {
+		if (currentGameLevel_.equals("mediumDifficulty")) {
 			// The preference hasnn't been set yet, so default it to medium
 			gameDifficulty = 1;
-		} else if (preference_.equals("easyDifficulty")) {
+		} else if (currentGameLevel_.equals("easyDifficulty")) {
 			// Easy
 			gameDifficulty = 0;
-		} else if (preference_.equals("hardDifficulty")) {
+		} else if (currentGameLevel_.equals("hardDifficulty")) {
 			// Hard
 			gameDifficulty = 2;
-		} else if (preference_.equals("extremeDifficulty")) {
+		} else if (currentGameLevel_.equals("extremeDifficulty")) {
 			// Extreme
 			gameDifficulty = 3;
 		}
 
-		gameLengthInMinutes_ = currentGameLengthSetting;
+		if (currentGameLength_.equals("speedRound")) {
+			// The preference hasnn't been set yet, so default it to medium
+			gameLengthInMinutes_ = 0;
+		} else if (currentGameLength_.equals("shortLength")) {
+			// Easy
+			gameLengthInMinutes_ = 1;
+		} else if (currentGameLength_.equals("mediumLength")) {
+			// Hard
+			gameLengthInMinutes_ = 2;
+		} else if (currentGameLength_.equals("longLength")) {
+			// Extreme
+			gameLengthInMinutes_ = 3;
+		}
+
+		Log.w("Level", "" + gameDifficulty);
+
+		// gameLengthInMinutes_ = currentGameLengthSetting;
 	}
 
 	/**
@@ -98,9 +116,8 @@ public class CampaignSetUp {
 	 * 
 	 * @return the number of aliens created
 	 */
-	private int initializeNumberOfAliens() {
+	private void initializeNumberOfAliens() {
 		randomNumberGenerator_ = new Random();
-		int randomInt = 0;
 
 		switch (gameDifficulty) {
 		case 0:
@@ -135,7 +152,6 @@ public class CampaignSetUp {
 				randomInt = randomNumberGenerator_.nextInt(10) + 30;
 
 			}
-			Log.i("Random int is ", "" + randomInt);
 			break;
 		case 1:
 			/**
@@ -237,8 +253,9 @@ public class CampaignSetUp {
 		default:
 			break;
 		}
+		Log.i("Game length ", "" + gameLengthInMinutes_);
+		Log.i("Random int is ", "" + randomInt);
 		setmNumberOfAlienShips(randomInt);
-		return getmNumberOfAlienShips();
 	}
 
 	private void getRandomAlienLocation(double latitude_, double longitude_,

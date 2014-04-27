@@ -55,16 +55,9 @@ public class GameActivity extends Activity {
 
 	private String userName_ = "";
 
-	private Camera mCamera;
-	private TextureView mTextureView;
-	private RelativeLayout mRelativeLayout;
-
+	private int fragCounter = 0; //0 if currently on map, 1 if on camera
 	private MapFragmentClass mapFragment_;
 	private CameraFragment cameraFragment;
-	private ListView objectives;
-	private ArrayAdapter<String> itemAdapter;
-	private ArrayList<String> itemList;
-	private FrameLayout objectivesFrame;
 	private Intent settings;
 
 	/**
@@ -106,13 +99,6 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		settings = getIntent();
-		//objectives = (ListView) findViewById(R.id.objectivesFrame)
-		//		.findViewById(R.id.listView1);
-		//itemList = new ArrayList<String>();
-		//itemList.clear();
-		//itemAdapter = new ArrayAdapter<String>(this, R.id.listView1, itemList);
-		//objectives.setAdapter(itemAdapter);
-		//objectives.bringToFront();
 		// Load the preference values
 		// Set up the preference
 		preference_ = getSharedPreferences(getString(R.string.pref_title_file),
@@ -155,13 +141,28 @@ public class GameActivity extends Activity {
 				"Difficulty is " + difficulty_ + " and length is "
 						+ gameLength_, Toast.LENGTH_LONG).show();
 
-		// displayCamera();
 		displayMapFragment();
-		// displayObjectives();
 		// Record the start time of the game
 		questStartTime_ = System.currentTimeMillis();
 	}
 
+	/**
+	 * switches the view between the camera and the map fragments
+	 */
+	private void switchFragment()
+	{
+	    //TODO: implement this
+	    if(fragCounter == 0)
+	    {
+	        displayCameraFragment();
+	        fragCounter++;
+	    }
+	    else
+	    {
+	        displayMapFragment();
+	        fragCounter--;
+	    }
+	}
 	/**
 	 * Adds the map fragment to the view
 	 */
@@ -221,14 +222,6 @@ public class GameActivity extends Activity {
 		}
 	}
 
-	/**
-	 * displays the objectives component to the game screen
-	 *
-	private void displayObjectives() {
-		// TODO: change this to actually do what it should do
-		itemAdapter.add("1.......200");
-	}*/
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -242,7 +235,7 @@ public class GameActivity extends Activity {
 	        // Handle item selection
 	        switch (item.getItemId()) {
 	            case 1:
-	                displayCameraFragment();
+	                switchFragment();
 	                return true;
 	            default:
 	                return super.onOptionsItemSelected(item);
@@ -314,53 +307,4 @@ public class GameActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 	}
-/**
-	/**
-	 * This method will display the bulk of the screen as the camera
-	 *
-	private void displayCamera() {
-		mTextureView = new TextureView(this);
-		mTextureView.setSurfaceTextureListener(this);
-		RelativeLayout.LayoutParams params;
-		params = new RelativeLayout.LayoutParams(screenWidthPixels_,
-				screenHeightPixels_);
-		mRelativeLayout = new RelativeLayout(this);
-		mRelativeLayout.addView(mTextureView, params);
-		setContentView(mRelativeLayout);
-	}
-
-	@Override
-	public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
-			int height) {
-		mCamera = Camera.open();
-		try {
-			mCamera.setPreviewTexture(surface);
-			mCamera.startPreview();
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	@Override
-	public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width,
-			int height) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-		if (null != mCamera) {
-			mCamera.stopPreview();
-			mCamera.release();
-		}
-		return true;
-	}
-
-	@Override
-	public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-		// TODO Auto-generated method stub
-	}
-	// --------------------End of Section-----------------------//
-*/
 }

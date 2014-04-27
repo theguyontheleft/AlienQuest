@@ -10,29 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin" >
 
     <FrameLayout
-        android:id="@+id/objectivesFrame"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:drawable="@color/Background" >
-
-        <ListView
-            android:id="@+id/listView1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@color/Background" >
-        </ListView>
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/mapFrame"
+        android:id="@+id/gameFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
+
+        <Button
+            android:id="@+id/cameraButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:layout_marginRight="36dp"
+            android:text="Button" />
 
     </FrameLayout>
 

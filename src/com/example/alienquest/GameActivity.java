@@ -16,7 +16,10 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -38,14 +41,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint("NewApi")
-public class GameActivity extends Activity implements SurfaceTextureListener {
+public class GameActivity extends Activity {
 	public final static String FRAG1_TAG = "FRAG1";
 	public final static String FRAG2_TAG = "FRAG2";
 
@@ -53,10 +56,11 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 
 	private Camera mCamera;
 	private TextureView mTextureView;
-
+	private Button cameraButton;
 	private RelativeLayout mRelativeLayout;
 
 	private MapFragmentClass mapFragment_;
+	private CameraFragment cameraFragment;
 	private ListView objectives;
 	private ArrayAdapter<String> itemAdapter;
 	private ArrayList<String> itemList;
@@ -102,14 +106,23 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		settings = getIntent();
-
-		objectives = (ListView) findViewById(R.id.objectivesFrame)
-				.findViewById(R.id.listView1);
-		itemList = new ArrayList<String>();
-		itemList.clear();
-		itemAdapter = new ArrayAdapter<String>(this, R.id.listView1, itemList);
-		objectives.setAdapter(itemAdapter);
-		objectives.bringToFront();
+		cameraButton = (Button) findViewById(R.id.gameFrame)
+		    .findViewById(R.id.cameraButton);
+		cameraButton.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v)
+            {
+                // TODO Auto-generated method stub
+                displayCameraFragment();
+            }
+		});
+		//objectives = (ListView) findViewById(R.id.objectivesFrame)
+		//		.findViewById(R.id.listView1);
+		//itemList = new ArrayList<String>();
+		//itemList.clear();
+		//itemAdapter = new ArrayAdapter<String>(this, R.id.listView1, itemList);
+		//objectives.setAdapter(itemAdapter);
+		//objectives.bringToFront();
 		// Load the preference values
 		// Set up the preference
 		preference_ = getSharedPreferences(getString(R.string.pref_title_file),
@@ -155,7 +168,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		// displayCamera();
 		displayMapFragment();
 		// displayObjectives();
-
+		cameraButton.bringToFront();
 		// Record the start time of the game
 		questStartTime_ = System.currentTimeMillis();
 	}
@@ -168,13 +181,25 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		mMapFrag_ = new MapFragment();
 
 		FragmentTransaction fragMan = getFragmentManager().beginTransaction();
-		fragMan.add(R.id.mapFrame, mMapFrag_, FRAG2_TAG);
+		fragMan.add(R.id.gameFrame, mMapFrag_, FRAG2_TAG);
 		fragMan.commit();
+
 
 		mMap_ = mMapFrag_.getMap(); // Custom MapFragment
 		setUpMapIfNeeded(); // Dynamic
 
 	}
+	/**
+	 * displays the camera fragment
+	 */
+	private void displayCameraFragment()
+	{
+	   cameraFragment = new CameraFragment();
+	   FragmentTransaction fragMan = getFragmentManager().beginTransaction();
+       fragMan.add(R.id.gameFrame, cameraFragment, FRAG2_TAG);
+       fragMan.commit();
+	}
+
 
 	private void setUpMapIfNeeded() {
 		if (null != mMap_) {
@@ -209,11 +234,11 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 
 	/**
 	 * displays the objectives component to the game screen
-	 */
+	 *
 	private void displayObjectives() {
 		// TODO: change this to actually do what it should do
 		itemAdapter.add("1.......200");
-	}
+	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -230,7 +255,7 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
@@ -280,17 +305,17 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onPause()
 	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
 	}
-
+/**
 	/**
 	 * This method will display the bulk of the screen as the camera
-	 */
+	 *
 	private void displayCamera() {
 		mTextureView = new TextureView(this);
 		mTextureView.setSurfaceTextureListener(this);
@@ -335,5 +360,5 @@ public class GameActivity extends Activity implements SurfaceTextureListener {
 		// TODO Auto-generated method stub
 	}
 	// --------------------End of Section-----------------------//
-
+*/
 }

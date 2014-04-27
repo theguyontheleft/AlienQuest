@@ -14,6 +14,7 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
@@ -56,7 +57,6 @@ public class GameActivity extends Activity {
 
 	private Camera mCamera;
 	private TextureView mTextureView;
-	private Button cameraButton;
 	private RelativeLayout mRelativeLayout;
 
 	private MapFragmentClass mapFragment_;
@@ -106,16 +106,6 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		settings = getIntent();
-		cameraButton = (Button) findViewById(R.id.gameFrame)
-		    .findViewById(R.id.cameraButton);
-		cameraButton.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View v)
-            {
-                // TODO Auto-generated method stub
-                displayCameraFragment();
-            }
-		});
 		//objectives = (ListView) findViewById(R.id.objectivesFrame)
 		//		.findViewById(R.id.listView1);
 		//itemList = new ArrayList<String>();
@@ -168,7 +158,6 @@ public class GameActivity extends Activity {
 		// displayCamera();
 		displayMapFragment();
 		// displayObjectives();
-		cameraButton.bringToFront();
 		// Record the start time of the game
 		questStartTime_ = System.currentTimeMillis();
 	}
@@ -181,7 +170,7 @@ public class GameActivity extends Activity {
 		mMapFrag_ = new MapFragment();
 
 		FragmentTransaction fragMan = getFragmentManager().beginTransaction();
-		fragMan.add(R.id.gameFrame, mMapFrag_, FRAG2_TAG);
+		fragMan.add(R.id.mapFrame, mMapFrag_, FRAG2_TAG);
 		fragMan.commit();
 
 
@@ -196,7 +185,7 @@ public class GameActivity extends Activity {
 	{
 	   cameraFragment = new CameraFragment();
 	   FragmentTransaction fragMan = getFragmentManager().beginTransaction();
-       fragMan.add(R.id.gameFrame, cameraFragment, FRAG2_TAG);
+       fragMan.add(R.id.mapFrame, cameraFragment, FRAG2_TAG);
        fragMan.commit();
 	}
 
@@ -244,8 +233,21 @@ public class GameActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		menu.add(menu.NONE, 1, menu.NONE, "Switch View");
 		return true;
 	}
+
+	 @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        // Handle item selection
+	        switch (item.getItemId()) {
+	            case 1:
+	                displayCameraFragment();
+	                return true;
+	            default:
+	                return super.onOptionsItemSelected(item);
+	        }
+	    }
 
 	public long getQuestStartTime() {
 		return questStartTime_;

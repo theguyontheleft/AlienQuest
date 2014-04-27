@@ -317,62 +317,62 @@ public class CampaignSetUp
             /**
              * EASY
              * 
-             * 5 minutes: 5 - 55
+             * 5 minutes: 20 - 70
              * 
-             * 10 minutes: 10 - 60
+             * 10 minutes: 30 - 80
              * 
-             * 15 minutes: 15 - 65
+             * 15 minutes: 40 - 90
              * 
-             * 30 minutes: 30 - 80
+             * 30 minutes: 50 - 100
              * 
              */
 
             if ( gameLengthInMinutes_ == 0 )
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 5;
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 20;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 10;
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 30;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 15;
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 40;
             }
             else
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 30;
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 50;
             }
             break;
         case 1:
             /**
              * MEDIUM
              * 
-             * 5 minutes: 15 - 90
+             * 5 minutes: 20 - 90
              * 
-             * 10 minutes: 30 - 105
+             * 10 minutes: 35 - 105
              * 
-             * 15 minutes: 45 - 120
+             * 15 minutes: 50 - 120
              * 
-             * 30 minutes: 90 - 165
+             * 30 minutes: 75 - 145
              * 
              */
 
             if ( gameLengthInMinutes_ == 0 )
             {
-                radiusInMeters = randomInRange( 0.0, 75.0 ) + 15;
+                radiusInMeters = randomInRange( 0.0, 70.0 ) + 20;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-                radiusInMeters = randomInRange( 0.0, 75.0 ) + 30;
+                radiusInMeters = randomInRange( 0.0, 70.0 ) + 35;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-                radiusInMeters = randomInRange( 0.0, 75.0 ) + 45;
+                radiusInMeters = randomInRange( 0.0, 70.0 ) + 50;
             }
             else
             {
-                radiusInMeters = randomInRange( 0.0, 75.0 ) + 90;
+                radiusInMeters = randomInRange( 0.0, 70.0 ) + 75;
             }
             break;
         case 2:

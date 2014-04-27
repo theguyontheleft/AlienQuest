@@ -60,10 +60,11 @@ public class GameActivity extends Activity
     protected GPSLocator gps_ = null;
 
     /**
-     * This arrayList will store the alienShips
+     * The current Aliens Location
      */
-    private ArrayList<Marker> alienShips_;
+    private Marker currentAlienShipsMarker_;
     private boolean alienShipsInitialized_ = false;
+    private int numberOfShipsDestroyed = 0;
 
     // Store the width and height in pixels, this will be usefull in
     // calculations throughout the application
@@ -118,8 +119,6 @@ public class GameActivity extends Activity
         }
 
         getGPSLocation();
-
-        alienShips_ = new ArrayList<Marker>();
 
         // Start off by displaying a google map and inserting the aliens
 
@@ -247,7 +246,7 @@ public class GameActivity extends Activity
         // Is the ships displayed
         if ( !alienShipsInitialized_ )
         {
-            createAlienShipsAtLocation();
+            initializeNextAlienShip();
         }
         else
         {
@@ -395,19 +394,16 @@ public class GameActivity extends Activity
      * @param shipType
      *            the type of alien ship
      */
-    public void createAlienShipsAtLocation()
+    public void initializeNextAlienShip()
     {
         if ( null != mMap_ )
         {
-            // Create the number of ships and put them on the map
-            for ( int j = 0; j < setUp.getmNumberOfAlienShips(); j++ )
-            {
                 // First get a random location to place the alien ship
                 LatLng randomNewAlienLocation =
                         setUp.getRandomLatLongVariable( gps_.getLatitude(),
                                 gps_.getLongitude() );
 
-                Marker newAlienShip =
+                currentAlienShipsMarker_ =
                         mMap_
                                 .addMarker( new MarkerOptions()
                                         .position(
@@ -418,8 +414,6 @@ public class GameActivity extends Activity
                                         .icon( BitmapDescriptorFactory
                                                 .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
 
-                alienShips_.add( newAlienShip );
-            }
 
             alienShipsInitialized_ = true;
         }

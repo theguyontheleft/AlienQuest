@@ -10,7 +10,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.alienquest.GameActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -47,13 +49,17 @@ public class GPSLocator extends Service implements LocationListener
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
+    
+    private GameActivity gameActivity_;
 
     /**
      * @param context
+     * @param gameActivity 
      */
-    public GPSLocator( Context context )
+    public GPSLocator( Context context, GameActivity gameActivity )
     {
         this.mContext = context;
+        this.gameActivity_ = gameActivity;
         getLocation();
     }
 
@@ -78,6 +84,10 @@ public class GPSLocator extends Service implements LocationListener
             if ( !isGPSEnabled && !isNetworkEnabled )
             {
                 // no network provider is enabled
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Please check your GPS and network connection.",
+                        Toast.LENGTH_LONG * 2 ).show();
             }
             else
             {
@@ -219,6 +229,7 @@ public class GPSLocator extends Service implements LocationListener
     {
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+        gameActivity_.locationChanged();
     }
 
     @Override

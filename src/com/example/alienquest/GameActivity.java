@@ -31,10 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- *
+ * 
  * @version Mar 31, 2014
- *
- *
+ * 
+ * 
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -156,22 +156,22 @@ public class GameActivity extends Activity
         FragmentManager fragMgr = getFragmentManager();
         FragmentTransaction xact = fragMgr.beginTransaction();
         // TODO: implement this
-        if (cameraFragment == null)
+        if ( cameraFragment == null )
         {
             displayCameraFragment();
             fragCounter++;
         }
-        else if (fragCounter == 0)
+        else if ( fragCounter == 0 )
         {
             // remove mapfragment from view
-            xact.remove(mMapFrag_);
+            xact.remove( mMapFrag_ );
             xact.commit();
             fragMgr.executePendingTransactions();
 
             // replace with camera fragment
             xact = fragMgr.beginTransaction();
-            xact.replace(R.id.mapFrame, cameraFragment, FRAG1_TAG);
-            xact.addToBackStack(null);
+            xact.replace( R.id.mapFrame, cameraFragment, FRAG1_TAG );
+            xact.addToBackStack( null );
             xact.commit();
             fragMgr.executePendingTransactions();
 
@@ -181,14 +181,14 @@ public class GameActivity extends Activity
         else
         {
             // remove camerafragment from view
-            xact.remove(cameraFragment);
+            xact.remove( cameraFragment );
             xact.commit();
             fragMgr.executePendingTransactions();
 
             // replace with map fragment
             xact = fragMgr.beginTransaction();
-            xact.replace(R.id.mapFrame, mMapFrag_, FRAG2_TAG);
-            xact.addToBackStack(null);
+            xact.replace( R.id.mapFrame, mMapFrag_, FRAG2_TAG );
+            xact.addToBackStack( null );
             xact.commit();
             fragMgr.executePendingTransactions();
 
@@ -259,7 +259,7 @@ public class GameActivity extends Activity
      */
     private void getGPSLocation()
     {
-        gps_ = new GPSLocator( getApplicationContext() );
+        gps_ = new GPSLocator( getApplicationContext(), this );
 
         // check if GPS enabled
         if ( gps_.canGetLocation() )
@@ -309,7 +309,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -321,7 +321,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -331,6 +331,16 @@ public class GameActivity extends Activity
     }
 
     /************************************* Map and Alien Ship Methods *************************************/
+
+    /**
+     * This function is called whenever the location of the device is changed,
+     * it updates the objectives screen and the map.
+     */
+    public void locationChanged()
+    {
+        // TODO:
+        centerOnCurrentLocation();
+    }
 
     /**
      * Focuses the google map on the current GPS location
@@ -386,7 +396,7 @@ public class GameActivity extends Activity
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     *
+     * 
      * @param longitude
      * @param latitude
      * @param shipID
@@ -398,22 +408,21 @@ public class GameActivity extends Activity
     {
         if ( null != mMap_ )
         {
-                // First get a random location to place the alien ship
-                LatLng randomNewAlienLocation =
-                        setUp.getRandomLatLongVariable( gps_.getLatitude(),
-                                gps_.getLongitude() );
+            // First get a random location to place the alien ship
+            LatLng randomNewAlienLocation =
+                    setUp.getRandomLatLongVariable( gps_.getLatitude(),
+                            gps_.getLongitude() );
 
-                currentAlienShipsMarker_ =
-                        mMap_
-                                .addMarker( new MarkerOptions()
-                                        .position(
-                                                randomNewAlienLocation )
-                                        .title( "AlienShip" )
-                                        // TODO specify which ship
-                                        .snippet( "Ship is landing!" )
-                                        .icon( BitmapDescriptorFactory
-                                                .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
-
+            currentAlienShipsMarker_ =
+                    mMap_
+                            .addMarker( new MarkerOptions()
+                                    .position(
+                                            randomNewAlienLocation )
+                                    .title( "AlienShip" )
+                                    // TODO specify which ship
+                                    .snippet( "Ship is landing!" )
+                                    .icon( BitmapDescriptorFactory
+                                            .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
 
             alienShipsInitialized_ = true;
         }
@@ -439,7 +448,7 @@ public class GameActivity extends Activity
 
     /**
      * This function is called if the ships are shuffled or shot down
-     *
+     * 
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )

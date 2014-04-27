@@ -15,280 +15,336 @@ import com.google.android.gms.maps.model.LatLng;
  * @version Apr 2, 2014
  * 
  */
-public class CampaignSetUp {
+public class CampaignSetUp
+{
 
-	private int mNumberOfAlienShips;
+    private int mNumberOfAlienShips;
 
-	/**
-	 * There are currently four difficulty options
-	 * 
-	 * 0 = easyDifficulty
-	 * 
-	 * 1 = mediumDifficulty (Default)
-	 * 
-	 * 2 = hardDifficulty
-	 * 
-	 * 3 = extremeDifficulty
-	 */
-	private int gameDifficulty = 1;
+    /**
+     * There are currently four difficulty options
+     * 
+     * 0 = easyDifficulty
+     * 
+     * 1 = mediumDifficulty (Default)
+     * 
+     * 2 = hardDifficulty
+     * 
+     * 3 = extremeDifficulty
+     */
+    private int gameDifficulty = 1;
 
-	/**
-	 * There are currently four campaign length options
-	 * 
-	 * 0 = speedRound (5 minutes)
-	 * 
-	 * 1 = shortLength (10 minutes)
-	 * 
-	 * 2 = mediumLength (15 minutes) (Default)
-	 * 
-	 * 3 = longLength (30 minutes)
-	 */
-	private int gameLengthInMinutes_ = 2;
+    /**
+     * There are currently four campaign length options
+     * 
+     * 0 = speedRound (5 minutes)
+     * 
+     * 1 = shortLength (10 minutes)
+     * 
+     * 2 = mediumLength (15 minutes) (Default)
+     * 
+     * 3 = longLength (30 minutes)
+     */
+    private int gameLengthInMinutes_ = 2;
 
-	private static Random randomNumGenerator_;
+    private static Random randomNumGenerator_;
 
-	protected Location alienLocation_;
+    protected Location alienLocation_;
 
-	/**
-	 * @return NumberOfAlienShips
-	 */
-	public int getmNumberOfAlienShips() {
-		return mNumberOfAlienShips;
-	}
+    /**
+     * @return NumberOfAlienShips
+     */
+    public int getmNumberOfAlienShips()
+    {
+        return mNumberOfAlienShips;
+    }
 
-	/**
-	 * @param mNumberOfAlienShips
-	 */
-	public void setmNumberOfAlienShips(int mNumberOfAlienShips) {
-		this.mNumberOfAlienShips = mNumberOfAlienShips;
-	}
+    /**
+     * @param mNumberOfAlienShips
+     */
+    public void setmNumberOfAlienShips( int mNumberOfAlienShips )
+    {
+        this.mNumberOfAlienShips = mNumberOfAlienShips;
+    }
 
-	/**
-	 * Look at the preference setting and store the values locally.
-	 */
-	public CampaignSetUp(Context context, String gameLevel, String gameLength) {
-		initializePreferences(context, gameLevel, gameLength);
-		initializeNumberOfAliens();
-	}
+    /**
+     * Look at the preference setting and store the values locally.
+     * 
+     * @param context
+     * @param gameLevel
+     * @param gameLength
+     */
+    public CampaignSetUp( Context context, String gameLevel, String gameLength )
+    {
+        initializePreferences( context, gameLevel, gameLength );
+        initializeNumberOfAliens();
+    }
 
-	private void initializePreferences(Context context,
-			String currentGameLevel_, String currentGameLength_) {
-		if (currentGameLevel_.equals(context
-				.getString(R.string.mediumDifficulty))) {
-			// The preference hasnn't been set yet, so default it to medium
-			gameDifficulty = 1;
-		} else if (currentGameLevel_.equals(context
-				.getString(R.string.easyDifficulty))) {
-			// Easy
-			gameDifficulty = 0;
-		} else if (currentGameLevel_.equals(context
-				.getString(R.string.hardDifficulty))) {
-			// Hard
-			gameDifficulty = 2;
-		} else if (currentGameLevel_.equals(context
-				.getString(R.string.extremeDifficulty))) {
-			// Extreme
-			gameDifficulty = 3;
-		}
+    private void initializePreferences( Context context,
+            String currentGameLevel_, String currentGameLength_ )
+    {
+        if ( currentGameLevel_.equals( context
+                .getString( R.string.mediumDifficulty ) ) )
+        {
+            // The preference hasnn't been set yet, so default it to medium
+            gameDifficulty = 1;
+        }
+        else if ( currentGameLevel_.equals( context
+                .getString( R.string.easyDifficulty ) ) )
+        {
+            // Easy
+            gameDifficulty = 0;
+        }
+        else if ( currentGameLevel_.equals( context
+                .getString( R.string.hardDifficulty ) ) )
+        {
+            // Hard
+            gameDifficulty = 2;
+        }
+        else if ( currentGameLevel_.equals( context
+                .getString( R.string.extremeDifficulty ) ) )
+        {
+            // Extreme
+            gameDifficulty = 3;
+        }
 
-		if (currentGameLength_.equals(context.getString(R.string.speedRound))) {
-			gameLengthInMinutes_ = 0;
-		} else if (currentGameLength_.equals(context
-				.getString(R.string.shortLength))) {
-			// Easy
-			gameLengthInMinutes_ = 1;
-		} else if (currentGameLength_.equals(context
-				.getString(R.string.mediumLength))) {
-			// Hard
-			gameLengthInMinutes_ = 2;
-		} else if (currentGameLength_.equals(context
-				.getString(R.string.longLength))) {
-			// Extreme
-			gameLengthInMinutes_ = 3;
-		}
+        if ( currentGameLength_.equals( context
+                .getString( R.string.speedRound ) ) )
+        {
+            gameLengthInMinutes_ = 0;
+        }
+        else if ( currentGameLength_.equals( context
+                .getString( R.string.shortLength ) ) )
+        {
+            // Easy
+            gameLengthInMinutes_ = 1;
+        }
+        else if ( currentGameLength_.equals( context
+                .getString( R.string.mediumLength ) ) )
+        {
+            // Hard
+            gameLengthInMinutes_ = 2;
+        }
+        else if ( currentGameLength_.equals( context
+                .getString( R.string.longLength ) ) )
+        {
+            // Extreme
+            gameLengthInMinutes_ = 3;
+        }
 
-		Log.w("Level", "" + gameDifficulty);
-		Log.i("Game length ", "" + gameLengthInMinutes_);
+        Log.w( "Level", "" + gameDifficulty );
+        Log.i( "Game length ", "" + gameLengthInMinutes_ );
 
-		// gameLengthInMinutes_ = currentGameLengthSetting;
-	}
+        // gameLengthInMinutes_ = currentGameLengthSetting;
+    }
 
-	/**
-	 * There are two main things taken into account here. The first is the time
-	 * of the campaign and the second is the selected difficulty.
-	 * 
-	 * @return the number of aliens created
-	 */
-	private void initializeNumberOfAliens() {
-		randomNumGenerator_ = new Random();
+    /**
+     * There are two main things taken into account here. The first is the time
+     * of the campaign and the second is the selected difficulty.
+     * 
+     * @return the number of aliens created
+     */
+    private void initializeNumberOfAliens()
+    {
+        randomNumGenerator_ = new Random();
 
-		switch (gameDifficulty) {
-		case 0:
+        switch ( gameDifficulty )
+        {
+        case 0:
 
-			/**
-			 * EASY
-			 * 
-			 * 5 minutes: 5 - 14
-			 * 
-			 * 10 minutes: 10 - 19
-			 * 
-			 * 15 minutes: 15 - 24
-			 * 
-			 * 30 minutes: 30 - 39
-			 * 
-			 */
+            /**
+             * EASY
+             * 
+             * 5 minutes: 5 - 14
+             * 
+             * 10 minutes: 10 - 19
+             * 
+             * 15 minutes: 15 - 24
+             * 
+             * 30 minutes: 30 - 39
+             * 
+             */
 
-			if (gameLengthInMinutes_ == 0) {
+            if ( gameLengthInMinutes_ == 0 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 5;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 5;
 
-			} else if (gameLengthInMinutes_ == 1) {
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 10;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 10;
 
-			} else if (gameLengthInMinutes_ == 2) {
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 15;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 15;
 
-			} else {
+            }
+            else
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 30;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 30;
 
-			}
-			break;
-		case 1:
-			/**
-			 * MEDIUM
-			 * 
-			 * 5 minutes: 15 - 24
-			 * 
-			 * 10 minutes: 30 - 39
-			 * 
-			 * 15 minutes: 45 - 54
-			 * 
-			 * 30 minutes: 90 - 99
-			 * 
-			 */
+            }
+            break;
+        case 1:
+            /**
+             * MEDIUM
+             * 
+             * 5 minutes: 15 - 24
+             * 
+             * 10 minutes: 30 - 39
+             * 
+             * 15 minutes: 45 - 54
+             * 
+             * 30 minutes: 90 - 99
+             * 
+             */
 
-			if (gameLengthInMinutes_ == 0) {
+            if ( gameLengthInMinutes_ == 0 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 15;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 15;
 
-			} else if (gameLengthInMinutes_ == 1) {
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 30;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 30;
 
-			} else if (gameLengthInMinutes_ == 2) {
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 45;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 45;
 
-			} else {
+            }
+            else
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 90;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 90;
 
-			}
-			break;
-		case 2:
+            }
+            break;
+        case 2:
 
-			/**
-			 * HARD
-			 * 
-			 * 5 minutes: 25 - 34
-			 * 
-			 * 10 minutes: 50 - 59
-			 * 
-			 * 15 minutes: 75 - 84
-			 * 
-			 * 30 minutes: 150 - 159
-			 * 
-			 */
+            /**
+             * HARD
+             * 
+             * 5 minutes: 25 - 34
+             * 
+             * 10 minutes: 50 - 59
+             * 
+             * 15 minutes: 75 - 84
+             * 
+             * 30 minutes: 150 - 159
+             * 
+             */
 
-			if (gameLengthInMinutes_ == 0) {
+            if ( gameLengthInMinutes_ == 0 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 25;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 25;
 
-			} else if (gameLengthInMinutes_ == 1) {
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 50;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 50;
 
-			} else if (gameLengthInMinutes_ == 2) {
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 75;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 75;
 
-			} else {
+            }
+            else
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 150;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 150;
 
-			}
-			break;
-		case 3:
-			/**
-			 * EXTREME
-			 * 
-			 * 5 minutes: 30 - 39
-			 * 
-			 * 10 minutes: 60 - 69
-			 * 
-			 * 15 minutes: 90 - 99
-			 * 
-			 * 30 minutes: 180 - 189
-			 * 
-			 */
+            }
+            break;
+        case 3:
+            /**
+             * EXTREME
+             * 
+             * 5 minutes: 30 - 39
+             * 
+             * 10 minutes: 60 - 69
+             * 
+             * 15 minutes: 90 - 99
+             * 
+             * 30 minutes: 180 - 189
+             * 
+             */
 
-			if (gameLengthInMinutes_ == 0) {
+            if ( gameLengthInMinutes_ == 0 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 30;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 30;
 
-			} else if (gameLengthInMinutes_ == 1) {
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 60;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 60;
 
-			} else if (gameLengthInMinutes_ == 2) {
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 90;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 90;
 
-			} else {
+            }
+            else
+            {
 
-				mNumberOfAlienShips = randomNumGenerator_.nextInt(10) + 180;
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 180;
 
-			}
-			break;
-		default:
-			break;
-		}
-		Log.i("Random int is ", "" + mNumberOfAlienShips);
-		setmNumberOfAlienShips(mNumberOfAlienShips);
-	}
+            }
+            break;
+        default:
+            break;
+        }
+        Log.i( "Random int is ", "" + mNumberOfAlienShips );
+        setmNumberOfAlienShips( mNumberOfAlienShips );
+    }
 
-	private void getRandomAlienLocation(double latitude_, double longitude_,
-			int radius) {
-		Random random = new Random();
+    private void getRandomAlienLocation( double latitude_, double longitude_,
+            int radius )
+    {
+        Random random = new Random();
 
-		// Convert radius from meters to degrees
-		double radiusInDegrees = radius / 111000f;
+        // Convert radius from meters to degrees
+        double radiusInDegrees = radius / 111000f;
 
-		double u = random.nextDouble();
-		double v = random.nextDouble();
-		double w = radiusInDegrees * Math.sqrt(u);
-		double t = 2 * Math.PI * v;
-		double x = w * Math.cos(t);
-		double y = w * Math.sin(t);
+        double u = random.nextDouble();
+        double v = random.nextDouble();
+        double w = radiusInDegrees * Math.sqrt( u );
+        double t = 2 * Math.PI * v;
+        double x = w * Math.cos( t );
+        double y = w * Math.sin( t );
 
-		// Adjust the x-coordinate for the shrinking of the east-west distances
-		double new_x = x / Math.cos(latitude_);
+        // Adjust the x-coordinate for the shrinking of the east-west distances
+        double new_x = x / Math.cos( latitude_ );
 
-		double alienLongitude = new_x + longitude_;
-		double alienLatitude = y + latitude_;
+        double alienLongitude = new_x + longitude_;
+        double alienLatitude = y + latitude_;
 
-		alienLocation_ = new Location("GPS");
+        alienLocation_ = new Location( "GPS" );
 
-		alienLocation_.setLongitude(alienLongitude);
-		alienLocation_.setLatitude(alienLatitude);
+        alienLocation_.setLongitude( alienLongitude );
+        alienLocation_.setLatitude( alienLatitude );
 
-	}
+    }
 
-	public LatLng getRandomLatLongVariable() {
-		return new LatLng(alienLocation_.getLatitude(),
-				alienLocation_.getLongitude());
-	}
+    public LatLng getRandomLatLongVariable()
+    {
+        return new LatLng( alienLocation_.getLatitude(),
+                alienLocation_.getLongitude() );
+    }
 }

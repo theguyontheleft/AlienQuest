@@ -38,6 +38,7 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
         itemList = new ArrayList<String>();
         itemAdapter = new ArrayAdapter<String>(this.getActivity(),
             R.id.listView1, itemList);
+
     }
 
     // Initializing the views and listeners
@@ -51,7 +52,6 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
                 camera_fragment, container, false);
         objectives = (ListView) view.findViewById(R.id.listView1);
         objectives.setAdapter(itemAdapter);
-        objectives.bringToFront();
         mTextureView = new TextureView(this.getActivity());
         mTextureView.setSurfaceTextureListener(this);
         RelativeLayout.LayoutParams params;
@@ -59,18 +59,39 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
                 view.getWidth());
         cameraLayout = (RelativeLayout)view.findViewById(R.id.cameraLayout);
         view.addView(mTextureView);
+        objectives.bringToFront();
         return view;
     }
 
+    /**
+     * this method populates the listview with the location of the alien ships
+     */
+    private void populateObjectives()
+    {
+        int numShips = ((GameActivity)this.getActivity()).setUp.getmNumberOfAlienShips();
+    }
+
+    /**
+     * this method removes a complete objective from the listview, or adds
+     * if such a scenario is supported
+     */
+    private void updateObjectives()
+    {
+        //TODO: populate objectives listview
+        //TODO: retrieve location as well?
+    }
+
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
-            int height) {
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height)
+    {
         mCamera = Camera.open();
-        try {
+        try
+        {
             mCamera.setPreviewTexture(surface);
             mCamera.startPreview();
-
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             ex.printStackTrace();
         }
     }

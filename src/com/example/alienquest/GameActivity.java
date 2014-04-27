@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -30,10 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -153,15 +154,46 @@ public class GameActivity extends Activity
      */
     private void switchFragment()
     {
+        FragmentManager fragMgr = getFragmentManager();
+        FragmentTransaction xact = fragMgr.beginTransaction();
         // TODO: implement this
-        if ( fragCounter == 0 )
+        if (cameraFragment == null)
         {
             displayCameraFragment();
             fragCounter++;
         }
+        else if (fragCounter == 0)
+        {
+            // remove mapfragment from view
+            xact.remove(mMapFrag_);
+            xact.commit();
+            fragMgr.executePendingTransactions();
+
+            // replace with camera fragment
+            xact = fragMgr.beginTransaction();
+            xact.replace(R.id.mapFrame, cameraFragment, FRAG1_TAG);
+            xact.addToBackStack(null);
+            xact.commit();
+            fragMgr.executePendingTransactions();
+
+            // increment to 1
+            fragCounter++;
+        }
         else
         {
-            displayMapFragment();
+            // remove camerafragment from view
+            xact.remove(cameraFragment);
+            xact.commit();
+            fragMgr.executePendingTransactions();
+
+            // replace with map fragment
+            xact = fragMgr.beginTransaction();
+            xact.replace(R.id.mapFrame, mMapFrag_, FRAG2_TAG);
+            xact.addToBackStack(null);
+            xact.commit();
+            fragMgr.executePendingTransactions();
+
+            // decrement to 0
             fragCounter--;
         }
     }
@@ -278,7 +310,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -290,7 +322,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -355,7 +387,7 @@ public class GameActivity extends Activity
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     * 
+     *
      * @param longitude
      * @param latitude
      * @param shipID
@@ -413,7 +445,7 @@ public class GameActivity extends Activity
 
     /**
      * This function is called if the ships are shuffled or shot down
-     * 
+     *
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )

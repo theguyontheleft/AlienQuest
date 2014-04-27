@@ -10,8 +10,9 @@
             android:id="@+id/listView1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@color/Background" >
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:alpha="0.3"
+            android:background="@color/LimeGreen" >
         </ListView>
-
-
 </RelativeLayout> 

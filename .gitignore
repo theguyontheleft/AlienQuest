@@ -27,3 +27,5 @@ proguard/
 *.ipr
 *.iws
 .idea/
+*.properties
+project.properties

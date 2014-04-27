@@ -317,62 +317,62 @@ public class CampaignSetUp
             /**
              * EASY
              * 
-             * 5 minutes: 20 - 70
+             * 5 minutes: 20 - 80
              * 
-             * 10 minutes: 30 - 80
+             * 10 minutes: 30 - 90
              * 
-             * 15 minutes: 40 - 90
+             * 15 minutes: 40 - 100
              * 
-             * 30 minutes: 50 - 100
+             * 30 minutes: 50 - 110
              * 
              */
 
             if ( gameLengthInMinutes_ == 0 )
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 20;
+                radiusInMeters = randomInRange( 0.0, 60.0 ) + 20;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 30;
+                radiusInMeters = randomInRange( 0.0, 60.0 ) + 30;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 40;
+                radiusInMeters = randomInRange( 0.0, 60.0 ) + 40;
             }
             else
             {
-                radiusInMeters = randomInRange( 0.0, 50.0 ) + 50;
+                radiusInMeters = randomInRange( 0.0, 60.0 ) + 50;
             }
             break;
         case 1:
             /**
              * MEDIUM
              * 
-             * 5 minutes: 20 - 90
+             * 5 minutes: 20 - 100
              * 
-             * 10 minutes: 35 - 105
+             * 10 minutes: 35 - 115
              * 
-             * 15 minutes: 50 - 120
+             * 15 minutes: 50 - 130
              * 
-             * 30 minutes: 75 - 145
+             * 30 minutes: 75 - 155
              * 
              */
 
             if ( gameLengthInMinutes_ == 0 )
             {
-                radiusInMeters = randomInRange( 0.0, 70.0 ) + 20;
+                radiusInMeters = randomInRange( 0.0, 80.0 ) + 20;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-                radiusInMeters = randomInRange( 0.0, 70.0 ) + 35;
+                radiusInMeters = randomInRange( 0.0, 80.0 ) + 35;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-                radiusInMeters = randomInRange( 0.0, 70.0 ) + 50;
+                radiusInMeters = randomInRange( 0.0, 80.0 ) + 50;
             }
             else
             {
-                radiusInMeters = randomInRange( 0.0, 70.0 ) + 75;
+                radiusInMeters = randomInRange( 0.0, 80.0 ) + 75;
             }
             break;
         case 2:
@@ -411,31 +411,32 @@ public class CampaignSetUp
             /**
              * EXTREME GORGIO's VACATION!!! TODO
              * 
-             * 5 minutes: 30 - 39
              * 
-             * 10 minutes: 60 - 69
+             * 5 minutes: 25 - 135
              * 
-             * 15 minutes: 90 - 99
+             * 10 minutes: 50 - 160
              * 
-             * 30 minutes: 180 - 189
+             * 15 minutes: 75 - 185
+             * 
+             * 30 minutes: 150 - 260
              * 
              */
 
             if ( gameLengthInMinutes_ == 0 )
             {
-                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 30;
+                radiusInMeters = randomInRange( 0.0, 110.0 ) + 25;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 60;
+                radiusInMeters = randomInRange( 0.0, 110.0 ) + 50;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 90;
+                radiusInMeters = randomInRange( 0.0, 110.0 ) + 75;
             }
             else
             {
-                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 180;
+                radiusInMeters = randomInRange( 0.0, 110.0 ) + 150;
             }
             break;
         default:

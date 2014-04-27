@@ -31,10 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- *
+ * 
  * @version Mar 31, 2014
- *
- *
+ * 
+ * 
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -46,7 +46,6 @@ public class GameActivity extends Activity
     private String userName_ = "";
 
     private int fragCounter = 0; // 0 if currently on map, 1 if on camera
-    private MapFragmentClass mapFragment_;
     private CameraFragment cameraFragment;
     private Intent settings;
 
@@ -311,7 +310,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -323,7 +322,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -341,7 +340,8 @@ public class GameActivity extends Activity
     public void locationChanged()
     {
         // TODO:
-        cameraFragment.updateLocation(gps_.getLatitude(), gps_.getLongitude());
+        cameraFragment
+                .updateLocation( gps_.getLatitude(), gps_.getLongitude() );
         centerOnCurrentLocation();
     }
 
@@ -399,7 +399,7 @@ public class GameActivity extends Activity
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     *
+     * 
      * @param longitude
      * @param latitude
      * @param shipID
@@ -429,15 +429,6 @@ public class GameActivity extends Activity
 
             alienShipsInitialized_ = true;
         }
-        /*
-         * old // // Uses a custom icon. MarkerOptions newMarker = new
-         * MarkerOptions() .title( shipType + " " + shipID ) .icon(
-         * BitmapDescriptorFactory .fromResource(
-         * R.drawable.alien_ship_map_marker_large ) );
-         */
-
-        // Add the marker to the map and the array list
-        // mMap_.addMarker( newMarker ); TODO
     }
 
     /**
@@ -451,24 +442,41 @@ public class GameActivity extends Activity
 
     /**
      * This function is called if the ships are shuffled or shot down
-     *
+     * 
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )
     {
-        // TODO
+        // First remove the current marker from the map.
+        mMap_.clear();
+
+        // TODO update the completion activity with a score based on time and
+        // difficulty
+
+        // Increment the ship destroyed count
+        numberOfShipsDestroyed++;
+
+        if ( numberOfShipsDestroyed == setUp.getmNumberOfAlienShips() )
+        {
+            // Game is finished!
+            campaignFinished();
+        }
+        else
+        {
+            // Switch the view to the map
+            switchFragment(); // TODO test
+
+            // Place another alien ship
+            initializeNextAlienShip();
+        }
     }
 
     /**
-     * Removes all of the items from the arrayList of markers and the map
+     * This function is called when all of the alien ships are destroyed, it
+     * wraps up the compaign accordingly
      */
-    public void removeMarkersOnMap()
+    private void campaignFinished()
     {
-        // mMap_.setMap( null ); TODO
 
-        // First erase from the map
-
-        // Empty the array of markers
     }
-
 }

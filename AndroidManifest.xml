@@ -61,10 +61,14 @@
             android:label="MapFragment"
             android:screenOrientation="landscape" >
         </activity>
-         <activity
+        <activity
             android:name="com.example.mapping.MapActivity"
             android:label="ALienLandingPoints"
             android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.example.alienquest.CompletionActivity"
+            android:label="Completion" >
         </activity>
 
         <meta-data

@@ -2,10 +2,8 @@ package com.example.alienquest;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import com.google.android.gms.maps.model.Marker;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.content.res.Configuration;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -14,10 +12,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.TextureView.SurfaceTextureListener;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -37,8 +32,8 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
         super.onCreate(state);
         itemList = new ArrayList<String>();
         itemAdapter = new ArrayAdapter<String>(this.getActivity(),
-            R.id.listView1, itemList);
-
+            android.R.layout.simple_list_item_1, itemList);
+        itemList.add(0 + " , " + 0);
     }
 
     // Initializing the views and listeners
@@ -79,6 +74,12 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
     {
         //TODO: populate objectives listview
         //TODO: retrieve location as well?
+    }
+
+    public void updateLocation(double latitude, double longitude)
+    {
+        itemList.set(0, latitude + " , " + longitude);
+        itemAdapter.notifyDataSetChanged();
     }
 
     @Override

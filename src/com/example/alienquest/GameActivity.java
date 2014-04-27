@@ -31,10 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -143,7 +143,9 @@ public class GameActivity extends Activity
                 "Difficulty is " + difficulty_ + " and length is "
                         + gameLength_, Toast.LENGTH_LONG ).show();
 
+        displayCameraFragment();
         displayMapFragment();
+
         // Record the start time of the game
         questStartTime_ = System.currentTimeMillis();
     }
@@ -221,7 +223,7 @@ public class GameActivity extends Activity
     {
         cameraFragment = new CameraFragment();
         FragmentTransaction fragMan = getFragmentManager().beginTransaction();
-        fragMan.add( R.id.mapFrame, cameraFragment, FRAG2_TAG );
+        fragMan.add( R.id.mapFrame, cameraFragment, FRAG1_TAG );
         fragMan.commit();
     }
 
@@ -309,7 +311,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -321,7 +323,7 @@ public class GameActivity extends Activity
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -339,6 +341,7 @@ public class GameActivity extends Activity
     public void locationChanged()
     {
         // TODO:
+        cameraFragment.updateLocation(gps_.getLatitude(), gps_.getLongitude());
         centerOnCurrentLocation();
     }
 
@@ -396,7 +399,7 @@ public class GameActivity extends Activity
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     * 
+     *
      * @param longitude
      * @param latitude
      * @param shipID
@@ -448,7 +451,7 @@ public class GameActivity extends Activity
 
     /**
      * This function is called if the ships are shuffled or shot down
-     * 
+     *
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )

@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -19,8 +20,9 @@ import android.widget.TextView;
  */
 public class CompletionActivity extends Activity {
 
-	private Intent settings;
+	private static final String PREF_NAME = "myScores";
 	protected static SharedPreferences preference_;
+	private Intent settings;
 	private String userName_;
 	private TextView congratulationsName_;
 
@@ -50,17 +52,18 @@ public class CompletionActivity extends Activity {
 		return true;
 	}
 
-	private void getScores() {
-		// // Setting preferences
+	private void saveScores() {
+		// setting preferences
 		// SharedPreferences prefs = this.getSharedPreferences("myPrefsKey",
 		// Context.MODE_PRIVATE);
 		// Editor editor = prefs.edit();
 		// editor.putInt("key", score);
 		// editor.commit();
-		//
-		// // getting preferences
-		// SharedPreferences prefs = this.getSharedPreferences("myPrefsKey",
-		// Context.MODE_PRIVATE);
+
+	}
+
+	private void getScores() {
+		// getting preferences
 		// int score = prefs.getInt("key", 0); // 0 is the default value
 	}
 }

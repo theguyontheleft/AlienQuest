@@ -8,6 +8,8 @@
     <string name="pref_title_name">Display Name</string>
     <string name="pref_title_difficulty">Quest Difficulty</string>
     <string name="pref_title_game_length">Campaign Length</string>
+    <string name="saved_high_score_default">High Score Default</string>
+    <string name="saved_high_score">High Score</string>
 
     <!-- Error Messages -->
     <string name="error_general">An Error Has Occurred</string>

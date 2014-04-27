@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -203,10 +204,15 @@ public class MainActivity extends Activity {
 		Dialog aboutBox = new Dialog(MainActivity.this);
 		aboutBox.setContentView(R.layout.dialog_about);
 
+		TextView aboutTxt = (TextView) aboutBox
+				.findViewById(android.R.id.message);
+
 		// set the message to display
 		aboutBox.setTitle("About Alien Quest");
-
 		aboutBox.show();
+		aboutBox.getWindow().setLayout(
+				RelativeLayout.LayoutParams.MATCH_PARENT, 400);
+
 	}
 
 	@Override

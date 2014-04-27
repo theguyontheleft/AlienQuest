@@ -18,6 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 public class CampaignSetUp
 {
 
+    /**
+     * The number of alien ships
+     */
     private int mNumberOfAlienShips;
 
     /**
@@ -46,9 +49,11 @@ public class CampaignSetUp
      */
     private int gameLengthInMinutes_ = 2;
 
+    // Used to get the random location and number of aliens
     private static Random randomNumGenerator_;
 
-    protected Location alienLocation_;
+    // Stores the current or previously modified alien location
+    protected Location currentAlienLocation_;
 
     /**
      * @return NumberOfAlienShips
@@ -141,7 +146,6 @@ public class CampaignSetUp
      * There are two main things taken into account here. The first is the time
      * of the campaign and the second is the selected difficulty.
      * 
-     * @return the number of aliens created
      */
     private void initializeNumberOfAliens()
     {
@@ -153,6 +157,68 @@ public class CampaignSetUp
 
             /**
              * EASY
+             * 
+             * 5 minutes: 1 - 5
+             * 
+             * 10 minutes: 3 - 8
+             * 
+             * 15 minutes: 5 - 12
+             * 
+             * 30 minutes: 10 - 15
+             * 
+             */
+            if ( gameLengthInMinutes_ == 0 )
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 4 ) + 1;
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 5 ) + 3;
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 7 ) + 5;
+            }
+            else
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 5 ) + 10;
+            }
+            break;
+        case 1:
+            /**
+             * MEDIUM
+             * 
+             * 5 minutes: 3 - 8
+             * 
+             * 10 minutes: 5 - 10
+             * 
+             * 15 minutes: 7 - 12
+             * 
+             * 30 minutes: 9 - 15
+             * 
+             */
+
+            if ( gameLengthInMinutes_ == 0 )
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 5 ) + 3;
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 5 ) + 5;
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 5 ) + 7;
+            }
+            else
+            {
+                mNumberOfAlienShips = randomNumGenerator_.nextInt( 5 ) + 9;
+            }
+            break;
+        case 2:
+
+            /**
+             * HARD
              * 
              * 5 minutes: 5 - 14
              * 
@@ -189,9 +255,9 @@ public class CampaignSetUp
 
             }
             break;
-        case 1:
+        case 3:
             /**
-             * MEDIUM
+             * EXTREME
              * 
              * 5 minutes: 15 - 24
              * 
@@ -228,49 +294,122 @@ public class CampaignSetUp
 
             }
             break;
-        case 2:
+        default:
+            break;
+        }
+        Log.i( "Random int is ", "" + mNumberOfAlienShips );
+        setmNumberOfAlienShips( mNumberOfAlienShips );
+    }
+
+    /**
+     * The radius is randomly determined based off of the difficulty and time
+     * length
+     * 
+     * @return the random radius in meters
+     */
+    private double getRandomAlienShipRadius()
+    {
+        double radiusInMeters;
+        switch ( gameDifficulty )
+        {
+        case 0:
 
             /**
-             * HARD
+             * EASY
              * 
-             * 5 minutes: 25 - 34
+             * 5 minutes: 5 - 55
              * 
-             * 10 minutes: 50 - 59
+             * 10 minutes: 10 - 60
              * 
-             * 15 minutes: 75 - 84
+             * 15 minutes: 15 - 65
              * 
-             * 30 minutes: 150 - 159
+             * 30 minutes: 30 - 80
              * 
              */
 
             if ( gameLengthInMinutes_ == 0 )
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 25;
-
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 5;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 50;
-
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 10;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 75;
-
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 15;
             }
             else
             {
+                radiusInMeters = randomInRange( 0.0, 50.0 ) + 30;
+            }
+            break;
+        case 1:
+            /**
+             * MEDIUM
+             * 
+             * 5 minutes: 15 - 90
+             * 
+             * 10 minutes: 30 - 105
+             * 
+             * 15 minutes: 45 - 120
+             * 
+             * 30 minutes: 90 - 165
+             * 
+             */
 
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 150;
+            if ( gameLengthInMinutes_ == 0 )
+            {
+                radiusInMeters = randomInRange( 0.0, 75.0 ) + 15;
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
+                radiusInMeters = randomInRange( 0.0, 75.0 ) + 30;
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
+                radiusInMeters = randomInRange( 0.0, 75.0 ) + 45;
+            }
+            else
+            {
+                radiusInMeters = randomInRange( 0.0, 75.0 ) + 90;
+            }
+            break;
+        case 2:
 
+            /**
+             * HARD
+             * 
+             * 5 minutes: 25 - 125
+             * 
+             * 10 minutes: 50 - 150
+             * 
+             * 15 minutes: 75 - 175
+             * 
+             * 30 minutes: 150 - 250
+             * 
+             */
+
+            if ( gameLengthInMinutes_ == 0 )
+            {
+                radiusInMeters = randomInRange( 0.0, 100.0 ) + 25;
+            }
+            else if ( gameLengthInMinutes_ == 1 )
+            {
+                radiusInMeters = randomInRange( 0.0, 100.0 ) + 50;
+            }
+            else if ( gameLengthInMinutes_ == 2 )
+            {
+                radiusInMeters = randomInRange( 0.0, 100.0 ) + 75;
+            }
+            else
+            {
+                radiusInMeters = randomInRange( 0.0, 100.0 ) + 150;
             }
             break;
         case 3:
             /**
-             * EXTREME
+             * EXTREME GORGIO's VACATION!!! TODO
              * 
              * 5 minutes: 30 - 39
              * 
@@ -284,46 +423,48 @@ public class CampaignSetUp
 
             if ( gameLengthInMinutes_ == 0 )
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 30;
-
+                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 30;
             }
             else if ( gameLengthInMinutes_ == 1 )
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 60;
-
+                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 60;
             }
             else if ( gameLengthInMinutes_ == 2 )
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 90;
-
+                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 90;
             }
             else
             {
-
-                mNumberOfAlienShips = randomNumGenerator_.nextInt( 10 ) + 180;
-
+                radiusInMeters = randomNumGenerator_.nextInt( 10 ) + 180;
             }
             break;
         default:
+            radiusInMeters = -1;
             break;
         }
-        Log.i( "Random int is ", "" + mNumberOfAlienShips );
-        setmNumberOfAlienShips( mNumberOfAlienShips );
+        return radiusInMeters;
     }
 
-    private void getRandomAlienLocation( double latitude_, double longitude_,
-            int radius )
+    /**
+     * This sets the currentAlienLocation_ = to a random location
+     * 
+     * @param latitude_
+     * @param longitude_
+     * @param radius
+     */
+    private void setRandomAlienLocation( double latitude_, double longitude_ )
     {
-        Random random = new Random();
+        double radius = getRandomAlienShipRadius();
+        if ( -1 != radius )
+        {
+            radius = getRandomAlienShipRadius();
+        }
 
         // Convert radius from meters to degrees
         double radiusInDegrees = radius / 111000f;
 
-        double u = random.nextDouble();
-        double v = random.nextDouble();
+        double u = randomNumGenerator_.nextDouble();
+        double v = randomNumGenerator_.nextDouble();
         double w = radiusInDegrees * Math.sqrt( u );
         double t = 2 * Math.PI * v;
         double x = w * Math.cos( t );
@@ -335,16 +476,40 @@ public class CampaignSetUp
         double alienLongitude = new_x + longitude_;
         double alienLatitude = y + latitude_;
 
-        alienLocation_ = new Location( "GPS" );
+        currentAlienLocation_ = new Location( "GPS" );
 
-        alienLocation_.setLongitude( alienLongitude );
-        alienLocation_.setLatitude( alienLatitude );
+        currentAlienLocation_.setLongitude( alienLongitude );
+        currentAlienLocation_.setLatitude( alienLatitude );
 
     }
 
-    public LatLng getRandomLatLongVariable()
+    /**
+     * @param latitude_
+     * @param longitude_
+     * @return the latLong of random alien location
+     */
+    public LatLng
+            getRandomLatLongVariable( double latitude_, double longitude_ )
     {
-        return new LatLng( alienLocation_.getLatitude(),
-                alienLocation_.getLongitude() );
+        setRandomAlienLocation( latitude_, longitude_ );
+
+        return new LatLng( currentAlienLocation_.getLatitude(),
+                currentAlienLocation_.getLongitude() );
+    }
+
+    /**
+     * The standard java getDouble, does not have range specifications so this
+     * function generates a random double within the specified range
+     * 
+     * @param min
+     * @param max
+     * @return a random double inside the range
+     */
+    public double randomInRange( double min, double max )
+    {
+        double range = max - min;
+        double scaled = randomNumGenerator_.nextDouble() * range;
+        double shifted = scaled + min;
+        return shifted; // == (rand.nextDouble() * (max-min)) + min;
     }
 }

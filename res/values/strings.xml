@@ -48,10 +48,14 @@
     <string name="about_author2">Garrett Moran</string>
     <string name="about_author3">Tiffany Tuan</string>
     <string name="about_contact">Humans can contact us at jdagres@vt.edu</string>
-    <string name="about_qoute">“I\'m sure the universe is full of intelligent life. 
+    <!--
+        Old string <string name="about_qoute">“I\'m sure the universe is full of intelligent life. 
         It\'s just been too intelligent to come here.” 
 		― Arthur C. Clarke</string>
+    -->
 
+    <string name="about_qoute">“The only way to disprove acient aliens is when the extraterrestrials show up and say “we were never here”!” 
+		― Giorgio Tsoukalos</string>
     <!-- Completion strings -->
     <string name="congratulations_name">Congratulations %1$s!</string>
     <string name="congratulations_message">You have managed to complete %2$d objectives and defeated %2$d aliens. Good job!</string>

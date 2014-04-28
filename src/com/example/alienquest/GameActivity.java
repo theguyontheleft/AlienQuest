@@ -2,9 +2,11 @@ package com.example.alienquest;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -13,6 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -117,6 +120,7 @@ public class GameActivity extends Activity implements SensorEventListener
         userName_ =
                 preference_.getString( getString( R.string.pref_title_name ),
                         getString( R.string.pref_title_name ) );
+
         if ( 1 <= userName_.length() )
         {
             Toast.makeText(
@@ -124,6 +128,14 @@ public class GameActivity extends Activity implements SensorEventListener
                     "Welcome "
                             + userName_
                             + " to the quest. The human race is counting on you"
+                            + " to fend off the alien spaceships attempting to land on earth.",
+                    Toast.LENGTH_LONG * 2 ).show();
+        }
+        else
+        {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Welcome to the quest. The human race is counting on you"
                             + " to fend off the alien spaceships attempting to land on earth.",
                     Toast.LENGTH_LONG * 2 ).show();
         }
@@ -203,10 +215,31 @@ public class GameActivity extends Activity implements SensorEventListener
                         Toast.LENGTH_SHORT ).show();
 
                 previousDegree_ = degree;
-                // Update the picture of the alien on the screen.
+
+                // Update the picture of the alien on the screen if the device
+                // is pointing in a relatively similar direction and the ship is
+                // located nearby
+                double differenceInDegrees = bearing() - previousDegree_;
+
+                if ( Math.abs( differenceInDegrees ) < 25 && isAlienNearby() )
+                {
+                    // Display the spaceship
+                    if (!cameraFragment.isAlienDrawn() )
+                    {
+                        cameraFragment.drawAlien();
+                        if ( fragCounter == 0 )
+                        {
+                            switchFragment();
+                        }
+                    }
+                }
+                else
+                {
+                    // Hide the spaceship
+                }
+
             }
         }
-
     }
 
     @Override
@@ -450,6 +483,70 @@ public class GameActivity extends Activity implements SensorEventListener
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+     */
+    @Override
+    public boolean onKeyDown( int keyCode, KeyEvent event )
+    {
+        if ( fragCounter == 1 )
+        {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Exiting Campaign",
+                    Toast.LENGTH_SHORT ).show();
+        }
+        
+        
+        /*
+        final boolean endCampaign;
+        
+        new AlertDialog.Builder( this )
+                .setTitle( "End Campaign" )
+                .setMessage( "Are you sure you want to end your campaign?" )
+                .setPositiveButton( android.R.string.yes,
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick( DialogInterface dialog,
+                                    int which )
+                            {
+                                // continue with delete
+                                endCampaign = true;
+                            }
+                        } )
+                .setNegativeButton( android.R.string.no,
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick( DialogInterface dialog,
+                                    int which )
+                            {
+                                // do nothing
+                                endCampaign = false;
+                            }
+                        }
+                
+                
+
+                )
+                .setIcon( android.R.drawable.ic_dialog_alert )
+                .show();
+        
+        if ( endCampaign )
+        {
+            return super.onKeyDown( keyCode, event );
+        }
+        else
+        {
+            return false;
+        }
+        */
+
+        return super.onKeyDown( keyCode, event );
+
+    }
+
     /************************************* Map and Alien Ship Methods *************************************/
 
     /**
@@ -473,15 +570,6 @@ public class GameActivity extends Activity implements SensorEventListener
         // Update the new values
         storedLatitude_ = gps_.getLatitude();
         storedLongitude_ = gps_.getLongitude();
-
-        if ( isAlienNearby() && !cameraFragment.isAlienDrawn() )
-        {
-            cameraFragment.drawAlien();
-            if ( fragCounter == 0 )
-            {
-                switchFragment();
-            }
-        }
     }
 
     private boolean isAlienNearby()

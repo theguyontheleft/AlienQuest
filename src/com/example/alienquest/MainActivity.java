@@ -1,18 +1,23 @@
 package com.example.alienquest;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,190 +39,217 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @version Mar 30, 2014
  * 
  */
-public class MainActivity extends Activity
-{
-    /**
-     * Used for the settings
-     */
-    public static boolean inputCorrect;
+public class MainActivity extends Activity {
+	/**
+	 * Used for the settings
+	 */
+	public static boolean inputCorrect;
 
-    /**
-     * determines if the app is in its initial setup
-     */
-    private static boolean initialSetup;
+	/**
+	 * determines if the app is in its initial setup
+	 */
+	private static boolean initialSetup;
 
-    /**
-     * settings menu Intent, used to access settings and preference information
-     */
-    private Intent settingsIntention;
+	/**
+	 * settings menu Intent, used to access settings and preference information
+	 */
+	private Intent settingsIntention;
 
-    /**
-     * start game intent
-     */
-    private Intent startGameIntention;
+	/**
+	 * start game intent
+	 */
+	private Intent startGameIntention;
 
-    /**
-     * instance of the settings task
-     */
-    private static SharedPreferences preference_;
+	private Intent startTestIntention;
+	/**
+	 * instance of the settings task
+	 */
+	private static SharedPreferences preference_;
 
-    // Button instances
-    private Button startGameButton_;
-    private Button instructionsButton_;
-    private Button aboutGameButton_;
+	// Button instances
+	private Button startGameButton_;
+	private Button instructionsButton_;
+	private Button aboutGameButton_;
+	private Button testButton_;
 
-    private TextView welcomeMsg_;
+	private TextView welcomeMsg_;
 
-    @Override
-    protected void onCreate( Bundle savedInstanceState )
-    {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        Typeface tf =
-                Typeface.createFromAsset( getAssets(), "Fonts/Molot.otf" );
+		// Opens alert dialog if user GPS is not enabled
+		LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+		if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+				|| !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
-        settingsIntention = new Intent( MainActivity.this,
-                SettingsPreferenceActivity.class );
-        startGameIntention =
-                new Intent( MainActivity.this, GameActivity.class );
+			// Build the alert dialog
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Location Services Not Active");
+			builder.setMessage("Please enable Location Services and GPS");
+			builder.setPositiveButton("OK",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogInterface,
+								int i) {
+							// Show location settings when the user acknowledges
+							// the alert dialog
+							Intent intent = new Intent(
+									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							startActivity(intent);
+						}
+					});
+			Dialog alertDialog = builder.create();
+			alertDialog.setCanceledOnTouchOutside(false);
+			alertDialog.show();
+		}
 
-        // Set up the start game, instructions and about buttons.
-        startGameButton_ = (Button) findViewById( R.id.startGameButton );
-        instructionsButton_ = (Button) findViewById( R.id.instructionsButton );
-        aboutGameButton_ = (Button) findViewById( R.id.aboutButton );
+		setContentView(R.layout.activity_main);
 
-        welcomeMsg_ = (TextView) findViewById( R.id.textView1 );
+		Typeface tf = Typeface.createFromAsset(getAssets(), "Fonts/Molot.otf");
 
-        startGameButton_.setTypeface( tf );
-        instructionsButton_.setTypeface( tf );
-        aboutGameButton_.setTypeface( tf );
+		settingsIntention = new Intent(MainActivity.this,
+				SettingsPreferenceActivity.class);
+		startGameIntention = new Intent(MainActivity.this, GameActivity.class);
+		startTestIntention = new Intent(MainActivity.this,
+				CompletionActivity.class);
 
-        welcomeMsg_.setTypeface( tf );
+		// Set up the start game, instructions and about buttons.
+		startGameButton_ = (Button) findViewById(R.id.startGameButton);
+		instructionsButton_ = (Button) findViewById(R.id.instructionsButton);
+		aboutGameButton_ = (Button) findViewById(R.id.aboutButton);
+		testButton_ = (Button) findViewById(R.id.testButton);
 
-        // Set up the preference
-        preference_ =
-                getSharedPreferences( getString( R.string.pref_title_file ),
-                        Context.MODE_PRIVATE );
+		welcomeMsg_ = (TextView) findViewById(R.id.textView1);
 
-        // Start game
-        startGameButton_.setOnClickListener( new View.OnClickListener()
-        {
-            @Override
-            public void onClick( View v )
-            {
-                Vibrator earthShaker =
-                        (Vibrator) getSystemService( Context.VIBRATOR_SERVICE );
-                earthShaker.vibrate( 200 );
-                //startGameIntention.putExtra("Difficulty", settingsIntention.getStringExtra("Difficulty"));
-                MainActivity.this.startActivity( startGameIntention );
-            }
-        } );
+		startGameButton_.setTypeface(tf);
+		instructionsButton_.setTypeface(tf);
+		aboutGameButton_.setTypeface(tf);
 
-        // Display instructions fragment
-        instructionsButton_.setOnClickListener( new View.OnClickListener()
-        {
-            @Override
-            public void onClick( View v )
-            {
-                displayInstructionsDialog();
-            }
-        } );
+		testButton_.setTypeface(tf);
+		welcomeMsg_.setTypeface(tf);
 
-        // Display about fragment
-        aboutGameButton_.setOnClickListener( new View.OnClickListener()
-        {
-            @Override
-            public void onClick( View v )
-            {
-                displayAboutDialog();
-            }
-        } );
+		// Set up the preference
+		preference_ = getSharedPreferences(getString(R.string.pref_title_file),
+				Context.MODE_PRIVATE);
 
-        // CUSTOM
-        // Test the map fragment
-        // mapFragment_ = new MapFragmentClass();
-        //
-        // FragmentManager fragmentManager = getFragmentManager();
-        // FragmentTransaction fragmentTransaction =
-        // fragmentManager.beginTransaction();
-        //
-        // fragmentTransaction.add( R.id.googleMapFragment, mapFragment_ );
-        // fragmentTransaction.commit();
+		// Start game
+		startGameButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Vibrator earthShaker = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				earthShaker.vibrate(200);
+				// startGameIntention.putExtra("Difficulty",
+				// settingsIntention.getStringExtra("Difficulty"));
+				MainActivity.this.startActivity(startGameIntention);
+			}
+		});
 
-        // mMap_ = new GoogleMap( null ); TODO
+		testButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 
-    }
+				MainActivity.this.startActivity(startTestIntention);
+			}
+		});
 
-    /**
-     * Adds the instructions fragment to the view
-     */
-    private void displayInstructionsDialog()
-    {
-        // prepare the instructions box
-        Dialog instructionsBox = new Dialog( MainActivity.this );
-        instructionsBox.setContentView( R.layout.dialog_instructions );
-        // set the message to display
-        instructionsBox.setTitle( "Instructions Menu" );
+		// Display instructions fragment
+		instructionsButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				displayInstructionsDialog();
+			}
+		});
 
-        instructionsBox.show();
-    }
+		// Display about fragment
+		aboutGameButton_.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				displayAboutDialog();
+			}
+		});
 
-    /**
-     * Adds the about fragment to the view
-     */
-    private void displayAboutDialog()
-    {
-        // prepare the instructions box
-        Dialog aboutBox = new Dialog( MainActivity.this );
-        aboutBox.setContentView( R.layout.dialog_about );
+		// CUSTOM
+		// Test the map fragment
+		// mapFragment_ = new MapFragmentClass();
+		//
+		// FragmentManager fragmentManager = getFragmentManager();
+		// FragmentTransaction fragmentTransaction =
+		// fragmentManager.beginTransaction();
+		//
+		// fragmentTransaction.add( R.id.googleMapFragment, mapFragment_ );
+		// fragmentTransaction.commit();
 
-        // set the message to display
-        aboutBox.setTitle( "About Alien Quest" );
+		// mMap_ = new GoogleMap( null ); TODO
 
-        aboutBox.show();
-    }
+	}
 
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item )
-    {
-        switch ( item.getItemId() )
-        {
-        case R.id.action_settings:
-            this.startActivity( settingsIntention );
-            
-            break;
-        }
+	/**
+	 * Adds the instructions fragment to the view
+	 */
+	private void displayInstructionsDialog() {
+		// prepare the instructions box
+		Dialog instructionsBox = new Dialog(MainActivity.this);
+		instructionsBox.setContentView(R.layout.dialog_instructions);
+		// set the message to display
+		instructionsBox.setTitle("Instructions Menu");
 
-        return true;
-    }
+		instructionsBox.show();
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu )
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.settings, menu );
-        return true;
-    }
+	/**
+	 * Adds the about fragment to the view
+	 */
+	private void displayAboutDialog() {
+		// prepare the instructions box
+		Dialog aboutBox = new Dialog(MainActivity.this);
+		aboutBox.setContentView(R.layout.dialog_about);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
-     */
-    @Override
-    public boolean onMenuItemSelected( int featureId, MenuItem item )
-    {
-        // TODO Auto-generated method stub
-        return super.onMenuItemSelected( featureId, item );
-    }
+		TextView aboutTxt = (TextView) aboutBox
+				.findViewById(android.R.id.message);
 
-    /**
-     * @return
-     * @returns the preferences
-     */
-    public static SharedPreferences getPreference_()
-    {
-        return preference_;
-    }
+		// set the message to display
+		aboutBox.setTitle("About Alien Quest");
+		aboutBox.show();
+		aboutBox.getWindow().setLayout(
+				RelativeLayout.LayoutParams.MATCH_PARENT, 400);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			this.startActivity(settingsIntention);
+
+			break;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.settings, menu);
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
+	 */
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+	/**
+	 * @return
+	 * @returns the preferences
+	 */
+	public static SharedPreferences getPreference_() {
+		return preference_;
+	}
 }

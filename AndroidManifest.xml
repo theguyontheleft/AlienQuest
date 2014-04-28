@@ -69,6 +69,10 @@
             android:label="ALienLandingPoints"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="com.example.alienquest.CompletionActivity"
+            android:label="Completion" >
+        </activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

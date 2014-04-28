@@ -24,233 +24,200 @@ import com.google.android.gms.maps.model.LatLng;
  * @version March 20, 2014
  * 
  */
-public class GPSLocator extends Service implements LocationListener
-{
-    private final Context mContext;
+public class GPSLocator extends Service implements LocationListener {
+	private final Context mContext;
 
-    // flag for GPS status
-    boolean isGPSEnabled = false;
+	// flag for GPS status
+	boolean isGPSEnabled = false;
 
-    // flag for network status
-    boolean isNetworkEnabled = false;
+	// flag for network status
+	boolean isNetworkEnabled = false;
 
-    // flag for GPS status
-    boolean canGetLocation = false;
+	// flag for GPS status
+	boolean canGetLocation = false;
 
-    Location location; // location
-    double latitude; // latitude
-    double longitude; // longitude
+	Location location; // location
+	double latitude; // latitude
+	double longitude; // longitude
 
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+	// The minimum distance to change Updates in meters
+	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+	// The minimum time between updates in milliseconds
+	private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
-    // Declaring a Location Manager
-    protected LocationManager locationManager;
-    
-    private GameActivity gameActivity_;
+	// Declaring a Location Manager
+	protected LocationManager locationManager;
 
-    /**
-     * @param context
-     * @param gameActivity 
-     */
-    public GPSLocator( Context context, GameActivity gameActivity )
-    {
-        this.mContext = context;
-        this.gameActivity_ = gameActivity;
-        getLocation();
-    }
+	private GameActivity gameActivity_;
 
-    /**
-     * @return the location
-     */
-    public Location getLocation()
-    {
-        try
-        {
-            locationManager = (LocationManager) mContext
-                    .getSystemService( LOCATION_SERVICE );
+	/**
+	 * @param context
+	 * @param gameActivity
+	 */
+	public GPSLocator(Context context, GameActivity gameActivity) {
+		this.mContext = context;
+		this.gameActivity_ = gameActivity;
+		getLocation();
+	}
 
-            // getting GPS status
-            isGPSEnabled = locationManager
-                    .isProviderEnabled( LocationManager.GPS_PROVIDER );
+	/**
+	 * @return the location
+	 */
+	public Location getLocation() {
+		try {
+			locationManager = (LocationManager) mContext
+					.getSystemService(LOCATION_SERVICE);
 
-            // getting network status
-            isNetworkEnabled = locationManager
-                    .isProviderEnabled( LocationManager.NETWORK_PROVIDER );
+			// getting GPS status
+			isGPSEnabled = locationManager
+					.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            if ( !isGPSEnabled && !isNetworkEnabled )
-            {
-                // no network provider is enabled
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Please check your GPS and network connection.",
-                        Toast.LENGTH_LONG * 2 ).show();
-            }
-            else
-            {
-                this.canGetLocation = true;
-                if ( isNetworkEnabled )
-                {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this );
-                    Log.d( "Network", "Network" );
-                    if ( locationManager != null )
-                    {
-                        location =
-                                locationManager
-                                        .getLastKnownLocation( LocationManager.NETWORK_PROVIDER );
-                        if ( location != null )
-                        {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                }
-                // if GPS Enabled get lat/long using GPS Services
-                if ( isGPSEnabled )
-                {
-                    if ( location == null )
-                    {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this );
-                        Log.d( "GPS Enabled", "GPS Enabled" );
-                        if ( locationManager != null )
-                        {
-                            location =
-                                    locationManager
-                                            .getLastKnownLocation( LocationManager.GPS_PROVIDER );
-                            if ( location != null )
-                            {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
-                        }
-                    }
-                }
-            }
+			// getting network status
+			isNetworkEnabled = locationManager
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
+			if (!isGPSEnabled && !isNetworkEnabled) {
+				// no network provider is enabled
+				Toast.makeText(getApplicationContext(),
+						"Please check your GPS and network connection.",
+						Toast.LENGTH_LONG * 2).show();
+			} else {
+				this.canGetLocation = true;
+				if (isNetworkEnabled) {
+					locationManager.requestLocationUpdates(
+							LocationManager.NETWORK_PROVIDER,
+							MIN_TIME_BW_UPDATES,
+							MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+					Log.d("Network", "Network");
+					if (locationManager != null) {
+						location = locationManager
+								.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+						if (location != null) {
+							latitude = location.getLatitude();
+							longitude = location.getLongitude();
+						}
+					}
+				}
+				// if GPS Enabled get lat/long using GPS Services
+				if (isGPSEnabled) {
+					if (location == null) {
+						locationManager.requestLocationUpdates(
+								LocationManager.GPS_PROVIDER,
+								MIN_TIME_BW_UPDATES,
+								MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+						Log.d("GPS Enabled", "GPS Enabled");
+						if (locationManager != null) {
+							location = locationManager
+									.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+							if (location != null) {
+								latitude = location.getLatitude();
+								longitude = location.getLongitude();
+							}
+						}
+					}
+				}
+			}
 
-        return location;
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    /**
-     * Stop using GPS listener Calling this function will stop using GPS in your
-     * app
-     * */
-    public void stopUsingGPS()
-    {
-        if ( locationManager != null )
-        {
-            locationManager.removeUpdates( GPSLocator.this );
-        }
-    }
+		return location;
+	}
 
-    /**
-     * Function to get latitude
-     * 
-     * @return the latitude y coordinate
-     * */
-    public double getLatitude()
-    {
-        if ( location != null )
-        {
-            latitude = location.getLatitude();
-        }
+	/**
+	 * Stop using GPS listener Calling this function will stop using GPS in your
+	 * app
+	 * */
+	public void stopUsingGPS() {
+		if (locationManager != null) {
+			locationManager.removeUpdates(GPSLocator.this);
+		}
+	}
 
-        // return latitude
-        return latitude;
-    }
+	/**
+	 * Function to get latitude
+	 * 
+	 * @return the latitude y coordinate
+	 * */
+	public double getLatitude() {
+		if (location != null) {
+			latitude = location.getLatitude();
+		}
 
-    /**
-     * Function to get longitude
-     * 
-     * @return the longitude x coordinate
-     * */
-    public double getLongitude()
-    {
-        if ( location != null )
-        {
-            longitude = location.getLongitude();
-        }
+		// return latitude
+		return latitude;
+	}
 
-        // return longitude
-        return longitude;
-    }
+	/**
+	 * Function to get longitude
+	 * 
+	 * @return the longitude x coordinate
+	 * */
+	public double getLongitude() {
+		if (location != null) {
+			longitude = location.getLongitude();
+		}
 
-    /**
-     * Function to check GPS/wifi enabled
-     * 
-     * @return boolean
-     * */
-    public boolean canGetLocation()
-    {
-        return this.canGetLocation;
-    }
+		// return longitude
+		return longitude;
+	}
 
-    /**
-     * Function to show settings alert dialogs
-     * */
-    public void showSettingsAlert()
-    {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder( mContext );
+	/**
+	 * Function to check GPS/wifi enabled
+	 * 
+	 * @return boolean
+	 * */
+	public boolean canGetLocation() {
+		return this.canGetLocation;
+	}
 
-        // Setting Dialog Title
-        alertDialog.setTitle( "GPS is settings" );
+	/**
+	 * Function to show settings alert dialogs
+	 * */
+	public void showSettingsAlert() {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
-        // Setting Dialog Message
-        alertDialog
-                .setMessage( "GPS is not enabled. Do you want to go to settings menu?" );
+		// Setting Dialog Title
+		alertDialog.setTitle("GPS is settings");
 
-        alertDialog.show();
-    }
+		// Setting Dialog Message
+		alertDialog
+				.setMessage("GPS is not enabled. Do you want to go to settings menu?");
 
-    /**
-     * @return the latitude longitude variable
-     */
-    public LatLng getLatCurrentLongVariable()
-    {
-        return new LatLng( latitude, longitude );
-    }
+		alertDialog.show();
+	}
 
-    @Override
-    public void onLocationChanged( Location location )
-    {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        gameActivity_.locationChanged();
-    }
+	/**
+	 * @return the latitude longitude variable
+	 */
+	public LatLng getLatCurrentLongVariable() {
+		return new LatLng(latitude, longitude);
+	}
 
-    @Override
-    public void onProviderDisabled( String provider )
-    {
-    }
+	@Override
+	public void onLocationChanged(Location location) {
+		latitude = location.getLatitude();
+		longitude = location.getLongitude();
+		gameActivity_.locationChanged();
+	}
 
-    @Override
-    public void onProviderEnabled( String provider )
-    {
-    }
+	@Override
+	public void onProviderDisabled(String provider) {
+	}
 
-    @Override
-    public void onStatusChanged( String provider, int status, Bundle extras )
-    {
-    }
+	@Override
+	public void onProviderEnabled(String provider) {
+	}
 
-    @Override
-    public IBinder onBind( Intent arg0 )
-    {
-        return null;
-    }
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		return null;
+	}
 
 }

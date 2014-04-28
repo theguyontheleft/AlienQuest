@@ -169,7 +169,12 @@ public class GameActivity extends Activity implements SensorEventListener
 
         if ( event.sensor.getType() == Sensor.TYPE_ACCELEROMETER )
         {
-
+            // get the angle around the z-axis rotated
+            float degree = Math.round( azimuth );
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Accel Current Degrees " + degree,
+                    Toast.LENGTH_SHORT ).show();
         }
         else if ( event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD )
         {
@@ -177,7 +182,16 @@ public class GameActivity extends Activity implements SensorEventListener
             float degree = Math.round( azimuth );
             Toast.makeText(
                     getApplicationContext(),
-                    "Current Degrees " + degree,
+                    "Mag Current Degrees " + degree,
+                    Toast.LENGTH_SHORT ).show();
+        }
+        else
+        {
+            float degree = Math.round( azimuth );
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Type " + event.sensor.getType() + " Mag Current Degrees "
+                            + degree,
                     Toast.LENGTH_SHORT ).show();
         }
 

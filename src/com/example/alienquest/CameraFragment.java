@@ -1,5 +1,6 @@
 package com.example.alienquest;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import android.annotation.SuppressLint;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -26,6 +28,9 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
     private ArrayList<String> itemList;
     private Camera mCamera;
     private TextureView mTextureView;
+    private double userLat;
+    private double userLong;
+    private boolean alienDrawn;
 
  // this is the first callback method that is invoked.
     public void onCreate(Bundle state) {
@@ -34,6 +39,7 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
         itemAdapter = new ArrayAdapter<String>(this.getActivity(),
             android.R.layout.simple_list_item_1, itemList);
         itemList.add(0 + " , " + 0);
+        alienDrawn = false;
     }
 
     // Initializing the views and listeners
@@ -58,28 +64,38 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
         return view;
     }
 
-    /**
-     * this method populates the listview with the location of the alien ships
-     */
-    private void populateObjectives()
-    {
-        int numShips = ((GameActivity)this.getActivity()).setUp.getmNumberOfAlienShips();
-    }
-
-    /**
-     * this method removes a complete objective from the listview, or adds
-     * if such a scenario is supported
-     */
-    private void updateObjectives()
-    {
-        //TODO: populate objectives listview
-        //TODO: retrieve location as well?
-    }
-
     public void updateLocation(double latitude, double longitude)
     {
-        itemList.set(0, latitude + " , " + longitude);
+        userLat = latitude;
+        userLong = longitude;
+        itemList.set(0, "User Loc: " + userLong + " , " + userLat);
         itemAdapter.notifyDataSetChanged();
+        /*if(isAlienNearby())
+        {
+            placeAlienOnScreen();
+        }*/
+    }
+
+    public void insertAlienLocation(double latitude, double longitude)
+    {
+        itemList.add("Alien Loc: " + longitude + " , " + latitude);
+        itemAdapter.notifyDataSetChanged();
+    }
+
+    public void drawAlien()
+    {
+        ImageView alien = new ImageView(this.getActivity());
+        alien.setImageResource(R.drawable.alien_battleship1_large);
+        RelativeLayout.LayoutParams alienParams =
+            new RelativeLayout.LayoutParams(cameraLayout.getWidth()/4, cameraLayout.getHeight()/4);
+        cameraLayout.addView(alien, alienParams);
+        alien.bringToFront();
+        alienDrawn = true;
+    }
+
+    public boolean isAlienDrawn()
+    {
+        return alienDrawn;
     }
 
     @Override

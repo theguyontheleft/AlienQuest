@@ -32,10 +32,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -206,10 +206,10 @@ public class GameActivity extends Activity implements SensorEventListener
     /**
      * Point 1 is the users current position. Point 2 is the current alien ships
      * location
-     * 
+     *
      * http://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to
      * -another
-     * 
+     *
      * @param lat1
      * @param lon1
      * @param lat2
@@ -397,7 +397,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -420,7 +420,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -445,9 +445,29 @@ public class GameActivity extends Activity implements SensorEventListener
     public void locationChanged()
     {
         // TODO:
-        cameraFragment
-                .updateLocation( gps_.getLatitude(), gps_.getLongitude() );
+        cameraFragment.updateLocation(gps_.getLatitude(), gps_.getLongitude());
         centerOnCurrentLocation();
+        if(isAlienNearby() && !cameraFragment.isAlienDrawn())
+        {
+            cameraFragment.drawAlien();
+            if(fragCounter == 0)
+            {
+                switchFragment();
+            }
+        }
+    }
+
+    private boolean isAlienNearby()
+    {
+        double distance = Math.sqrt(Math.pow(gps_.getLongitude() -
+            currentAlienShipsMarker_.getPosition().longitude, 2) +
+            Math.pow(gps_.getLatitude() - currentAlienShipsMarker_.getPosition().latitude,
+                2));
+        if(distance < 1)
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -489,7 +509,7 @@ public class GameActivity extends Activity implements SensorEventListener
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     * 
+     *
      * @param longitude
      * @param latitude
      * @param shipID
@@ -521,7 +541,7 @@ public class GameActivity extends Activity implements SensorEventListener
                                     .snippet( "Ship is landing!" )
                                     .icon( BitmapDescriptorFactory
                                             .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
-
+            cameraFragment.insertAlienLocation(randomNewAlienLocation.latitude, randomNewAlienLocation.longitude);
             alienShipsInitialized_ = true;
         }
     }
@@ -536,7 +556,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /**
      * This function is called if the ships are shuffled or shot down
-     * 
+     *
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )

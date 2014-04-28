@@ -1,7 +1,5 @@
 package com.example.alienquest;
 
-import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -9,6 +7,10 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.mapping.CampaignSetUp;
 import com.example.mapping.GPSLocator;
-import com.example.mapping.MapFragmentClass;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -38,7 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
-public class GameActivity extends Activity
+public class GameActivity extends Activity implements SensorEventListener
 {
     public final static String FRAG1_TAG = "FRAG1";
     public final static String FRAG2_TAG = "FRAG2";
@@ -61,7 +62,8 @@ public class GameActivity extends Activity
     /**
      * The current Aliens Location
      */
-    private Marker currentAlienShipsMarker_;
+    private static Marker currentAlienShipsMarker_;
+    private static Marker currentUserMarker_;
     private boolean alienShipsInitialized_ = false;
     private int numberOfShipsDestroyed = 0;
 
@@ -85,6 +87,9 @@ public class GameActivity extends Activity
     protected CampaignSetUp setUp;
     private String difficulty_;
     private String gameLength_;
+
+    // Device sensor manager
+    private SensorManager mSensorManager;
 
     /**
      * instance of the settings task
@@ -119,6 +124,9 @@ public class GameActivity extends Activity
 
         getGPSLocation();
 
+        // initialize your android device sensor capabilities
+        mSensorManager = (SensorManager) getSystemService( SENSOR_SERVICE );
+
         // Start off by displaying a google map and inserting the aliens
 
         // Store the screen width and height
@@ -148,6 +156,72 @@ public class GameActivity extends Activity
         // Record the start time of the game
         questStartTime_ = System.currentTimeMillis();
     }
+
+    /************************************* Sensor Listeners *************************************/
+
+    @Override
+    public void onSensorChanged( SensorEvent event )
+    {
+
+        // angle between the magnetic north direction
+        // 0=North, 90=East, 180=South, 270=West
+        float azimuth = event.values[0];
+
+        if ( event.sensor.getType() == Sensor.TYPE_ACCELEROMETER )
+        {
+
+        }
+        else if ( event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD )
+        {
+            // get the angle around the z-axis rotated
+            float degree = Math.round( azimuth );
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Current Degrees " + degree,
+                    Toast.LENGTH_SHORT ).show();
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged( Sensor sensor, int accuracy )
+    {
+        // Not used currently
+    }
+
+    /**
+     * Point 1 is the users current position. Point 2 is the current alien ships
+     * location
+     * 
+     * http://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to
+     * -another
+     * 
+     * @param lat1
+     * @param lon1
+     * @param lat2
+     * @param lon2
+     * @return
+     */
+    protected static double bearing()
+    {
+        // currentUserMarker_
+        double longitude1 = currentUserMarker_.getPosition().longitude;
+        double longitude2 = currentAlienShipsMarker_.getPosition().longitude;
+        double latitude1 =
+                Math.toRadians( currentUserMarker_.getPosition().latitude );
+        double latitude2 =
+                Math.toRadians( currentAlienShipsMarker_.getPosition().latitude );
+        double longDiff = Math.toRadians( longitude2 - longitude1 );
+        double y = Math.sin( longDiff ) * Math.cos( latitude2 );
+        double x =
+                Math.cos( latitude1 ) * Math.sin( latitude2 )
+                        - Math.sin( latitude1 ) * Math.cos( latitude2 )
+                        * Math.cos( longDiff );
+
+        return (Math.toDegrees( Math.atan2( y, x ) ) + 360) % 360;
+    }
+
+    /************************************* End Sensor Listeners *************************************/
 
     /**
      * switches the view between the camera and the map fragments
@@ -212,7 +286,6 @@ public class GameActivity extends Activity
 
         mMap_ = mMapFrag_.getMap(); // Custom MapFragment
         setUpMapIfNeeded(); // Dynamic
-
     }
 
     /**
@@ -251,7 +324,7 @@ public class GameActivity extends Activity
         }
         else
         {
-            redrawAlienShipsOnMap();
+            // redrawAlienShipsOnMap(); // TODO
         }
     }
 
@@ -318,6 +391,17 @@ public class GameActivity extends Activity
     {
         super.onResume();
         setUpMapIfNeeded();
+
+        if ( null != mSensorManager )
+        {
+            // for the system's orientation sensor registered listeners
+            mSensorManager
+                    .registerListener(
+                            this,
+                            mSensorManager
+                                    .getDefaultSensor( Sensor.TYPE_ORIENTATION ),
+                            SensorManager.SENSOR_DELAY_GAME );
+        }
     }
 
     /*
@@ -329,6 +413,13 @@ public class GameActivity extends Activity
     protected void onPause()
     {
         super.onPause();
+
+        if ( null != mSensorManager )
+        {
+            // to stop the listener and save battery
+            mSensorManager.unregisterListener( this );
+        }
+
     }
 
     /************************************* Map and Alien Ship Methods *************************************/
@@ -355,13 +446,19 @@ public class GameActivity extends Activity
             // Get the location first
             getGPSLocation();
 
+            // Remove the old marker
+            if ( null != currentUserMarker_ )
+            {
+                currentUserMarker_.remove();
+            }
+
             // Initialize the camera position
             MapsInitializer.initialize( GameActivity.this );
             CameraPosition mCameraPosition = new CameraPosition.Builder()
                     .zoom( 16.0f ).target( gps_.getLatCurrentLongVariable() )
                     .bearing( 0 ).tilt( 0 ).build();
 
-            Marker currentPosition = mMap_.addMarker( new MarkerOptions()
+            currentUserMarker_ = mMap_.addMarker( new MarkerOptions()
                     .position( gps_.getLatCurrentLongVariable() )
                     .title( "Hamburg" ) );
 
@@ -372,27 +469,6 @@ public class GameActivity extends Activity
             mMap_.animateCamera( CameraUpdateFactory
                     .newCameraPosition( mCameraPosition ) );
         }
-    }
-
-    /**
-     * @param numberOfAlienShips
-     *            TODO delete
-     */
-    public void createAliens( int numberOfAlienShips )
-    {
-        // for ( int j = 0; j < numberOfAlienShips; j++ )
-        // {
-        // Marker newAlienShip =
-        // mMap_
-        // .addMarker( new MarkerOptions()
-        // .position(
-        // setUp.getRandomLatLongVariable() )
-        // .title( "AlienShip " + j )
-        // .snippet( "Ship " + j + " is landing!" )
-        // .icon( BitmapDescriptorFactory
-        // .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
-        // alienShips_.add( newAlienShip );
-        // }
     }
 
     /**
@@ -411,6 +487,11 @@ public class GameActivity extends Activity
     {
         if ( null != mMap_ )
         {
+            if ( null != currentAlienShipsMarker_ )
+            {
+                currentAlienShipsMarker_.remove();
+            }
+
             // First get a random location to place the alien ship
             LatLng randomNewAlienLocation =
                     setUp.getRandomLatLongVariable( gps_.getLatitude(),
@@ -432,12 +513,11 @@ public class GameActivity extends Activity
     }
 
     /**
-     * This function redraws the aliens on the map by reading them from the
-     * arraylist of markers
+     * This function clears all of the markers on the current map
      */
-    private void redrawAlienShipsOnMap()
+    private void clearMap()
     {
-        // TODO
+        mMap_.clear();
     }
 
     /**
@@ -448,7 +528,7 @@ public class GameActivity extends Activity
     public void alienShipDestroyed( int shipID )
     {
         // First remove the current marker from the map.
-        mMap_.clear();
+        currentAlienShipsMarker_.remove();
 
         // TODO update the completion activity with a score based on time and
         // difficulty
@@ -464,7 +544,7 @@ public class GameActivity extends Activity
         else
         {
             // Switch the view to the map
-            switchFragment(); // TODO test
+            switchFragment();
 
             // Place another alien ship
             initializeNextAlienShip();
@@ -473,7 +553,7 @@ public class GameActivity extends Activity
 
     /**
      * This function is called when all of the alien ships are destroyed, it
-     * wraps up the compaign accordingly
+     * wraps up the campaign accordingly
      */
     private void campaignFinished()
     {

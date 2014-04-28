@@ -20,6 +20,9 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
 
     <permission
         android:name="com.example.alienquest.permission.MAPS_RECEIVE"
@@ -61,7 +64,7 @@
             android:label="MapFragment"
             android:screenOrientation="landscape" >
         </activity>
-         <activity
+        <activity
             android:name="com.example.mapping.MapActivity"
             android:label="ALienLandingPoints"
             android:screenOrientation="landscape" >

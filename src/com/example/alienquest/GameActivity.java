@@ -35,10 +35,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- * 
+ *
  * @version Mar 31, 2014
- * 
- * 
+ *
+ *
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -251,10 +251,10 @@ public class GameActivity extends Activity implements SensorEventListener
     /**
      * Point 1 is the users current position. Point 2 is the current alien ships
      * location
-     * 
+     *
      * http://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to
      * -another
-     * 
+     *
      * @param lat1
      * @param lon1
      * @param lat2
@@ -305,7 +305,6 @@ public class GameActivity extends Activity implements SensorEventListener
             // replace with camera fragment
             xact = fragMgr.beginTransaction();
             xact.replace( R.id.mapFrame, cameraFragment, FRAG1_TAG );
-            xact.addToBackStack( null );
             xact.commit();
             fragMgr.executePendingTransactions();
 
@@ -322,7 +321,6 @@ public class GameActivity extends Activity implements SensorEventListener
             // replace with map fragment
             xact = fragMgr.beginTransaction();
             xact.replace( R.id.mapFrame, mMapFrag_, FRAG2_TAG );
-            xact.addToBackStack( null );
             xact.commit();
             fragMgr.executePendingTransactions();
 
@@ -444,7 +442,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -467,7 +465,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -485,24 +483,21 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
      */
     @Override
     public boolean onKeyDown( int keyCode, KeyEvent event )
     {
-        if ( fragCounter == 1 )
-        {
             Toast.makeText(
                     getApplicationContext(),
                     "Exiting Campaign",
                     Toast.LENGTH_SHORT ).show();
-        }
-        
-        
+
+
         /*
         final boolean endCampaign;
-        
+
         new AlertDialog.Builder( this )
                 .setTitle( "End Campaign" )
                 .setMessage( "Are you sure you want to end your campaign?" )
@@ -526,13 +521,13 @@ public class GameActivity extends Activity implements SensorEventListener
                                 endCampaign = false;
                             }
                         }
-                
-                
+
+
 
                 )
                 .setIcon( android.R.drawable.ic_dialog_alert )
                 .show();
-        
+
         if ( endCampaign )
         {
             return super.onKeyDown( keyCode, event );
@@ -626,7 +621,7 @@ public class GameActivity extends Activity implements SensorEventListener
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     * 
+     *
      * @param longitude
      * @param latitude
      * @param shipID
@@ -675,7 +670,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /**
      * This function is called if the ships are shuffled or shot down
-     * 
+     *
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )

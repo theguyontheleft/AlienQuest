@@ -31,6 +31,7 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
     private double userLat;
     private double userLong;
     private boolean alienDrawn;
+    private ImageView alien;
 
  // this is the first callback method that is invoked.
     public void onCreate(Bundle state) {
@@ -53,6 +54,7 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
                 camera_fragment, container, false);
         objectives = (ListView) view.findViewById(R.id.listView1);
         objectives.setAdapter(itemAdapter);
+        alien = new ImageView(this.getActivity());
         mTextureView = new TextureView(this.getActivity());
         mTextureView.setSurfaceTextureListener(this);
         RelativeLayout.LayoutParams params;
@@ -84,13 +86,22 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
 
     public void drawAlien()
     {
-        ImageView alien = new ImageView(this.getActivity());
         alien.setImageResource(R.drawable.alien_battleship1_large);
         RelativeLayout.LayoutParams alienParams =
             new RelativeLayout.LayoutParams(cameraLayout.getWidth()/4, cameraLayout.getHeight()/4);
         cameraLayout.addView(alien, alienParams);
         alien.bringToFront();
         alienDrawn = true;
+    }
+
+    public void hideAlien()
+    {
+        alien.setVisibility(View.INVISIBLE);
+    }
+
+    public void unhideAlien()
+    {
+        alien.setVisibility(View.VISIBLE);
     }
 
     public boolean isAlienDrawn()

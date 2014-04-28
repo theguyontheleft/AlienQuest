@@ -221,7 +221,7 @@ public class GameActivity extends Activity implements SensorEventListener
                 // located nearby
                 double differenceInDegrees = bearing() - previousDegree_;
 
-                if ( Math.abs( differenceInDegrees ) < 25 && isAlienNearby() )
+                if ( Math.abs( differenceInDegrees ) < 50 && isAlienNearby() )
                 {
                     // Display the spaceship
                     if (!cameraFragment.isAlienDrawn() )
@@ -236,6 +236,7 @@ public class GameActivity extends Activity implements SensorEventListener
                 else
                 {
                     // Hide the spaceship
+                    cameraFragment.hideAlien();
                 }
 
             }

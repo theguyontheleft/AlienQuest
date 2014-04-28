@@ -32,10 +32,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- *
+ * 
  * @version Mar 31, 2014
- *
- *
+ * 
+ * 
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -56,6 +56,9 @@ public class GameActivity extends Activity implements SensorEventListener
     protected static GoogleMap mMap_;
     protected static MapFragment mMapFrag_;
 
+    // Stores the previous degree of the direction the device is facing
+    private static double previousDegree_;
+
     // Stores a GPS variable
     protected GPSLocator gps_ = null;
 
@@ -66,6 +69,11 @@ public class GameActivity extends Activity implements SensorEventListener
     private static Marker currentUserMarker_;
     private boolean alienShipsInitialized_ = false;
     private int numberOfShipsDestroyed = 0;
+
+    // Store the previous latitude and longitude values so that you can only
+    // update when there's a significant change in location.
+    private double storedLatitude_;
+    private double storedLongitude_;
 
     // Store the width and height in pixels, this will be usefull in
     // calculations throughout the application
@@ -82,8 +90,6 @@ public class GameActivity extends Activity implements SensorEventListener
     private boolean userPrompted_ = false;
 
     // GPS location values
-    protected double longitude_;
-    protected double latitude_;
     protected CampaignSetUp setUp;
     private String difficulty_;
     private String gameLength_;
@@ -169,30 +175,36 @@ public class GameActivity extends Activity implements SensorEventListener
 
         if ( event.sensor.getType() == Sensor.TYPE_ACCELEROMETER )
         {
-            // get the angle around the z-axis rotated
             float degree = Math.round( azimuth );
             Toast.makeText(
-                    getApplicationContext(),
-                    "Accel Current Degrees " + degree,
+                    getApplicationContext(), "Type " + event.sensor.getType() +
+                            " Acc Current Degrees " + degree,
                     Toast.LENGTH_SHORT ).show();
         }
         else if ( event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD )
         {
-            // get the angle around the z-axis rotated
             float degree = Math.round( azimuth );
             Toast.makeText(
-                    getApplicationContext(),
-                    "Mag Current Degrees " + degree,
+                    getApplicationContext(), "Type " + event.sensor.getType() +
+                            " Mag Current Degrees " + degree,
                     Toast.LENGTH_SHORT ).show();
         }
-        else
+        else if ( event.sensor.getType() == Sensor.TYPE_ORIENTATION )
         {
+
             float degree = Math.round( azimuth );
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Type " + event.sensor.getType() + " Mag Current Degrees "
-                            + degree,
-                    Toast.LENGTH_SHORT ).show();
+
+            if ( Math.abs( degree - previousDegree_ ) > 25 )
+            {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Bearing between two points " + bearing() +
+                                "\n Orientation Current Degrees " + degree,
+                        Toast.LENGTH_SHORT ).show();
+
+                previousDegree_ = degree;
+                // Update the picture of the alien on the screen.
+            }
         }
 
     }
@@ -206,10 +218,10 @@ public class GameActivity extends Activity implements SensorEventListener
     /**
      * Point 1 is the users current position. Point 2 is the current alien ships
      * location
-     *
+     * 
      * http://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to
      * -another
-     *
+     * 
      * @param lat1
      * @param lon1
      * @param lat2
@@ -253,9 +265,9 @@ public class GameActivity extends Activity implements SensorEventListener
         else if ( fragCounter == 0 )
         {
             // remove mapfragment from view
-            xact.remove( mMapFrag_ );
-            xact.commit();
-            fragMgr.executePendingTransactions();
+            // xact.remove( mMapFrag_ );
+            // xact.commit();
+            // fragMgr.executePendingTransactions();
 
             // replace with camera fragment
             xact = fragMgr.beginTransaction();
@@ -270,9 +282,9 @@ public class GameActivity extends Activity implements SensorEventListener
         else
         {
             // remove camerafragment from view
-            xact.remove( cameraFragment );
-            xact.commit();
-            fragMgr.executePendingTransactions();
+            // xact.remove( cameraFragment );
+            // xact.commit();
+            // fragMgr.executePendingTransactions();
 
             // replace with map fragment
             xact = fragMgr.beginTransaction();
@@ -280,6 +292,8 @@ public class GameActivity extends Activity implements SensorEventListener
             xact.addToBackStack( null );
             xact.commit();
             fragMgr.executePendingTransactions();
+
+            setUpMapIfNeeded();
 
             // decrement to 0
             fragCounter--;
@@ -315,7 +329,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /**
      * If the map isn't set up then initialize it, this function is important
-     * cause the map needs to be initiazlied before this activities oncreate
+     * cause the map needs to be initialized before this activities oncreate
      * then the program will crash
      */
     private void setUpMapIfNeeded()
@@ -352,8 +366,8 @@ public class GameActivity extends Activity implements SensorEventListener
         // check if GPS enabled
         if ( gps_.canGetLocation() )
         {
-            latitude_ = gps_.getLatitude();
-            longitude_ = gps_.getLongitude();
+            storedLatitude_ = gps_.getLatitude();
+            storedLongitude_ = gps_.getLongitude();
         }
         else
         {
@@ -397,7 +411,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -420,7 +434,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -444,13 +458,26 @@ public class GameActivity extends Activity implements SensorEventListener
      */
     public void locationChanged()
     {
-        // TODO:
-        cameraFragment.updateLocation(gps_.getLatitude(), gps_.getLongitude());
+
+        // if ( storedLatitude_ != gps_.getLatitude()
+        // || storedLongitude_ != gps_.getLongitude() )
+        // {
+        Toast.makeText(
+                getApplicationContext(),
+                "Updated gps location",
+                Toast.LENGTH_SHORT ).show();
+
+        cameraFragment
+                .updateLocation( gps_.getLatitude(), gps_.getLongitude() );
         centerOnCurrentLocation();
-        if(isAlienNearby() && !cameraFragment.isAlienDrawn())
+        // Update the new values
+        storedLatitude_ = gps_.getLatitude();
+        storedLongitude_ = gps_.getLongitude();
+
+        if ( isAlienNearby() && !cameraFragment.isAlienDrawn() )
         {
             cameraFragment.drawAlien();
-            if(fragCounter == 0)
+            if ( fragCounter == 0 )
             {
                 switchFragment();
             }
@@ -459,11 +486,16 @@ public class GameActivity extends Activity implements SensorEventListener
 
     private boolean isAlienNearby()
     {
-        double distance = Math.sqrt(Math.pow(gps_.getLongitude() -
-            currentAlienShipsMarker_.getPosition().longitude, 2) +
-            Math.pow(gps_.getLatitude() - currentAlienShipsMarker_.getPosition().latitude,
-                2));
-        if(distance < 1)
+        double distance =
+                Math.sqrt( Math.pow( gps_.getLongitude() -
+                        currentAlienShipsMarker_.getPosition().longitude, 2 )
+                        +
+                        Math.pow(
+                                gps_.getLatitude()
+                                        - currentAlienShipsMarker_
+                                                .getPosition().latitude,
+                                2 ) );
+        if ( distance < 1 )
         {
             return true;
         }
@@ -477,9 +509,6 @@ public class GameActivity extends Activity implements SensorEventListener
     {
         if ( null != mMap_ )
         {
-            // Get the location first
-            getGPSLocation();
-
             // Remove the old marker
             if ( null != currentUserMarker_ )
             {
@@ -509,7 +538,7 @@ public class GameActivity extends Activity implements SensorEventListener
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     *
+     * 
      * @param longitude
      * @param latitude
      * @param shipID
@@ -541,7 +570,9 @@ public class GameActivity extends Activity implements SensorEventListener
                                     .snippet( "Ship is landing!" )
                                     .icon( BitmapDescriptorFactory
                                             .fromResource( R.drawable.alien_ship_map_marker_small ) ) );
-            cameraFragment.insertAlienLocation(randomNewAlienLocation.latitude, randomNewAlienLocation.longitude);
+            cameraFragment.insertAlienLocation(
+                    randomNewAlienLocation.latitude,
+                    randomNewAlienLocation.longitude );
             alienShipsInitialized_ = true;
         }
     }
@@ -556,7 +587,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /**
      * This function is called if the ships are shuffled or shot down
-     *
+     * 
      * @param shipID
      */
     public void alienShipDestroyed( int shipID )

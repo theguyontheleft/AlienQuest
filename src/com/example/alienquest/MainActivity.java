@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -73,6 +74,7 @@ public class MainActivity extends Activity {
 	private Button testButton_;
 
 	private TextView welcomeMsg_;
+	private TextView welcomeMsg2_;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +108,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		Typeface tf = Typeface.createFromAsset(getAssets(), "Fonts/Molot.otf");
+		Typeface main = Typeface
+				.createFromAsset(getAssets(), "Fonts/OpTic.ttf");
 
 		settingsIntention = new Intent(MainActivity.this,
 				SettingsPreferenceActivity.class);
@@ -117,16 +121,16 @@ public class MainActivity extends Activity {
 		startGameButton_ = (Button) findViewById(R.id.startGameButton);
 		instructionsButton_ = (Button) findViewById(R.id.instructionsButton);
 		aboutGameButton_ = (Button) findViewById(R.id.aboutButton);
-		testButton_ = (Button) findViewById(R.id.testButton);
 
 		welcomeMsg_ = (TextView) findViewById(R.id.textView1);
+		welcomeMsg2_ = (TextView) findViewById(R.id.textView2);
 
 		startGameButton_.setTypeface(tf);
 		instructionsButton_.setTypeface(tf);
 		aboutGameButton_.setTypeface(tf);
 
-		testButton_.setTypeface(tf);
 		welcomeMsg_.setTypeface(tf);
+		welcomeMsg2_.setTypeface(main);
 
 		// Set up the preference
 		preference_ = getSharedPreferences(getString(R.string.pref_title_file),
@@ -141,14 +145,6 @@ public class MainActivity extends Activity {
 				// startGameIntention.putExtra("Difficulty",
 				// settingsIntention.getStringExtra("Difficulty"));
 				MainActivity.this.startActivity(startGameIntention);
-			}
-		});
-
-		testButton_.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				MainActivity.this.startActivity(startTestIntention);
 			}
 		});
 
@@ -190,6 +186,8 @@ public class MainActivity extends Activity {
 		// prepare the instructions box
 		Dialog instructionsBox = new Dialog(MainActivity.this);
 		instructionsBox.setContentView(R.layout.dialog_instructions);
+		instructionsBox.getWindow().setBackgroundDrawable(
+				new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		// set the message to display
 		instructionsBox.setTitle("Instructions Menu");
 
@@ -204,15 +202,14 @@ public class MainActivity extends Activity {
 		Dialog aboutBox = new Dialog(MainActivity.this);
 		aboutBox.setContentView(R.layout.dialog_about);
 
-		TextView aboutTxt = (TextView) aboutBox
-				.findViewById(android.R.id.message);
+		// TextView aboutTxt = (TextView) aboutBox
+		// .findViewById(android.R.id.message);
 
 		// set the message to display
+		aboutBox.getWindow().setBackgroundDrawable(
+				new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		aboutBox.setTitle("About Alien Quest");
 		aboutBox.show();
-		aboutBox.getWindow().setLayout(
-				RelativeLayout.LayoutParams.MATCH_PARENT, 400);
-
 	}
 
 	@Override

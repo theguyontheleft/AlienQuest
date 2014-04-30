@@ -20,7 +20,7 @@
         android:layout_marginTop="18dp"
         android:background="@drawable/button_background"
         android:text="Instructions"
-        android:textColor="@color/LimeGreen" />
+        android:textColor="#6FF272" />
 
     <Button
         android:id="@+id/aboutButton"
@@ -33,7 +33,7 @@
         android:layout_marginTop="21dp"
         android:background="@drawable/button_background"
         android:text="About"
-        android:textColor="@color/LimeGreen" />
+        android:textColor="#6FF272" />
 
     <TextView
         android:id="@+id/textView1"
@@ -45,28 +45,28 @@
         android:text="@string/hello_human"
         android:textColor="@color/Gray" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="@string/alienquest"
+        android:textColor="#6FF272"
+        android:textSize="30sp" />
+
     <Button
         android:id="@+id/startGameButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:background="@drawable/button_background"
         android:text="Start Game"
-        android:textColor="@color/LimeGreen" />
-
-    <Button
-        android:id="@+id/testButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/aboutButton"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/button_background"
-        android:text="TEST BUTTON"
-        android:textColor="@color/LimeGreen" />
+        android:textColor="#6FF272" />
 
     <FrameLayout
         android:id="@+id/mainActivityFragmentFrame1"

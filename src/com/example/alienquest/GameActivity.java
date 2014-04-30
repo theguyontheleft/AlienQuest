@@ -90,6 +90,13 @@ public class GameActivity extends Activity implements SensorEventListener
 
     // Time in ms that the game started
     private static long questStartTime_;
+    
+    // Stores the current ship type.
+    // Type 0: alien_battleship1_large
+    // Type 1: alien_cruiser_carrier_large
+    // Type 2: alien_cruiser1_large (Left orientation)
+    // Type 3: alien_cruiser2_large (Right orientation)
+    private int alienShipType;
 
     /**
      * When the game first starts the user is prompted of the map where the
@@ -274,7 +281,7 @@ public class GameActivity extends Activity implements SensorEventListener
                     // Display the spaceship
                     if (!cameraFragment.isAlienDrawn() )
                     {
-                        cameraFragment.drawAlien(0, 0); //TODO: update this
+                        cameraFragment.drawAlien(0, 0, alienShipType); //TODO: update this
                         if ( fragCounter == 0 )
                         {
                             switchFragment();
@@ -660,7 +667,7 @@ public class GameActivity extends Activity implements SensorEventListener
      * @param latitude
      * @param shipID
      *            the number of alien ship to give the label
-     * @param shipType
+     * @param alienShipType
      *            the type of alien ship
      */
     public void initializeNextAlienShip()
@@ -690,6 +697,9 @@ public class GameActivity extends Activity implements SensorEventListener
             cameraFragment.insertAlienLocation(
                     randomNewAlienLocation.latitude,
                     randomNewAlienLocation.longitude );
+            
+            // Get the random ship type
+            alienShipType = setUp.getTypeOfAlienCraft();
             alienShipsInitialized_ = true;
         }
     }
@@ -717,6 +727,9 @@ public class GameActivity extends Activity implements SensorEventListener
         updateScore();
         // Increment the ship destroyed count
         numberOfShipsDestroyed++;
+        
+        // Reset the alien ship type
+        alienShipType = -1;
 
         if ( numberOfShipsDestroyed == setUp.getmNumberOfAlienShips() )
         {

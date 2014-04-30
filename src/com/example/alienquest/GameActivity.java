@@ -491,36 +491,41 @@ public class GameActivity extends Activity implements SensorEventListener
     @Override
     public boolean onKeyDown( int keyCode, KeyEvent event )
     {
-        AlertDialog.Builder alertbox =
-                new AlertDialog.Builder( this )
-                        .setTitle( "End Campaign" )
-                        .setMessage(
-                                "Are you sure you want to end your campaign?" )
-                        .setPositiveButton( android.R.string.yes,
-                                new DialogInterface.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(
-                                            DialogInterface dialog, int which )
+        if ( (keyCode == KeyEvent.KEYCODE_BACK) )
+        {
+            AlertDialog.Builder alertbox =
+                    new AlertDialog.Builder( this )
+                            .setTitle( "End Campaign" )
+                            .setMessage(
+                                    "Are you sure you want to end your campaign?" )
+                            .setPositiveButton( android.R.string.yes,
+                                    new DialogInterface.OnClickListener()
                                     {
-                                        finish(); // to finish Activity on which
-                                        // dialog is
-                                        // displayed
-                                    }
-                                } )
-                        .setNegativeButton( android.R.string.no,
-                                new DialogInterface.OnClickListener()
-                                {
-                                    public void onClick(
-                                            DialogInterface dialog,
-                                            int which )
+                                        @Override
+                                        public void onClick(
+                                                DialogInterface dialog,
+                                                int which )
+                                        {
+                                            finish(); // to finish Activity on
+                                                      // which
+                                            // dialog is
+                                            // displayed
+                                        }
+                                    } )
+                            .setNegativeButton( android.R.string.no,
+                                    new DialogInterface.OnClickListener()
                                     {
-                                        // do nothing
-                                        return;
-                                    }
-                                } );
-        alertbox.setIcon( android.R.drawable.ic_dialog_alert );
-        alertbox.show();
+                                        public void onClick(
+                                                DialogInterface dialog,
+                                                int which )
+                                        {
+                                            // do nothing
+                                            return;
+                                        }
+                                    } );
+            alertbox.setIcon( android.R.drawable.ic_dialog_alert );
+            alertbox.show();
+        }
 
         return super.onKeyDown( keyCode, event );
 

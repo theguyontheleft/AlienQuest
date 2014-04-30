@@ -226,12 +226,14 @@ public class GameActivity extends Activity implements SensorEventListener
                 {
                     // Display the spaceship
                     if ( !cameraFragment.isAlienDrawn() )
-                    {
-                        cameraFragment.drawAlien();
+                    {   
+                        // Display the camera activity if the map is in view 
                         if ( fragCounter == 0 )
                         {
                             switchFragment();
                         }
+                        
+                        cameraFragment.drawAlien();
                     }
                 }
                 else

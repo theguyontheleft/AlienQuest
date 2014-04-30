@@ -38,10 +38,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
- *
+ * 
  * @version Mar 31, 2014
- *
- *
+ * 
+ * 
  *          This activity will display the game mode
  */
 @SuppressLint( "NewApi" )
@@ -54,6 +54,9 @@ public class GameActivity extends Activity implements SensorEventListener
 
     private Intent settings;
     private int playerScore;
+
+    // Stores track of the time
+    private CountDownTimer timer;
     private int gameTime;
 
     /**
@@ -88,9 +91,6 @@ public class GameActivity extends Activity implements SensorEventListener
     private int screenWidthPixels_;
     private int screenHeightPixels_;
 
-    // Time in ms that the game started
-    private static long questStartTime_;
-    
     // Stores the current ship type.
     // Type 0: alien_battleship1_large
     // Type 1: alien_cruiser_carrier_large
@@ -111,6 +111,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     // Device sensor manager
     private SensorManager mSensorManager;
+    private Bundle cameraFragmentData;
 
     /**
      * instance of the settings task
@@ -133,6 +134,10 @@ public class GameActivity extends Activity implements SensorEventListener
                 preference_.getString( getString( R.string.pref_title_name ),
                         getString( R.string.pref_title_name ) );
 
+        // Initialize the bundle to keep fragments through on pause and on
+        // resume
+        cameraFragmentData = savedInstanceState;
+
         if ( 1 <= userName_.length() )
         {
             Toast.makeText(
@@ -141,7 +146,7 @@ public class GameActivity extends Activity implements SensorEventListener
                             + userName_
                             + " to the quest. The human race is counting on you"
                             + " to fend off the alien spaceships attempting to land on earth.",
-                    Toast.LENGTH_LONG * 2 ).show();
+                    Toast.LENGTH_LONG ).show();
         }
         else
         {
@@ -149,7 +154,7 @@ public class GameActivity extends Activity implements SensorEventListener
                     getApplicationContext(),
                     "Welcome to the quest. The human race is counting on you"
                             + " to fend off the alien spaceships attempting to land on earth.",
-                    Toast.LENGTH_LONG * 2 ).show();
+                    Toast.LENGTH_LONG ).show();
         }
 
         getGPSLocation();
@@ -185,51 +190,63 @@ public class GameActivity extends Activity implements SensorEventListener
 
         // Set initial score and retrieve time of session
         playerScore = 0;
-        switch(setUp.getGameLength())
+        switch ( setUp.getGameLength() )
         {
-            case 0: gameTime = 5;
-                    break;
-            case 1: gameTime = 10;
-                    break;
-            case 2: gameTime = 15;
-                    break;
-            case 3: gameTime = 30;
-                    break;
-            default: gameTime = 1;
+        case 0:
+            gameTime = 5;
+            break;
+        case 1:
+            gameTime = 10;
+            break;
+        case 2:
+            gameTime = 15;
+            break;
+        case 3:
+            gameTime = 30;
+            break;
+        default:
+            gameTime = 1;
         }
-        gameTime = gameTime * 60000; //converting from minutes to milliseconds
-        // Record the start time of the game
-        questStartTime_ = System.currentTimeMillis();
+        gameTime = gameTime * 60000; // converting from minutes to milliseconds
     }
 
-   @Override
-   protected void onStart()
-   {
-       super.onStart();
-       setTimer();
-   }
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        setTimer();
+    }
+
     /************************************* Game Time Handler *************************************/
     private void setTimer()
     {
         // TODO Auto-generated method stub
-        new CountDownTimer(gameTime, 5000) {
-            public void onTick(long millisUntilFinished) {
-            toastTimeRemaining(millisUntilFinished);
-         }
+        timer = new CountDownTimer( gameTime, 5000 )
+        {
+            public void onTick( long millisUntilFinished )
+            {
+                toastTimeRemaining( millisUntilFinished );
+            }
 
-         public void onFinish() {
-            timesUp();
-         }
-         }.start();
+            public void onFinish()
+            {
+                timesUp();
+            }
+        }.start();
     }
 
-    private void toastTimeRemaining(long millisUntilFinished)
+    private void toastTimeRemaining( long millisUntilFinished )
     {
-        Toast.makeText(this, String.format("%d:%d remaining",
-    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))), 2000).show();
+        /*
+         * Toast.makeText(this, String.format("%d:%d remaining",
+         * TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+         * TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+         * TimeUnit.MINUTES
+         * .toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))),
+         * 2000).show();
+         */
     }
+
     /************************************* Sensor Listeners *************************************/
 
     @Override
@@ -276,26 +293,44 @@ public class GameActivity extends Activity implements SensorEventListener
                 // located nearby
                 double differenceInDegrees = bearing() - previousDegree_;
 
-                if ( Math.abs( differenceInDegrees ) < 50 && isAlienNearby() )
+                if ( Math.abs( differenceInDegrees ) < 50 ) // &&
+                                                            // isAlienNearby() )
                 {
-                    // Display the spaceship
-                    if (!cameraFragment.isAlienDrawn() )
+
+                    if ( fragCounter == 0 )
                     {
-                        cameraFragment.drawAlien(0, 0, alienShipType); //TODO: update this
-                        if ( fragCounter == 0 )
-                        {
-                            switchFragment();
-                        }
+                        switchFragment();
                     }
+
+                    cameraFragment.drawAlien( differenceInDegrees, 0 );
                 }
                 else
                 {
-                    // Hide the spaceship
-                    cameraFragment.hideAlien();
+                    if ( cameraFragment.isAlienDrawn() )
+                    {
+                        // Hide the spaceship
+                        // cameraFragment.hideAlien();
+                        cameraFragment.removeAlienFromRadar();
+
+                        Toast.makeText( // TODO remove, for debugging
+                                getApplicationContext(),
+                                "Hiding of type: " + alienShipType,
+                                Toast.LENGTH_SHORT )
+                                .show();
+                    }
+
                 }
 
             }
         }
+    }
+
+    /**
+     * @return the type of alien ship
+     */
+    public int getShipOnRadar()
+    {
+        return alienShipType;
     }
 
     @Override
@@ -307,10 +342,10 @@ public class GameActivity extends Activity implements SensorEventListener
     /**
      * Point 1 is the users current position. Point 2 is the current alien ships
      * location
-     *
+     * 
      * http://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to
      * -another
-     *
+     * 
      * @param lat1
      * @param lon1
      * @param lat2
@@ -408,7 +443,7 @@ public class GameActivity extends Activity implements SensorEventListener
      */
     private void displayCameraFragment()
     {
-        cameraFragment = new CameraFragment();
+        cameraFragment = new CameraFragment( this );
         FragmentTransaction fragMan = getFragmentManager().beginTransaction();
         fragMan.add( R.id.mapFrame, cameraFragment, FRAG1_TAG );
         fragMan.commit();
@@ -486,17 +521,9 @@ public class GameActivity extends Activity implements SensorEventListener
         }
     }
 
-    /**
-     * @return the start time of the match
-     */
-    public long getQuestStartTime()
-    {
-        return questStartTime_;
-    }
-
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -519,7 +546,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -537,7 +564,7 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
      */
     @Override
@@ -558,6 +585,7 @@ public class GameActivity extends Activity implements SensorEventListener
                                                 DialogInterface dialog,
                                                 int which )
                                         {
+                                            timer.cancel();
                                             finish(); // to finish Activity on
                                                       // which
                                             // dialog is
@@ -662,7 +690,7 @@ public class GameActivity extends Activity implements SensorEventListener
      * This function is called to put the alien spaceship at their appropriate
      * spots on the map. It gets the number of ships to place, and places them
      * randomly.
-     *
+     * 
      * @param longitude
      * @param latitude
      * @param shipID
@@ -697,7 +725,7 @@ public class GameActivity extends Activity implements SensorEventListener
             cameraFragment.insertAlienLocation(
                     randomNewAlienLocation.latitude,
                     randomNewAlienLocation.longitude );
-            
+
             // Get the random ship type
             alienShipType = setUp.getTypeOfAlienCraft();
             alienShipsInitialized_ = true;
@@ -714,10 +742,10 @@ public class GameActivity extends Activity implements SensorEventListener
 
     /**
      * This function is called if the ships are shuffled or shot down
-     *
+     * 
      * @param shipID
      */
-    public void alienShipDestroyed( int shipID )
+    public void alienShipDestroyed()
     {
         // First remove the current marker from the map.
         currentAlienShipsMarker_.remove();
@@ -727,7 +755,7 @@ public class GameActivity extends Activity implements SensorEventListener
         updateScore();
         // Increment the ship destroyed count
         numberOfShipsDestroyed++;
-        
+
         // Reset the alien ship type
         alienShipType = -1;
 
@@ -750,21 +778,26 @@ public class GameActivity extends Activity implements SensorEventListener
     {
         int difficultyModifier = setUp.getDifficulty() + 1;
         int timeModifier;
-        switch(setUp.getGameLength())
+        switch ( setUp.getGameLength() )
         {
-            case 0: timeModifier = 5;
-                    break;
-            case 1: timeModifier = 10;
-                    break;
-            case 2: timeModifier = 15;
-                    break;
-            case 3: timeModifier = 30;
-                    break;
-            default: timeModifier = 1;
+        case 0:
+            timeModifier = 5;
+            break;
+        case 1:
+            timeModifier = 10;
+            break;
+        case 2:
+            timeModifier = 15;
+            break;
+        case 3:
+            timeModifier = 30;
+            break;
+        default:
+            timeModifier = 1;
         }
         // TODO Auto-generated method stub
         playerScore = playerScore +
-            (10000*difficultyModifier)/timeModifier;
+                (10000 * difficultyModifier) / timeModifier;
     }
 
     /************************************* End Game Event Handlers *************************************/
@@ -774,16 +807,35 @@ public class GameActivity extends Activity implements SensorEventListener
      */
     private void campaignFinished()
     {
-        //TODO: implement this
+        // TODO: implement this
     }
 
     private void timesUp()
     {
-        //TODO: implement this
-        Intent completionActivityIntent = new Intent(this, CompletionActivity.class);
-        completionActivityIntent.putExtra("score", playerScore);
-        Vibrator earthShaker = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        earthShaker.vibrate(200);
-        this.startActivity(completionActivityIntent);
+        // TODO: implement this
+        Intent completionActivityIntent =
+                new Intent( this, CompletionActivity.class );
+        completionActivityIntent.putExtra( "score", playerScore );
+        Vibrator earthShaker =
+                (Vibrator) getSystemService( Context.VIBRATOR_SERVICE );
+        earthShaker.vibrate( 300 );
+        this.startActivity( completionActivityIntent );
+    }
+
+    /************************************* Camera Fragment Data Getter/Setter *************************************/
+    /**
+     * @return the bundle
+     */
+    public Bundle getCameraFragmentData()
+    {
+        return cameraFragmentData;
+    }
+
+    /**
+     * @param cameraFragmentData
+     */
+    public void setCameraFragmentData( Bundle cameraFragmentData )
+    {
+        this.cameraFragmentData = cameraFragmentData;
     }
 }

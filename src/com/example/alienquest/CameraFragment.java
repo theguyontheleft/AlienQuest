@@ -84,11 +84,21 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
         itemAdapter.notifyDataSetChanged();
     }
 
-    public void drawAlien()
+    /**
+     * Draws Alien at specified coordinates
+     * @param x
+     *      the position of the alien ship along the x-axis view
+     * (note: use alienParams.leftMargin and/or alienParams.rightMargin to correctly place)
+     * @param y
+     *      the position of the alien ship along the y-axis view
+     * (note: use alienParams.topMargin and/or alienParams.bottomMargin to correctly place)
+     */
+    public void drawAlien(double x, double y)
     {
         alien.setImageResource(R.drawable.alien_battleship1_large);
         RelativeLayout.LayoutParams alienParams =
             new RelativeLayout.LayoutParams(cameraLayout.getWidth()/4, cameraLayout.getHeight()/4);
+
         cameraLayout.addView(alien, alienParams);
         alien.bringToFront();
         alienDrawn = true;

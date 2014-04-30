@@ -11,9 +11,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Jimmy Dagres, Tiffany Tuan, Garrett Moran
- * 
+ *
  * @version Apr 2, 2014
- * 
+ *
  */
 public class CampaignSetUp
 {
@@ -25,26 +25,26 @@ public class CampaignSetUp
 
     /**
      * There are currently four difficulty options
-     * 
+     *
      * 0 = easyDifficulty
-     * 
+     *
      * 1 = mediumDifficulty (Default)
-     * 
+     *
      * 2 = hardDifficulty
-     * 
+     *
      * 3 = extremeDifficulty
      */
     private int gameDifficulty = 1;
 
     /**
      * There are currently four campaign length options
-     * 
+     *
      * 0 = speedRound (5 minutes)
-     * 
+     *
      * 1 = shortLength (10 minutes)
-     * 
+     *
      * 2 = mediumLength (15 minutes) (Default)
-     * 
+     *
      * 3 = longLength (30 minutes)
      */
     private int gameLengthInMinutes_ = 2;
@@ -73,7 +73,7 @@ public class CampaignSetUp
 
     /**
      * Look at the preference setting and store the values locally.
-     * 
+     *
      * @param context
      * @param gameLevel
      * @param gameLength
@@ -145,7 +145,7 @@ public class CampaignSetUp
     /**
      * There are two main things taken into account here. The first is the time
      * of the campaign and the second is the selected difficulty.
-     * 
+     *
      */
     private void initializeNumberOfAliens()
     {
@@ -157,15 +157,15 @@ public class CampaignSetUp
 
             /**
              * EASY
-             * 
+             *
              * 5 minutes: 1 - 5
-             * 
+             *
              * 10 minutes: 3 - 8
-             * 
+             *
              * 15 minutes: 5 - 12
-             * 
+             *
              * 30 minutes: 10 - 15
-             * 
+             *
              */
             if ( gameLengthInMinutes_ == 0 )
             {
@@ -187,15 +187,15 @@ public class CampaignSetUp
         case 1:
             /**
              * MEDIUM
-             * 
+             *
              * 5 minutes: 3 - 8
-             * 
+             *
              * 10 minutes: 5 - 10
-             * 
+             *
              * 15 minutes: 7 - 12
-             * 
+             *
              * 30 minutes: 9 - 15
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -219,15 +219,15 @@ public class CampaignSetUp
 
             /**
              * HARD
-             * 
+             *
              * 5 minutes: 5 - 14
-             * 
+             *
              * 10 minutes: 10 - 19
-             * 
+             *
              * 15 minutes: 15 - 24
-             * 
+             *
              * 30 minutes: 30 - 39
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -258,15 +258,15 @@ public class CampaignSetUp
         case 3:
             /**
              * EXTREME
-             * 
+             *
              * 5 minutes: 15 - 24
-             * 
+             *
              * 10 minutes: 30 - 39
-             * 
+             *
              * 15 minutes: 45 - 54
-             * 
+             *
              * 30 minutes: 90 - 99
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -304,7 +304,7 @@ public class CampaignSetUp
     /**
      * The radius is randomly determined based off of the difficulty and time
      * length
-     * 
+     *
      * @return the random radius in meters
      */
     private double getRandomAlienShipRadius()
@@ -316,15 +316,15 @@ public class CampaignSetUp
 
             /**
              * EASY
-             * 
+             *
              * 5 minutes: 20 - 80
-             * 
+             *
              * 10 minutes: 30 - 90
-             * 
+             *
              * 15 minutes: 40 - 100
-             * 
+             *
              * 30 minutes: 50 - 110
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -347,15 +347,15 @@ public class CampaignSetUp
         case 1:
             /**
              * MEDIUM
-             * 
+             *
              * 5 minutes: 20 - 100
-             * 
+             *
              * 10 minutes: 35 - 115
-             * 
+             *
              * 15 minutes: 50 - 130
-             * 
+             *
              * 30 minutes: 75 - 155
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -379,15 +379,15 @@ public class CampaignSetUp
 
             /**
              * HARD
-             * 
+             *
              * 5 minutes: 25 - 125
-             * 
+             *
              * 10 minutes: 50 - 150
-             * 
+             *
              * 15 minutes: 75 - 175
-             * 
+             *
              * 30 minutes: 150 - 250
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -410,16 +410,16 @@ public class CampaignSetUp
         case 3:
             /**
              * EXTREME GORGIO's VACATION!!! TODO
-             * 
-             * 
+             *
+             *
              * 5 minutes: 25 - 135
-             * 
+             *
              * 10 minutes: 50 - 160
-             * 
+             *
              * 15 minutes: 75 - 185
-             * 
+             *
              * 30 minutes: 150 - 260
-             * 
+             *
              */
 
             if ( gameLengthInMinutes_ == 0 )
@@ -448,7 +448,7 @@ public class CampaignSetUp
 
     /**
      * This sets the currentAlienLocation_ = to a random location
-     * 
+     *
      * @param latitude_
      * @param longitude_
      * @param radius
@@ -501,7 +501,7 @@ public class CampaignSetUp
     /**
      * The standard java getDouble, does not have range specifications so this
      * function generates a random double within the specified range
-     * 
+     *
      * @param min
      * @param max
      * @return a random double inside the range
@@ -512,5 +512,15 @@ public class CampaignSetUp
         double scaled = randomNumGenerator_.nextDouble() * range;
         double shifted = scaled + min;
         return shifted; // == (rand.nextDouble() * (max-min)) + min;
+    }
+
+    public int getDifficulty()
+    {
+        return gameDifficulty;
+    }
+
+    public int getGameLength()
+    {
+        return gameLengthInMinutes_;
     }
 }

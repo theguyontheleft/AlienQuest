@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 /**
  * @author Jimmy Dagres
- * 
+ *
  * @version Apr 1, 2014
- * 
+ *
  */
 public class CompletionActivity extends Activity {
 
@@ -32,6 +32,7 @@ public class CompletionActivity extends Activity {
 		setContentView(R.layout.activity_completion);
 
 		settings = getIntent();
+		int score = getScores(); //TODO: implement database of scores
 		// Load the preference values
 		// Set up the preference
 		preference_ = getSharedPreferences(getString(R.string.pref_title_file),
@@ -62,8 +63,8 @@ public class CompletionActivity extends Activity {
 
 	}
 
-	private void getScores() {
+	private int getScores() {
 		// getting preferences
-		// int score = prefs.getInt("key", 0); // 0 is the default value
+	    return settings.getIntExtra("score", 0); // 0 is the default value
 	}
 }

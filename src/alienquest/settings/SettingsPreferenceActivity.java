@@ -57,6 +57,11 @@ public class SettingsPreferenceActivity extends Activity
     private static boolean initialSetup = true;
 
     /**
+     * Delim used to separate the highscores in the preference string
+     */
+    static String delim = "/b";
+
+    /**
      * @return the name saved in the preferences
      */
     public String getName()
@@ -84,6 +89,29 @@ public class SettingsPreferenceActivity extends Activity
                 getString( R.string.pref_title_difficulty ),
                 getString( R.string.pref_title_difficulty ) );
     }
+
+    /**
+     * @return the string containing the highscores. NOTE: scores are in order
+     *         separated by the delim: "/b"
+     */
+    public String getHighscoreNumbers()
+    {
+        return preference_.getString(
+                getString( R.string.pref_title_top_five_scores ),
+                getString( R.string.pref_title_top_five_scores ) );
+    }
+    
+    /**
+     * @return the string containing the highscores. NOTE: scores are in order
+     *         separated by the delim: "/b"
+     */
+    public String getHighscoreNames()
+    {
+        return preference_.getString(
+                getString( R.string.pref_title_top_five_names ),
+                getString( R.string.pref_title_top_five_names ) );
+    }
+
 
     @Override
     public void onCreate( Bundle savedInstanceState )

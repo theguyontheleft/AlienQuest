@@ -9,6 +9,8 @@
     <string name="pref_title_name">Display Name</string>
     <string name="pref_title_difficulty">Quest Difficulty</string>
     <string name="pref_title_game_length">Campaign Length</string>
+    <string name="pref_title_top_five_scores">Highscores</string>
+    <string name="pref_title_top_five_names">Username</string>
     <string name="saved_high_score_default">High Score Default</string>
     <string name="saved_high_score">High Score</string>
 
@@ -52,7 +54,7 @@
     <!--
         Old string <string name="about_qoute">“I\'m sure the universe is full of intelligent life. 
         It\'s just been too intelligent to come here.” 
-		― Arthur C. Clarke</string>
+		― Arthur C. Clarke</string>
     -->
 
     <string name="about_qoute">“The only way to disprove acient aliens is when the extraterrestrials show up and say “we were never here”!” 

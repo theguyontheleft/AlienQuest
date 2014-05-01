@@ -19,4 +19,112 @@
         android:text="@string/congratulations_message" >
     </TextView>
 
+    <!-- Start of Top 5 scores Textviews-->
+
+    <TextView
+        android:id="@+id/textViewTopScores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/congratulations_message"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/pref_title_top_five_scores"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textViewScore1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTopScores"
+        android:layout_toRightOf="@+id/textViewTopScores"
+        android:text="Score"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewUserName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewUserName1"
+        android:layout_below="@+id/textViewUserName1"
+        android:layout_marginTop="26dp"
+        android:text="Username"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textViewUserName1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/congratulations_name"
+        android:layout_below="@+id/textViewTopScores"
+        android:text="Username"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewScore2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextViewUserName2"
+        android:layout_alignBottom="@+id/TextViewUserName2"
+        android:layout_alignLeft="@+id/textViewScore1"
+        android:text="Score"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewUserName3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextViewUserName2"
+        android:layout_centerVertical="true"
+        android:text="Username"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewScore3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextViewScore2"
+        android:layout_centerVertical="true"
+        android:text="Score"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewUserName4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextViewUserName3"
+        android:layout_below="@+id/TextViewUserName3"
+        android:layout_marginTop="23dp"
+        android:text="Username"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewUserName5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextViewUserName4"
+        android:layout_below="@+id/TextViewUserName4"
+        android:layout_marginTop="30dp"
+        android:text="Username"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewScore4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextViewUserName4"
+        android:layout_alignBottom="@+id/TextViewUserName4"
+        android:layout_alignLeft="@+id/TextViewScore3"
+        android:text="Score"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextViewScore5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextViewUserName5"
+        android:layout_alignBottom="@+id/TextViewUserName5"
+        android:layout_toRightOf="@+id/textViewTopScores"
+        android:text="Score"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

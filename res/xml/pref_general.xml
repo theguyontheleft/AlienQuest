@@ -38,5 +38,14 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_top_five_scores" />
+     <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_title_sound"
+        android:inputType="textCapWords"
+        android:key="example_text"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_sound" />
 
 </PreferenceScreen>

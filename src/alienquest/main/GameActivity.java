@@ -102,6 +102,10 @@ public class GameActivity extends Activity implements SensorEventListener
     private SensorManager mSensorManager;
     private Bundle cameraFragmentData;
 
+    // This variable is updated from the settings and determines if there will
+    // be sound in the game
+    private boolean soundEnabled = false;
+
     /**
      * instance of the settings task
      */
@@ -118,6 +122,9 @@ public class GameActivity extends Activity implements SensorEventListener
         preference_ =
                 getSharedPreferences( getString( R.string.pref_title_file ),
                         Context.MODE_PRIVATE );
+
+        // Set up sound
+        initializeSound();
 
         userName_ =
                 preference_.getString( getString( R.string.pref_title_name ),
@@ -197,6 +204,18 @@ public class GameActivity extends Activity implements SensorEventListener
         gameTime = gameTime * 60000; // converting from minutes to milliseconds
     }
 
+    /**
+     * Gets the sound preference and initialize the variable
+     */
+    private void initializeSound()
+    {
+        String soundSring = preference_.getString(
+                getString( R.string.pref_title_sound ),
+                getString( R.string.pref_title_sound ) );
+
+        soundEnabled = soundSring.toUpperCase().contains( "TRUE" );
+    }
+
     @Override
     protected void onStart()
     {
@@ -216,11 +235,16 @@ public class GameActivity extends Activity implements SensorEventListener
 
             public void onFinish()
             {
-                timesUp();
+                timesUp( false );
             }
         }.start();
     }
 
+    /**
+     * This method is mostly for debugging
+     * 
+     * @param millisUntilFinished
+     */
     private void toastTimeRemaining( long millisUntilFinished )
     {
         /*
@@ -288,8 +312,10 @@ public class GameActivity extends Activity implements SensorEventListener
                 // located nearby
                 double differenceInDegrees = bearing() - previousXDegree_;
 
-                if ( Math.abs( differenceInDegrees ) < 20 ) // && 
-                                                            // isAlienNearby() ) // TODO test the alien nearby
+                if ( Math.abs( differenceInDegrees ) < 20 ) // &&
+                                                            // isAlienNearby() )
+                                                            // // TODO test the
+                                                            // alien nearby
                 {
 
                     if ( fragCounter == 0 )
@@ -879,17 +905,27 @@ public class GameActivity extends Activity implements SensorEventListener
         // TODO: implement this
 
         // Update the scores
-        timesUp();
+        timesUp( true );
     }
 
     /**
      * This function is called when the game ends.
      */
-    private void timesUp()
+    private void timesUp( boolean compaignSuccessful )
     {
         Intent completionActivityIntent =
                 new Intent( this, CompletionActivity.class );
-        completionActivityIntent.putExtra( "score", playerScore );
+
+        // Uses the string keys to pass info to the CompletionActivity
+        completionActivityIntent.putExtra( getString( R.string.key_score ),
+                playerScore );
+        completionActivityIntent.putExtra(
+                getString( R.string.key_completed ), compaignSuccessful );
+
+        // Pass whether or not to call the completion method
+        completionActivityIntent.putExtra(
+                getString( R.string.key_display_completed ), true );
+
         Vibrator earthShaker =
                 (Vibrator) getSystemService( Context.VIBRATOR_SERVICE );
         earthShaker.vibrate( 300 );
@@ -911,5 +947,13 @@ public class GameActivity extends Activity implements SensorEventListener
     public void setCameraFragmentData( Bundle cameraFragmentData )
     {
         this.cameraFragmentData = cameraFragmentData;
+    }
+
+    /**
+     * @return the current sound setting
+     */
+    public boolean getSoundSetting()
+    {
+        return soundEnabled;
     }
 }

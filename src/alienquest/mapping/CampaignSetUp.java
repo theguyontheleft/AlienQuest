@@ -60,7 +60,7 @@ public class CampaignSetUp
      */
     public int getmNumberOfAlienShips()
     {
-        return mNumberOfAlienShips;
+        return 3; // mNumberOfAlienShips; // TODO
     }
 
     /**

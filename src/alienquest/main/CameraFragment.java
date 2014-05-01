@@ -99,6 +99,12 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
                                 .getSystemService( Context.VIBRATOR_SERVICE );
                 earthShaker.vibrate( 200 );
 
+                // If sound is enabled, display the sound
+                if ( context_.getSoundSetting() )
+                {
+                    // TODO create sound
+                }
+
                 // TODO: Implement a health bar
                 scarCraftDamageCounter++;
 
@@ -155,7 +161,7 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
                 + " , " + Math.round( userLat * 1e2 ) / 1e2 );
         itemAdapter.notifyDataSetChanged();
         /*
-         * if(isAlienNearby()) { placeAlienOnScreen(); }
+         * if(isAlienNearby()) { placeAlienOnScreen(); } // TODO Put back in?
          */
     }
 
@@ -318,7 +324,7 @@ public class CameraFragment extends Fragment implements SurfaceTextureListener
     }
 
     /**
-     * Unhides the alien starcraft
+     * Unhides/shows the alien starcraft
      */
     public void unhideAlien()
     {

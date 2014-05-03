@@ -35,6 +35,19 @@
         android:text="About"
         android:textColor="#6FF272" />
 
+    <Button
+        android:id="@+id/scoresButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/aboutButton"
+        android:layout_alignRight="@+id/startGameButton"
+        android:layout_below="@+id/aboutButton"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/button_background"
+        android:text="Highscores"
+        android:textColor="#6FF272" />
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"

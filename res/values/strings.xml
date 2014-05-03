@@ -36,22 +36,16 @@
     <string name="longLength">30 Minutes (Stamina Defense)</string>
 
     <!-- Instruction strings -->
-    <string name="instructions_category1">		Instructions TO BE UPDATEDrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrrrrrrrrrr</string>
-    <string name="instructions_category1_1">Firstly</string>
-    <string name="instructions_category1_2">Secondly</string>
-    <string name="instructions_category2">		Instructions Category 2</string>
-    <string name="instructions_category2_1">Firstly for 2</string>
-    <string name="instructions_category2_2">Secondly for 2</string>
+    <string name="instructions_category1">OBJECTIVE: Blast the aliens as fast as you can before they land on Earth and disrupt life as we know it!</string>
+    <string name="instructions_category1_1">[1.] Before starting a quest, make sure that the GPS on your device is enabled.</string>
+    <string name="instructions_category1_2">[2.] Go to preferences (gear icon), add your name, and set the level of quest difficulty and time.</string>
+    <string name="instructions_category2">[3.] Go back to the main menu and start the game!</string>
+    <string name="instructions_category2_1">[4.] You are taken to a camera screen. Move it around to find the aliens, or tap the settings menu to switch view and view a map with the aliens\' locations! Switch view again to revert back to camera.</string>
+    <string name="instructions_category2_2">[5.] Destroy the enemies! Tap on the aliens on the screen to blast them down before your time is up. The closer you are to them the easier they get hit!</string>
 
     <!-- About strings -->
     <string name="about_mission">The goal of this application is to prepare people 
-        for extraterrestrial landings by improving fitness in a fun and exciting game. </string>
+        for extraterrestrial landings by improving fitness in a fun and excited game. </string>
     <string name="about_authors">AlienQuest was created by: </string>
     <string name="about_author1">James Dagres</string>
     <string name="about_author2">Garrett Moran</string>
@@ -60,7 +54,7 @@
     <!--
         Old string <string name="about_qoute">“I\'m sure the universe is full of intelligent life. 
         It\'s just been too intelligent to come here.” 
-		― Arthur C. Clarke</string>
+		― Arthur C. Clarke</string>
     -->
 
     <string name="about_qoute">“The only way to disprove acient aliens is when the extraterrestrials show up and say “we were never here”!” 

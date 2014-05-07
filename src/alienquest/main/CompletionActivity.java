@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -14,10 +15,10 @@ import android.widget.Toast;
 
 /**
  * @author Jimmy Dagres
- * 
+ *
  * @version Apr 1, 2014
- * 
- * 
+ *
+ *
  *          I (Jimmy) chose to store the highscores in a string stored as a
  *          preference, rather than a database because I wanted to practice with
  *          the android favored data structure SparseArray's.
@@ -28,7 +29,17 @@ public class CompletionActivity extends Activity {
 	protected static SharedPreferences preference_;
 	private Intent settings;
 	private String userName_;
-	private TextView congratulationsName_;
+	private TextView highscore;
+	private TextView score1;
+	private TextView score2;
+	private TextView score3;
+	private TextView score4;
+	private TextView score5;
+	private TextView name1;
+	private TextView name2;
+	private TextView name3;
+	private TextView name4;
+	private TextView name5;
 
 	private String topFiveScoreValues_;
 	private String topFiveScoreUsernames_;
@@ -52,6 +63,7 @@ public class CompletionActivity extends Activity {
 		settings = getIntent();
 
 		highscores_ = new SparseArray<String>();
+
 
 		int score = getScores(); // TODO: implement database of scores
 		// Load the preference values
@@ -84,7 +96,29 @@ public class CompletionActivity extends Activity {
 		// String nameMsg = getString( R.string.congratulations_name, userName_
 		// );
 		// congratulationsName_.setText( nameMsg );
-
+		Typeface tf = Typeface.createFromAsset(getAssets(), "Fonts/Molot.otf");
+		highscore = (TextView) findViewById(R.id.textViewTopScores);
+		score1 = (TextView) findViewById(R.id.textViewScore1);
+		score2 = (TextView) findViewById(R.id.TextViewScore2);
+		score3 = (TextView) findViewById(R.id.TextViewScore3);
+		score4 = (TextView) findViewById(R.id.TextViewScore4);
+		score5 = (TextView) findViewById(R.id.TextViewScore5);
+		name1 = (TextView) findViewById(R.id.textViewUserName1);
+		name2 = (TextView) findViewById(R.id.TextViewUserName2);
+		name3 = (TextView) findViewById(R.id.TextViewUserName3);
+		name4 = (TextView) findViewById(R.id.TextViewUserName4);
+		name5 = (TextView) findViewById(R.id.TextViewUserName5);
+		highscore.setTypeface(tf);
+		score1.setTypeface(tf);
+		score2.setTypeface(tf);
+		score3.setTypeface(tf);
+		score4.setTypeface(tf);
+		score5.setTypeface(tf);
+		name1.setTypeface(tf);
+		name2.setTypeface(tf);
+		name3.setTypeface(tf);
+		name4.setTypeface(tf);
+		name5.setTypeface(tf);
 		getTopFiveScores();
 	}
 
@@ -95,14 +129,14 @@ public class CompletionActivity extends Activity {
 	 */
 	public void gameEnded(int score, boolean completed) {
 		if (completed) {
-			congratulationsName_ = (TextView) findViewById(R.id.congratulations_name);
+			//congratulationsName_ = (TextView) findViewById(R.id.congratulations_name);
 			// String nameMsg =
 			// getString( R.string.congratulations_name, userName_ );
-			String nameMsg = "Congratulations "
+			/*String nameMsg = "Congratulations "
 					+ userName_
 					+ " you completed the quest! Earth thanks you. \n Your score was "
 					+ score + ".";
-			congratulationsName_.setText(nameMsg);
+			congratulationsName_.setText(nameMsg);*/
 
 			// See if the new score is higher than the 5th best score, if so
 			// place it into the sparse array and remove the fifth value, then
@@ -123,7 +157,7 @@ public class CompletionActivity extends Activity {
 			}
 		} else {
 			// Tell the user that time ran out
-			congratulationsName_.setText(userName_);
+			//congratulationsName_.setText(userName_);
 		}
 	}
 
@@ -196,7 +230,7 @@ public class CompletionActivity extends Activity {
 
 	/**
 	 * Updates the score in the saved string.
-	 * 
+	 *
 	 * @param newScore
 	 * @param userName
 	 */

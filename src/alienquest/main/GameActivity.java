@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * @author Jimmy Dagres
  * @author Garrett Moran
+ * @author Tiffany Tuan
  * 
  * @version Mar 31, 2014
  * 
@@ -111,6 +112,10 @@ public class GameActivity extends Activity implements SensorEventListener
      */
     protected static SharedPreferences preference_;
 
+    // This boolean ensures that the game activity is closed when the campaign
+    // is completed
+    private static boolean campaignEnded = false;
+
     @Override
     protected void onCreate( Bundle savedInstanceState )
     {
@@ -158,8 +163,6 @@ public class GameActivity extends Activity implements SensorEventListener
         // initialize your android device sensor capabilities
         mSensorManager = (SensorManager) getSystemService( SENSOR_SERVICE );
 
-        // Start off by displaying a google map and inserting the aliens
-
         // Store the screen width and height
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics( metrics );
@@ -174,11 +177,9 @@ public class GameActivity extends Activity implements SensorEventListener
 
         // Default the preferences if they aren't set yet
         setUp = new CampaignSetUp( this, difficulty_, gameLength_ );
-        Toast.makeText(
-                getApplicationContext(),
-                "Difficulty is " + difficulty_ + " and length is "
-                        + gameLength_, Toast.LENGTH_LONG ).show();
 
+        // Start off by displaying a google map and inserting the aliens and the
+        // camera activity
         displayCameraFragment();
         displayMapFragment();
 
@@ -201,6 +202,12 @@ public class GameActivity extends Activity implements SensorEventListener
         default:
             gameTime = 1;
         }
+
+        Toast.makeText(
+                getApplicationContext(),
+                "Difficulty is " + difficulty_ + " and length is "
+                        + gameTime + " minutes.", Toast.LENGTH_LONG ).show();
+
         gameTime = gameTime * 60000; // converting from minutes to milliseconds
     }
 
@@ -558,6 +565,14 @@ public class GameActivity extends Activity implements SensorEventListener
     protected void onResume()
     {
         super.onResume();
+
+        if ( campaignEnded )
+        {
+            campaignEnded = false;
+            finish();
+            return;
+        }
+
         setUpMapIfNeeded();
 
         if ( null != mSensorManager )
@@ -839,8 +854,6 @@ public class GameActivity extends Activity implements SensorEventListener
         currentAlienShipsMarker_.remove();
         alienShipsInitialized_ = false;
 
-        // TODO update the completion activity with a score based on time and
-        // difficulty
         updateScore();
 
         // Reset the alien ship type
@@ -902,7 +915,10 @@ public class GameActivity extends Activity implements SensorEventListener
      */
     private void campaignFinished()
     {
-        // TODO: implement this
+        campaignEnded = true;
+
+        // TODO update the completion activity with a score based on time and
+        // difficulty
 
         // Update the scores
         timesUp( true );

@@ -21,6 +21,14 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+/**
+ * @author Jimmy Dagres
+ * @author Garrett Moran
+ * @author Tiffany Tuan
+ * 
+ * @version May 7, 2014
+ * 
+ */
 @SuppressLint( "NewApi" )
 public class CameraFragment extends Fragment implements SurfaceTextureListener
 {

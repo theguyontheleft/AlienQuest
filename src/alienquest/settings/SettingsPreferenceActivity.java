@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 /**
  * @author Jimmy Dagres
+ * @author Garrett Moran
+ * @author Tiffany Tuan
  * 
  * @version March 8, 2014
  * 
